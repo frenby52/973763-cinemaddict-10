@@ -1,5 +1,3 @@
-'use strict';
-
 const FILM_COUNT = 5;
 const FILM_EXTRA_COUNT = 2;
 
