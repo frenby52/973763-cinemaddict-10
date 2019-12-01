@@ -9,8 +9,10 @@ import {generateFilmCards} from "./mock/film-card";
 import {generateFilters} from "./mock/filter";
 import {generateRank} from "./mock/rating";
 
-const FILM_COUNT = 5;
+const FILM_COUNT = 13;
 const FILM_EXTRA_COUNT = 2;
+const FILM_COUNT_ON_START = 5;
+const FILM_COUNT_BY_BUTTON = 5;
 
 const renderElement = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -32,8 +34,22 @@ renderElement(filmsListMainElement, createShowMoreButtonTemplate());
 const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
 
 const mainFilmCards = generateFilmCards(FILM_COUNT);
+// console.log(mainFilmCards)
+let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
 const renderFilmCards = (data, container) => data.forEach((it) => renderElement(getFilmsListContainer(container), createFilmCardTemplate(it)));
-renderFilmCards(mainFilmCards, filmsListMainElement);
+renderFilmCards(mainFilmCards.slice(0, FILM_COUNT_ON_START), filmsListMainElement);
+
+const showMoreButtonElement = siteMainElement.querySelector(`.films-list__show-more`);
+const onShowMoreButtonClick = () => {
+  const mainFilmCardsPreviouslyShowedCount = mainFilmCardsShowedCount;
+  mainFilmCardsShowedCount += FILM_COUNT_BY_BUTTON;
+  renderFilmCards(mainFilmCards.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), filmsListMainElement);
+
+  if (mainFilmCardsShowedCount >= mainFilmCards.length) {
+    showMoreButtonElement.remove();
+  }
+};
+showMoreButtonElement.addEventListener(`click`, onShowMoreButtonClick);
 
 const filmsListExtraElements = siteMainElement.querySelectorAll(`.films-list--extra`);
 const topRatedFilmCards = mainFilmCards.slice().sort((a, b) => b.rating - a.rating);
@@ -41,7 +57,14 @@ const mostCommentedFilmCards = mainFilmCards.slice().sort((a, b) => b.comments -
 renderFilmCards(topRatedFilmCards.slice(0, FILM_EXTRA_COUNT), filmsListExtraElements[0]);
 renderFilmCards(mostCommentedFilmCards.slice(0, FILM_EXTRA_COUNT), filmsListExtraElements[1]);
 
-renderElement(document.body, createFilmDetailsTemplate());
+const footerStatsElement = document.querySelector(`.footer__statistics`);
+const renderFooterStats = () => {
+  footerStatsElement.innerHTML = `<p>${mainFilmCards.length} movies inside</p>`;
+};
+
+renderFooterStats();
+
+renderElement(document.body, createFilmDetailsTemplate(mainFilmCards[0]));
 
 // изначальная
 // new Array(FILM_COUNT).fill(``).forEach(() => render(getFilmsListContainer(filmsListMainElement), createFilmCardTemplate(getFilmCard())));
