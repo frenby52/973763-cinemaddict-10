@@ -25,14 +25,10 @@ const generateFilmCard = () => ({
     country: [...countries][getRandomInteger(0, [...countries].length - 1)],
     runtime: `${getRandomInteger(0, 2)}h ${getRandomInteger(0, 60)}m`,
     genre: generateRandomArray([...genres]),
-    // genre: generateRandomArray([...genres]).join(`, `),
     description: generateRandomArray(description).join(` `),
-
-    // genre: generateRandomArray([...genres]).join(`, `),
-    // description: generateRandomArray(description).join(` `),
-    // genre: [...genres][getRandomInteger(0, [...genres].length - 1)],
-    // description: new Array(getRandomInteger(1, 3)).fill(``).map(() => description[getRandomInteger(0, description.length - 1)]).join(` `),
-
+    watchlist: Math.random() > 0.5,
+    history: Math.random() > 0.5,
+    favorites: Math.random() > 0.5
   },
   comments: generateComments(getRandomInteger(0, description.length - 1))
 });
@@ -46,7 +42,6 @@ const generateComment = () => ({
 
 const generateComments = (qty) => new Array(qty).fill(``).map(generateComment);
 
-// const generateFilmCards = (qty) => new Array(qty).fill(``).map(generateFilmCard);
 const generateFilmCards = (qty) => new Array(qty).fill(``).map(generateFilmCard);
 
 export {generateFilmCards};
