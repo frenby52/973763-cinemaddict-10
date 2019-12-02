@@ -7,7 +7,7 @@ import {createFilmCardTemplate} from "./components/film-card";
 import {createFilmDetailsTemplate} from "./components/film-details";
 import {generateFilmCards} from "./mock/film-card";
 import {generateRank} from "./mock/rating";
-import {getRandomInteger} from "./util";
+import {getRandomInteger, getArrayItemsSum} from "./util";
 
 const FILM_COUNT = 12;
 const FILM_EXTRA_COUNT = 2;
@@ -54,7 +54,21 @@ const renderRandomFilmCard = (data, filteredData, container) => {
 };
 
 const filmsListExtraElements = siteMainElement.querySelectorAll(`.films-list--extra`);
+const topRatedFilmElement = filmsListExtraElements[0];
+const mostCommentedFilmElement = filmsListExtraElements[1];
 const renderExtraFilmCards = (data) => {
+  const mostCommentedFilmArray = [];
+  const topRatedFilmArray = [];
+  const getMostCommentedFilmArray = () => data.forEach((it)=> mostCommentedFilmArray.push(it.comments.length));
+  const getTopRatedFilmArray = () => data.forEach((it)=> topRatedFilmArray.push(it.film.rating));
+  getMostCommentedFilmArray();
+  getTopRatedFilmArray();
+  if (getArrayItemsSum(data, topRatedFilmArray) === 0) {
+    topRatedFilmElement.style.visibility = `hidden`;
+  }
+  if (getArrayItemsSum(data, mostCommentedFilmArray) === 0) {
+    mostCommentedFilmElement.style.visibility = `hidden`;
+  }
   if (data.length === 0) {
     filmsListExtraElements.forEach((it)=> {
       it.style.display = `none`;
@@ -64,8 +78,8 @@ const renderExtraFilmCards = (data) => {
     const mostCommentedFilmCards = data.slice().sort((a, b) => b.comments.length - a.comments.length);
     const highestTopRatedFilmCards = topRatedFilmCards.filter((it) => it.film.rating === topRatedFilmCards[0].film.rating);
     const highestMostCommentedFilmCards = mostCommentedFilmCards.filter((it) => it.comments.length === mostCommentedFilmCards[0].comments.length);
-    renderRandomFilmCard(topRatedFilmCards, highestTopRatedFilmCards, filmsListExtraElements[0]);
-    renderRandomFilmCard(mostCommentedFilmCards, highestMostCommentedFilmCards, filmsListExtraElements[1]);
+    renderRandomFilmCard(topRatedFilmCards, highestTopRatedFilmCards, topRatedFilmElement);
+    renderRandomFilmCard(mostCommentedFilmCards, highestMostCommentedFilmCards, mostCommentedFilmElement);
   }
 };
 
