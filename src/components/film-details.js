@@ -16,7 +16,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
 
 
 export const createFilmDetailsTemplate = (data) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description} = data.film;
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
@@ -91,10 +91,10 @@ export const createFilmDetailsTemplate = (data) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${data.comments.length}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${createCommentsMarkup(data.comments)}
+        ${createCommentsMarkup(comments)}
         </ul>
 
         <div class="film-details__new-comment">

@@ -12,24 +12,22 @@ const authors = [`writer one`, `writer two`, `writer three`, `writer four`, `wri
 const emoji = new Set([`smile`, `sleeping`, `puke`, `angry`]);
 
 const generateFilmCard = () => ({
-  film: {
-    title: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
-    originalTitle: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
-    rating: getRandomInteger(0, 10),
-    poster: posters[getRandomInteger(0, posters.length - 1)],
-    age: getRandomInteger(0, 21),
-    director: [...directors][getRandomInteger(0, [...directors].length - 1)],
-    writers: generateRandomArray([...writers]).join(`, `),
-    actors: generateRandomArray([...actors]).join(`, `),
-    date: getRandomInteger(0, 29) * 365 * 24 * 3600 * 1000,
-    country: [...countries][getRandomInteger(0, [...countries].length - 1)],
-    runtime: `${getRandomInteger(0, 2)}h ${getRandomInteger(0, 60)}m`,
-    genre: generateRandomArray([...genres]),
-    description: generateRandomArray(description).join(` `),
-    watchlist: Math.random() > 0.5,
-    history: Math.random() > 0.5,
-    favorites: Math.random() > 0.5
-  },
+  title: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
+  originalTitle: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
+  rating: getRandomInteger(0, 10),
+  poster: posters[getRandomInteger(0, posters.length - 1)],
+  age: getRandomInteger(0, 21),
+  director: [...directors][getRandomInteger(0, [...directors].length - 1)],
+  writers: generateRandomArray([...writers]).join(`, `),
+  actors: generateRandomArray([...actors]).join(`, `),
+  date: getRandomInteger(0, 29) * 365 * 24 * 3600 * 1000,
+  country: [...countries][getRandomInteger(0, [...countries].length - 1)],
+  runtime: `${getRandomInteger(0, 2)}h ${getRandomInteger(0, 60)}m`,
+  genre: generateRandomArray([...genres]),
+  description: generateRandomArray(description).join(` `),
+  watchlist: Math.random() > 0.5,
+  history: Math.random() > 0.5,
+  favorites: Math.random() > 0.5,
   comments: generateComments(getRandomInteger(0, description.length - 1))
 });
 

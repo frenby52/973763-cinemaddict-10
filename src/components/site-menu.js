@@ -1,7 +1,7 @@
 export const createSiteMenuTemplate = (data) => {
-  const watchlistFilmCards = data.filter((it) => it.film.watchlist);
-  const historyFilmCards = data.filter((it) => it.film.history);
-  const favoritesFilmCards = data.filter((it) => it.film.favorites);
+  const watchlistFilmCards = data.filter((it) => it.watchlist);
+  const historyFilmCards = data.filter((it) => it.history);
+  const favoritesFilmCards = data.filter((it) => it.favorites);
   return (`<nav class="main-navigation">
     <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
     <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${watchlistFilmCards.length}</span></a>
