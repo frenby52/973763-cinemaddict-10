@@ -18,4 +18,15 @@ const getHighestValuesData = (data, key) => {
 
 const getRandomArrayItems = (data, qty)=> data.sort(() => Math.random() - 0.5).slice(0, qty);
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems};
+const createElement = (templateString) => {
+  const template = document.createElement(`template`);
+  template.innerHTML = templateString;
+  return template.content.firstElementChild;
+};
+
+const renderElement = (container, template) => {
+  const childElement = createElement(template);
+  return container.appendChild(childElement);
+};
+
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderElement};

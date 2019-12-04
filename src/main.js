@@ -7,7 +7,7 @@ import {createFilmCardTemplate} from "./components/film-card";
 import {createFilmDetailsTemplate} from "./components/film-details";
 import {generateFilmCards} from "./mock/film-card";
 import {generateRank} from "./mock/rating";
-import {getSortedData, getHighestValuesData, getRandomArrayItems} from "./util";
+import {getSortedData, getHighestValuesData, getRandomArrayItems, renderElement} from "./util";
 
 const FILM_COUNT = 11;
 const FILM_EXTRA_COUNT = 2;
@@ -16,10 +16,6 @@ const FILM_COUNT_BY_BUTTON = 5;
 
 const mainFilmCardsData = generateFilmCards(FILM_COUNT);
 const rank = generateRank();
-
-const renderElement = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const siteHeaderElement = document.querySelector(`.header`);
 renderElement(siteHeaderElement, createUserRatingTemplate(rank));
