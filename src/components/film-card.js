@@ -23,7 +23,7 @@ const createFilmCardTemplate = (data) => {
    </article>`);
 };
 
-export default class Card {
+export default class FilmCard {
   constructor(data) {
     this._card = data;
     this._element = null;
@@ -44,12 +44,4 @@ export default class Card {
   removeElement() {
     this._element = null;
   }
-
-  // render(container) {
-  //   if (this._element) {
-  //     container.removeChild(this._element);
-  //     this.removeElement();
-  //   }
-  //   renderElement(container, this.getTemplate());
-  // }
 }

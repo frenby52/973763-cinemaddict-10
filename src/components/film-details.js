@@ -151,7 +151,8 @@ export default class FilmDetails {
     return this._element;
   }
 
-  removeElement() {
+  removeElement(container) {
+    container.removeChild(this._element);
     this._element = null;
   }
 }

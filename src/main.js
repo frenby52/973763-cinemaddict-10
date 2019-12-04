@@ -1,7 +1,7 @@
 import {generateFilmCards} from "./mock/film-card";
 import {generateRank} from "./mock/rating";
-import {getSortedData, getHighestValuesData, getRandomArrayItems, renderElement} from "./util";
-import CardComponent from "./components/film-card";
+import {getSortedData, getHighestValuesData, getRandomArrayItems, renderElement, isEscEvent} from "./util";
+import FilmCardComponent from "./components/film-card";
 import FilmDetailsComponent from "./components/film-details";
 import FilmsContainerComponent from "./components/films-container";
 import SiteMenuComponent from "./components/site-menu";
@@ -23,17 +23,50 @@ renderElement(siteHeaderElement, new UserRatingComponent(rank).getElement());
 const siteMainElement = document.querySelector(`.main`);
 renderElement(siteMainElement, new SiteMenuComponent(mainFilmCardsData).getElement());
 renderElement(siteMainElement, new SortComponent().getElement());
-renderElement(siteMainElement, new FilmsContainerComponent().getElement());
+const filmsContainerComponent = new FilmsContainerComponent();
+renderElement(siteMainElement, filmsContainerComponent.getElement());
 
-const filmsListMainElement = siteMainElement.querySelector(`.films .films-list`);
+const filmsListMainElement = filmsContainerComponent.getElement().querySelector(`.films .films-list`);
 renderElement(filmsListMainElement, new ShowMoreButtonComponent().getElement());
 
 const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
 const showMoreButtonElement = siteMainElement.querySelector(`.films-list__show-more`);
 let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
 
-// const renderFilmCards = (data, container) => data.forEach((it) => renderElement2(getFilmsListContainer(container), createFilmCardTemplate(it)));
-const renderFilmCards = (data, container) => data.forEach((it) => renderElement(getFilmsListContainer(container), new CardComponent(it).getElement()));
+const renderFilmCards = (data, container) => data.forEach((it) => {
+  const filmCardComponent = new FilmCardComponent(it);
+  const filmDetailsComponent = new FilmDetailsComponent(it);
+  const filmCardPosterElement = filmCardComponent.getElement().querySelector(`.film-card__poster`);
+  const filmCardTitleElement = filmCardComponent.getElement().querySelector(`.film-card__title`);
+  const filmCardCommentsElement = filmCardComponent.getElement().querySelector(`.film-card__comments`);
+  const filmDetailsCloseBtnElement = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
+
+  const onFilmCardElementClick = (evt) => {
+    evt.preventDefault();
+    renderElement(document.body, filmDetailsComponent.getElement());
+    document.addEventListener(`keydown`, onFilmDetailsEscPress);
+  };
+
+  const onFilmDetailsCloseBtnElementClick = () => {
+    closeFilmDetails();
+  };
+
+  const closeFilmDetails = () => {
+    filmDetailsComponent.removeElement(document.body);
+    document.removeEventListener(`keydown`, onFilmDetailsEscPress);
+  };
+
+  const onFilmDetailsEscPress = (evt) => {
+    isEscEvent(evt, closeFilmDetails);
+  };
+
+  filmCardPosterElement.addEventListener(`click`, onFilmCardElementClick);
+  filmCardTitleElement.addEventListener(`click`, onFilmCardElementClick);
+  filmCardCommentsElement.addEventListener(`click`, onFilmCardElementClick);
+  filmDetailsCloseBtnElement.addEventListener(`click`, onFilmDetailsCloseBtnElementClick);
+
+  renderElement(getFilmsListContainer(container), filmCardComponent.getElement());
+});
 
 const renderMainFilmCards = (data) => {
   if (data.length === 0) {
@@ -56,7 +89,7 @@ const getExtraFilmCardsData = (data, key) => {
   return getRandomArrayItems(highestValuesData, FILM_EXTRA_COUNT);
 };
 
-const filmsListExtraElements = siteMainElement.querySelectorAll(`.films-list--extra`);
+const filmsListExtraElements = filmsContainerComponent.getElement().querySelectorAll(`.films-list--extra`);
 const topRatedFilmElement = filmsListExtraElements[0];
 const mostCommentedFilmElement = filmsListExtraElements[1];
 
@@ -90,5 +123,3 @@ const onShowMoreButtonClick = () => {
   }
 };
 showMoreButtonElement.addEventListener(`click`, onShowMoreButtonClick);
-
-renderElement(document.body, new FilmDetailsComponent(mainFilmCardsData[0]).getElement());
