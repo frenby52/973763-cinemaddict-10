@@ -63,27 +63,20 @@ const filmsListExtraElements = siteMainElement.querySelectorAll(`.films-list--ex
 const topRatedFilmElement = filmsListExtraElements[0];
 const mostCommentedFilmElement = filmsListExtraElements[1];
 
-const renderTopRatedFilmCards = (data, key, container) => {
+const renderExtraFilmCards = (data, key, container) => {
   const filteredData = getExtraFilmCardsData(data, key);
-  if (!data.some((it) => it.rating)) {
-    topRatedFilmElement.innerHTML = ``;
-  } else {
-    renderFilmCards(filteredData, container);
-  }
-};
-
-const renderMostCommentedFilmCards = (data, key, container) => {
-  const filteredData = getExtraFilmCardsData(data, key);
-  if (!data.some((it) => it.comments.length)) {
-    mostCommentedFilmElement.innerHTML = ``;
+  if (key === `comments` && !data.some((it) => it[key].length)) {
+    container.innerHTML = ``;
+  } else if (!data.some((it) => it[key])) {
+    container.innerHTML = ``;
   } else {
     renderFilmCards(filteredData, container);
   }
 };
 
 renderMainFilmCards(mainFilmCardsData);
-renderTopRatedFilmCards(mainFilmCardsData, `rating`, topRatedFilmElement);
-renderMostCommentedFilmCards(mainFilmCardsData, `comments`, mostCommentedFilmElement);
+renderExtraFilmCards(mainFilmCardsData, `rating`, topRatedFilmElement);
+renderExtraFilmCards(mainFilmCardsData, `comments`, mostCommentedFilmElement);
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = () => {
