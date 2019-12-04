@@ -65,7 +65,7 @@ const mostCommentedFilmElement = filmsListExtraElements[1];
 
 const renderExtraFilmCards = (data, key, container) => {
   const filteredData = getExtraFilmCardsData(data, key);
-  if ((key === `comments` && !data.some((it) => it[key].length)) || !data.some((it) => it[key])) {
+  if ((data.length && Array.isArray(data[0][key]) && !data.some((it) => it[key].length)) || !data.some((it) => it[key])) {
     container.innerHTML = ``;
   } else {
     renderFilmCards(filteredData, container);
