@@ -24,9 +24,6 @@ const createElement = (templateString) => {
   return template.content.firstElementChild;
 };
 
-const renderElement = (container, template) => {
-  const childElement = createElement(template);
-  return container.appendChild(childElement);
-};
+const renderElement = (container, element) => container.append(element);
 
 export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderElement};
