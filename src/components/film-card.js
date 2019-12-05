@@ -27,9 +27,9 @@ export default class FilmCard {
   constructor(data) {
     this._card = data;
     this._element = null;
-
-
+    this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
   }
+
   getTemplate() {
     return createFilmCardTemplate(this._card);
   }
@@ -45,7 +45,7 @@ export default class FilmCard {
     this._element = null;
   }
 
-  addHandler(elem, type, handler) {
-    this._element.querySelector(elem).addEventListener(type, handler.bind(this));
+  addElementsClickHandlers(handler) {
+    this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler.bind(this)));
   }
 }

@@ -39,7 +39,23 @@ export default class FilmsContainer {
     this._element = null;
   }
 
-  addHandler(elem, type, handler) {
-    this._element.querySelector(elem).addEventListener(type, handler.bind(this));
+  showNoMoviesMessage() {
+    const title = this._element.querySelector(`.films-list__title`);
+    title.classList.remove(`visually-hidden`);
+    title.textContent = `There are no movies in our database`;
+  }
+
+  getShowMoreBtnElement() {
+    return this._element.querySelector(`.films-list__show-more`);
+  }
+
+  removeShowMoreBtn() {
+    this.getShowMoreBtnElement().remove();
+  }
+
+  addShowMoreBtnClickHandler(handler) {
+    if (this.getShowMoreBtnElement()) {
+      this._element.querySelector(`.films-list__show-more`).addEventListener(`click`, handler.bind(this));
+    }
   }
 }

@@ -8,7 +8,7 @@ import SiteMenuComponent from "./components/site-menu";
 import SortComponent from "./components/sort";
 import UserRatingComponent from "./components/user-rating";
 
-const FILM_COUNT = 12;
+const FILM_COUNT = 11;
 const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
 const FILM_COUNT_BY_BUTTON = 5;
@@ -26,7 +26,6 @@ const filmsContainerComponent = new FilmsContainerComponent();
 renderElement(siteMainElement, filmsContainerComponent.getElement());
 
 const filmsListMainElement = filmsContainerComponent.getElement().querySelector(`.films .films-list`);
-const showMoreButtonElement = filmsListMainElement.querySelector(`.films-list__show-more`);
 let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
 
 const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
@@ -40,32 +39,41 @@ const renderFilmCards = (data, container) => data.forEach((it) => {
     evt.preventDefault();
     renderElement(document.body, filmDetailsComponent.getElement());
     filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
-    filmDetailsComponent.addHandler(`.film-details__close-btn`, `click`, onFilmDetailsCloseBtnElementClick);
+    filmDetailsComponent.addCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
   };
 
-  const onFilmDetailsCloseBtnElementClick = () => closeFilmDetails();
+  const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
+
+  const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
 
   const closeFilmDetails = () => {
     filmDetailsComponent.removeElement(document.body);
     filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
   };
 
-  const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
-
-  filmCardComponent.addHandler(`.film-card__poster`, `click`, onFilmCardElementClick);
-  filmCardComponent.addHandler(`.film-card__title`, `click`, onFilmCardElementClick);
-  filmCardComponent.addHandler(`.film-card__comments`, `click`, onFilmCardElementClick);
+  filmCardComponent.addElementsClickHandlers(onFilmCardElementClick);
 });
+
+const onShowMoreButtonClick = () => {
+  const mainFilmCardsPreviouslyShowedCount = mainFilmCardsShowedCount;
+  mainFilmCardsShowedCount += FILM_COUNT_BY_BUTTON;
+  renderFilmCards(mainFilmCardsData.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), filmsListMainElement);
+
+  if (mainFilmCardsShowedCount >= mainFilmCardsData.length) {
+    filmsContainerComponent.removeShowMoreBtn();
+  }
+};
 
 const renderMainFilmCards = (data) => {
   if (data.length === 0) {
-    showMoreButtonElement.classList.add(`visually-hidden`);
-    filmsListMainElement.innerHTML = `<p>There are no movies in our database</p>`;
+    filmsContainerComponent.removeShowMoreBtn();
+    filmsContainerComponent.showNoMoviesMessage();
   } else {
     if (mainFilmCardsData.length <= FILM_COUNT_ON_START) {
-      showMoreButtonElement.classList.add(`visually-hidden`);
+      filmsContainerComponent.removeShowMoreBtn();
     }
     renderFilmCards(data.slice(0, FILM_COUNT_ON_START), filmsListMainElement);
+    filmsContainerComponent.addShowMoreBtnClickHandler(onShowMoreButtonClick);
   }
 };
 
@@ -101,15 +109,3 @@ const renderFooterStats = () => {
 };
 
 renderFooterStats();
-
-const onShowMoreButtonClick = () => {
-  const mainFilmCardsPreviouslyShowedCount = mainFilmCardsShowedCount;
-  mainFilmCardsShowedCount += FILM_COUNT_BY_BUTTON;
-  renderFilmCards(mainFilmCardsData.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), filmsListMainElement);
-
-  if (mainFilmCardsShowedCount >= mainFilmCardsData.length) {
-    showMoreButtonElement.remove();
-  }
-};
-
-filmsContainerComponent.addHandler(`.films-list__show-more`, `click`, onShowMoreButtonClick);

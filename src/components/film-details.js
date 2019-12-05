@@ -156,8 +156,8 @@ export default class FilmDetails {
     this._element = null;
   }
 
-  addHandler(elem, type, handler) {
-    this._element.querySelector(elem).addEventListener(type, handler.bind(this));
+  addCloseBtnClickHandler(handler) {
+    this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler.bind(this));
   }
 
   addEscPressHandler(handler) {
