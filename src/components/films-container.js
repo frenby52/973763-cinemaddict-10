@@ -55,7 +55,7 @@ export default class FilmsContainer {
 
   addShowMoreBtnClickHandler(handler) {
     if (this.getShowMoreBtnElement()) {
-      this._element.querySelector(`.films-list__show-more`).addEventListener(`click`, handler.bind(this));
+      this.getShowMoreBtnElement().addEventListener(`click`, handler.bind(this));
     }
   }
 }
