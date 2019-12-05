@@ -111,4 +111,5 @@ const onShowMoreButtonClick = () => {
     showMoreButtonElement.remove();
   }
 };
-showMoreButtonElement.addEventListener(`click`, onShowMoreButtonClick);
+
+filmsContainerComponent.addHandler(`.films-list__show-more`, `click`, onShowMoreButtonClick);
