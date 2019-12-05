@@ -1,6 +1,8 @@
+import {createElement} from "../util";
+
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
-export const createFilmCardTemplate = (data) => {
+const createFilmCardTemplate = (data) => {
   const {title, rating, date, runtime, genre, poster, description, comments} = data;
   return (`<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
@@ -20,3 +22,30 @@ export const createFilmCardTemplate = (data) => {
           </form>
    </article>`);
 };
+
+export default class FilmCard {
+  constructor(data) {
+    this._card = data;
+    this._element = null;
+    this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  addElementsClickHandlers(handler) {
+    this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler.bind(this)));
+  }
+}

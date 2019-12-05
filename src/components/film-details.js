@@ -1,3 +1,5 @@
+import {createElement} from "../util";
+
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 const createCommentsMarkup = (comments) => comments.map((comment) =>
   `<li class="film-details__comment">
@@ -15,7 +17,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
   </li>`).join(`\n`);
 
 
-export const createFilmDetailsTemplate = (data) => {
+const createFilmDetailsTemplate = (data) => {
   const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -131,3 +133,38 @@ export const createFilmDetailsTemplate = (data) => {
   </form>
 </section>`);
 };
+
+export default class FilmDetails {
+  constructor(data) {
+    this._filmDetails = data;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._filmDetails);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement(container) {
+    container.removeChild(this._element);
+    this._element = null;
+  }
+
+  addCloseBtnClickHandler(handler) {
+    this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler.bind(this));
+  }
+
+  addEscPressHandler(handler) {
+    document.addEventListener(`keydown`, handler);
+  }
+
+  removeEscPressHandler(handler) {
+    document.removeEventListener(`keydown`, handler);
+  }
+}

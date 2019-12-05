@@ -1,4 +1,6 @@
-export const createSiteMenuTemplate = (data) => {
+import {createElement} from "../util";
+
+const createSiteMenuTemplate = (data) => {
   const watchlistFilmCards = data.filter((it) => it.watchlist);
   const historyFilmCards = data.filter((it) => it.history);
   const favoritesFilmCards = data.filter((it) => it.favorites);
@@ -10,3 +12,25 @@ export const createSiteMenuTemplate = (data) => {
     <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
   </nav>`);
 };
+
+export default class SiteMenu {
+  constructor(data) {
+    this._siteMenu = data;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate(this._siteMenu);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
