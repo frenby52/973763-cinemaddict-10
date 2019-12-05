@@ -44,4 +44,8 @@ export default class FilmCard {
   removeElement() {
     this._element = null;
   }
+
+  addHandler(elem, type, handler) {
+    this._element.querySelector(elem).addEventListener(type, handler.bind(this));
+  }
 }

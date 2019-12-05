@@ -7,9 +7,8 @@ import FilmsContainerComponent from "./components/films-container";
 import SiteMenuComponent from "./components/site-menu";
 import SortComponent from "./components/sort";
 import UserRatingComponent from "./components/user-rating";
-import ShowMoreButtonComponent from "./components/show-more-button";
 
-const FILM_COUNT = 11;
+const FILM_COUNT = 12;
 const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
 const FILM_COUNT_BY_BUTTON = 5;
@@ -27,45 +26,35 @@ const filmsContainerComponent = new FilmsContainerComponent();
 renderElement(siteMainElement, filmsContainerComponent.getElement());
 
 const filmsListMainElement = filmsContainerComponent.getElement().querySelector(`.films .films-list`);
-renderElement(filmsListMainElement, new ShowMoreButtonComponent().getElement());
+const showMoreButtonElement = filmsListMainElement.querySelector(`.films-list__show-more`);
+let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
 
 const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
-const showMoreButtonElement = siteMainElement.querySelector(`.films-list__show-more`);
-let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
 
 const renderFilmCards = (data, container) => data.forEach((it) => {
   const filmCardComponent = new FilmCardComponent(it);
   const filmDetailsComponent = new FilmDetailsComponent(it);
-  const filmCardPosterElement = filmCardComponent.getElement().querySelector(`.film-card__poster`);
-  const filmCardTitleElement = filmCardComponent.getElement().querySelector(`.film-card__title`);
-  const filmCardCommentsElement = filmCardComponent.getElement().querySelector(`.film-card__comments`);
-  const filmDetailsCloseBtnElement = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
+  renderElement(getFilmsListContainer(container), filmCardComponent.getElement());
 
   const onFilmCardElementClick = (evt) => {
     evt.preventDefault();
     renderElement(document.body, filmDetailsComponent.getElement());
-    document.addEventListener(`keydown`, onFilmDetailsEscPress);
+    filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
+    filmDetailsComponent.addHandler(`.film-details__close-btn`, `click`, onFilmDetailsCloseBtnElementClick);
   };
 
-  const onFilmDetailsCloseBtnElementClick = () => {
-    closeFilmDetails();
-  };
+  const onFilmDetailsCloseBtnElementClick = () => closeFilmDetails();
 
   const closeFilmDetails = () => {
     filmDetailsComponent.removeElement(document.body);
-    document.removeEventListener(`keydown`, onFilmDetailsEscPress);
+    filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
   };
 
-  const onFilmDetailsEscPress = (evt) => {
-    isEscEvent(evt, closeFilmDetails);
-  };
+  const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
 
-  filmCardPosterElement.addEventListener(`click`, onFilmCardElementClick);
-  filmCardTitleElement.addEventListener(`click`, onFilmCardElementClick);
-  filmCardCommentsElement.addEventListener(`click`, onFilmCardElementClick);
-  filmDetailsCloseBtnElement.addEventListener(`click`, onFilmDetailsCloseBtnElementClick);
-
-  renderElement(getFilmsListContainer(container), filmCardComponent.getElement());
+  filmCardComponent.addHandler(`.film-card__poster`, `click`, onFilmCardElementClick);
+  filmCardComponent.addHandler(`.film-card__title`, `click`, onFilmCardElementClick);
+  filmCardComponent.addHandler(`.film-card__comments`, `click`, onFilmCardElementClick);
 });
 
 const renderMainFilmCards = (data) => {

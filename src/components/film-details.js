@@ -155,4 +155,16 @@ export default class FilmDetails {
     container.removeChild(this._element);
     this._element = null;
   }
+
+  addHandler(elem, type, handler) {
+    this._element.querySelector(elem).addEventListener(type, handler.bind(this));
+  }
+
+  addEscPressHandler(handler) {
+    document.addEventListener(`keydown`, handler);
+  }
+
+  removeEscPressHandler(handler) {
+    document.removeEventListener(`keydown`, handler);
+  }
 }
