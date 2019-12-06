@@ -1,4 +1,4 @@
-import {createElement} from "../util";
+import AbstractComponent from "./abstract-component";
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 const createCommentsMarkup = (comments) => comments.map((comment) =>
@@ -134,30 +134,19 @@ const createFilmDetailsTemplate = (data) => {
 </section>`);
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractComponent {
   constructor(data) {
+    super();
+
     this._filmDetails = data;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._filmDetails);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement(container) {
-    container.removeChild(this._element);
-    this._element = null;
-  }
-
   addCloseBtnClickHandler(handler) {
-    this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler.bind(this));
+    this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
   addEscPressHandler(handler) {

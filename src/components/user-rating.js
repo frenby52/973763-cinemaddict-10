@@ -1,4 +1,4 @@
-import {createElement} from "../util";
+import AbstractComponent from "./abstract-component";
 
 const getUserRank = (rank) => {
   if (rank >= 1 && rank <= 10) {
@@ -19,24 +19,14 @@ const createUserRatingTemplate = (data) => {
   </section>`);
 };
 
-export default class UserRating {
+export default class UserRating extends AbstractComponent {
   constructor(data) {
+    super();
+
     this._userRating = data;
-    this._element = null;
   }
 
   getTemplate() {
     return createUserRatingTemplate(this._userRating);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

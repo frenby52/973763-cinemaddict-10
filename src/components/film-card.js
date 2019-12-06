@@ -1,4 +1,4 @@
-import {createElement} from "../util";
+import AbstractComponent from "./abstract-component";
 
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
@@ -23,26 +23,16 @@ const createFilmCardTemplate = (data) => {
    </article>`);
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(data) {
+    super();
+
     this._card = data;
-    this._element = null;
     this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._card);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   addElementsClickHandlers(handler) {

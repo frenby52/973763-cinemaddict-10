@@ -1,4 +1,4 @@
-import {createElement} from "../util";
+import AbstractComponent from "./abstract-component";
 
 const createFilmsContainerTemplate = () =>
   `<section class="films">
@@ -19,24 +19,13 @@ const createFilmsContainerTemplate = () =>
     </section>
   </section>`;
 
-export default class FilmsContainer {
+export default class FilmsContainer extends AbstractComponent {
   constructor() {
-    this._element = null;
+    super();
   }
 
   getTemplate() {
     return createFilmsContainerTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   showNoMoviesMessage() {
@@ -55,7 +44,7 @@ export default class FilmsContainer {
 
   addShowMoreBtnClickHandler(handler) {
     if (this.getShowMoreBtnElement()) {
-      this.getShowMoreBtnElement().addEventListener(`click`, handler.bind(this));
+      this.getShowMoreBtnElement().addEventListener(`click`, handler);
     }
   }
 }
