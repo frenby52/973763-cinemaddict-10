@@ -109,3 +109,4 @@ const renderFooterStats = () => {
 };
 
 renderFooterStats();
+// module4-task2
