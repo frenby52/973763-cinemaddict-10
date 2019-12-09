@@ -27,12 +27,12 @@ export default class FilmCard extends AbstractComponent {
   constructor(data) {
     super();
 
-    this._card = data;
+    this._data = data;
     this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._card);
+    return createFilmCardTemplate(this._data);
   }
 
   addElementsClickHandlers(handler) {

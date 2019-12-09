@@ -8,9 +8,9 @@ const createSortTemplate = () =>
   </ul>`;
 
 export default class Sort extends AbstractComponent {
-  constructor() {
-    super();
-  }
+  // constructor() {
+  //   super();
+  // }
 
   getTemplate() {
     return createSortTemplate();

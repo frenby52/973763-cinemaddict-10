@@ -23,10 +23,10 @@ export default class UserRating extends AbstractComponent {
   constructor(data) {
     super();
 
-    this._userRating = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createUserRatingTemplate(this._userRating);
+    return createUserRatingTemplate(this._data);
   }
 }

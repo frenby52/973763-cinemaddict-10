@@ -16,10 +16,10 @@ const createSiteMenuTemplate = (data) => {
 export default class SiteMenu extends AbstractComponent {
   constructor(data) {
     super();
-    this._siteMenu = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._siteMenu);
+    return createSiteMenuTemplate(this._data);
   }
 }

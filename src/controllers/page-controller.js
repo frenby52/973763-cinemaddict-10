@@ -5,8 +5,7 @@ import FilmsContainerComponent from "../components/films-container";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import MainFilmCardsComponent from "../components/main-film-cards";
-import TopRatedComponent from "../components/top-rated";
-import MostCommentedComponent from "../components/most-commented";
+import ExtraFilmCardsComponent from "../components/extra-fillm-cards";
 
 const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
@@ -40,11 +39,11 @@ export default class PageController {
     renderComponent(filmsContainerElement, mainFilmCardsComponent);
     const mainFilmCardsElement = mainFilmCardsComponent.getElement();
 
-    const topRatedComponent = new TopRatedComponent();
+    const topRatedComponent = new ExtraFilmCardsComponent(`Top rated`);
     renderComponent(filmsContainerElement, topRatedComponent);
     const topRatedElement = topRatedComponent.getElement();
 
-    const mostCommentedComponent = new MostCommentedComponent();
+    const mostCommentedComponent = new ExtraFilmCardsComponent(`Most commented`);
     renderComponent(filmsContainerElement, mostCommentedComponent);
     const mostCommentedElement = mostCommentedComponent.getElement();
 

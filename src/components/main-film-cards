@@ -8,10 +8,6 @@ const createMainFilmCardsTemplate = () =>
     </section>`;
 
 export default class MainFilmCards extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return createMainFilmCardsTemplate();
   }
@@ -23,7 +19,7 @@ export default class MainFilmCards extends AbstractComponent {
   }
 
   getShowMoreBtnElement() {
-    return this._element.querySelector(`.films-list__show-more`);
+    return this.getElement().querySelector(`.films-list__show-more`);
   }
 
   removeShowMoreBtn() {
@@ -31,8 +27,6 @@ export default class MainFilmCards extends AbstractComponent {
   }
 
   addShowMoreBtnClickHandler(handler) {
-    if (this.getShowMoreBtnElement()) {
-      this.getShowMoreBtnElement().addEventListener(`click`, handler);
-    }
+    this.getShowMoreBtnElement().addEventListener(`click`, handler);
   }
 }

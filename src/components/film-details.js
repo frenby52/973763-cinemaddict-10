@@ -138,11 +138,11 @@ export default class FilmDetails extends AbstractComponent {
   constructor(data) {
     super();
 
-    this._filmDetails = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._filmDetails);
+    return createFilmDetailsTemplate(this._data);
   }
 
   addCloseBtnClickHandler(handler) {
