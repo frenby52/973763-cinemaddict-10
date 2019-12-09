@@ -1,4 +1,4 @@
-import {createElement} from "../util";
+import AbstractComponent from "./abstract-component";
 
 const createSiteMenuTemplate = (data) => {
   const watchlistFilmCards = data.filter((it) => it.watchlist);
@@ -13,24 +13,13 @@ const createSiteMenuTemplate = (data) => {
   </nav>`);
 };
 
-export default class SiteMenu {
+export default class SiteMenu extends AbstractComponent {
   constructor(data) {
-    this._siteMenu = data;
-    this._element = null;
+    super();
+    this._data = data;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._siteMenu);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createSiteMenuTemplate(this._data);
   }
 }

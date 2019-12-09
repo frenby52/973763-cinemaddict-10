@@ -26,7 +26,7 @@ const createElement = (templateString) => {
   return template.content.firstElementChild;
 };
 
-const renderElement = (container, element) => container.append(element);
+const renderComponent = (container, component) => container.append(component.getElement());
 
 const isEscEvent = (evt, action) => {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -34,4 +34,4 @@ const isEscEvent = (evt, action) => {
   }
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderElement, isEscEvent};
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent};
