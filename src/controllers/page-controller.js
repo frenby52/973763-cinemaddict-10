@@ -29,7 +29,15 @@ export default class PageController {
 
   render(data) {
     renderComponent(this._container, new SiteMenuComponent(data));
-    renderComponent(this._container, new SortComponent());
+    // renderComponent(this._container, new SortComponent());
+
+    const sortComponent = new SortComponent();
+    renderComponent(this._container, sortComponent);
+    // console.log(data);
+    // sortComponent.addSortHandler(() => {
+    //   const sortedData = sortComponent.getSortedData(data);
+    //   console.log(sortedData);
+    // });
 
     const filmsContainerComponent = new FilmsContainerComponent();
     renderComponent(this._container, filmsContainerComponent);
