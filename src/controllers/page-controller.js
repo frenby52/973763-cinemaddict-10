@@ -1,17 +1,19 @@
-import {getHighestValuesData, getRandomArrayItems, getSortedData, isEscEvent, renderComponent} from "../util";
+// import {getHighestValuesData, getRandomArrayItems, getSortedData, getFilmsListContainer, isEscEvent, renderComponent} from "../util";
+import {getHighestValuesData, getRandomArrayItems, getSortedData, renderComponent} from "../util";
 import SiteMenuComponent from "../components/site-menu";
 import SortComponent from "../components/sort";
 import FilmsContainerComponent from "../components/films-container";
-import FilmCardComponent from "../components/film-card";
-import FilmDetailsComponent from "../components/film-details";
+// import FilmCardComponent from "../components/film-card";
+// import FilmDetailsComponent from "../components/film-details";
 import MainFilmCardsComponent from "../components/main-film-cards";
 import ExtraFilmCardsComponent from "../components/extra-fillm-cards";
+import MovieController from "./movie-controller";
 
 const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
 const FILM_COUNT_BY_BUTTON = 5;
 
-const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
+// const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
 
 const getExtraFilmCardsData = (data, key) => {
   const sortedData = getSortedData(data, key);
@@ -21,6 +23,40 @@ const getExtraFilmCardsData = (data, key) => {
   }
   return getRandomArrayItems(highestValuesData, FILM_EXTRA_COUNT);
 };
+
+// const renderFilmCard = (card, container) => {
+//   const filmCardComponent = new FilmCardComponent(card);
+//   const filmDetailsComponent = new FilmDetailsComponent(card);
+//   renderComponent(getFilmsListContainer(container), filmCardComponent);
+//
+//   const onFilmCardElementClick = (evt) => {
+//     evt.preventDefault();
+//     renderComponent(document.body, filmDetailsComponent);
+//     filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
+//     filmDetailsComponent.addCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
+//   };
+//
+//   const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
+//
+//   const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
+//
+//   const closeFilmDetails = () => {
+//     filmDetailsComponent.removeElement(document.body);
+//     filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
+//   };
+//
+//   filmCardComponent.addElementsClickHandlers(onFilmCardElementClick);
+// };
+
+// const renderFilmCards = (cards, container) => cards.forEach((card) => {
+//   renderFilmCard(card, container);
+// });
+
+const renderFilmCards = (cards, container) => cards.forEach((card) => {
+  const movieController = new MovieController(container);
+  // renderFilmCard(card, container);
+  movieController.render(card);
+});
 
 export default class PageController {
   constructor(container) {
@@ -34,7 +70,7 @@ export default class PageController {
     const sortComponent = new SortComponent();
     renderComponent(this._container, sortComponent);
     // console.log(data);
-    // sortComponent.addSortHandler(() => {
+    // sortComponent.addSortTypeChangeHandler(() => {
     //   const sortedData = sortComponent.getSortedData(data);
     //   console.log(sortedData);
     // });
@@ -55,29 +91,29 @@ export default class PageController {
     renderComponent(filmsContainerElement, mostCommentedComponent);
     const mostCommentedElement = mostCommentedComponent.getElement();
 
-    const renderFilmCards = (dataToRender, cardsContainer) => dataToRender.forEach((it) => {
-      const filmCardComponent = new FilmCardComponent(it);
-      const filmDetailsComponent = new FilmDetailsComponent(it);
-      renderComponent(getFilmsListContainer(cardsContainer), filmCardComponent);
-
-      const onFilmCardElementClick = (evt) => {
-        evt.preventDefault();
-        renderComponent(document.body, filmDetailsComponent);
-        filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
-        filmDetailsComponent.addCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
-      };
-
-      const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
-
-      const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
-
-      const closeFilmDetails = () => {
-        filmDetailsComponent.removeElement(document.body);
-        filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
-      };
-
-      filmCardComponent.addElementsClickHandlers(onFilmCardElementClick);
-    });
+    // const renderFilmCards = (dataToRender, cardsContainer) => dataToRender.forEach((it) => {
+    //   const filmCardComponent = new FilmCardComponent(it);
+    //   const filmDetailsComponent = new FilmDetailsComponent(it);
+    //   renderComponent(getFilmsListContainer(cardsContainer), filmCardComponent);
+    //
+    //   const onFilmCardElementClick = (evt) => {
+    //     evt.preventDefault();
+    //     renderComponent(document.body, filmDetailsComponent);
+    //     filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
+    //     filmDetailsComponent.addCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
+    //   };
+    //
+    //   const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
+    //
+    //   const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
+    //
+    //   const closeFilmDetails = () => {
+    //     filmDetailsComponent.removeElement(document.body);
+    //     filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
+    //   };
+    //
+    //   filmCardComponent.addElementsClickHandlers(onFilmCardElementClick);
+    // });
 
     const renderExtraFilmCards = (key, cardsContainer) => {
       const filteredData = getExtraFilmCardsData(data, key);

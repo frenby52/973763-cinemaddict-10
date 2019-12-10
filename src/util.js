@@ -20,6 +20,8 @@ const getHighestValuesData = (data, key) => {
 
 const getRandomArrayItems = (data, qty)=> data.sort(() => Math.random() - 0.5).slice(0, qty);
 
+const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
+
 const createElement = (templateString) => {
   const template = document.createElement(`template`);
   template.innerHTML = templateString;
@@ -34,4 +36,4 @@ const isEscEvent = (evt, action) => {
   }
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent};
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, getFilmsListContainer};

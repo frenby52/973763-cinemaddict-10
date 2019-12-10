@@ -24,8 +24,9 @@ export default class Sort extends AbstractComponent {
     return createSortTemplate();
   }
 
-  addSortHandler(handler) {
+  addSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
       if (evt.target.tagName === `A` && evt.target.getAttribute(`data-sort-type`) !== this._sortType) {
         this._sortType = sortTypes[evt.target.getAttribute(`data-sort-type`)];
         handler(this._sortType);
