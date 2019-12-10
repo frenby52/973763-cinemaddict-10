@@ -26,7 +26,9 @@ export default class MainFilmCards extends AbstractComponent {
     this.getShowMoreBtnElement().remove();
   }
 
-  addShowMoreBtnClickHandler(handler) {
-    this.getShowMoreBtnElement().addEventListener(`click`, handler);
+  setShowMoreBtnClickHandler(handler) {
+    if (this.getShowMoreBtnElement()) {
+      this.getShowMoreBtnElement().addEventListener(`click`, handler);
+    }
   }
 }

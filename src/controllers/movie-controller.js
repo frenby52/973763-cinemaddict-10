@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {getFilmsListContainer, isEscEvent, renderComponent} from "../util";
+import {getFilmsListContainer, isEscEvent, renderComponent, removeComponent} from "../util";
 
 export default class MovieController {
   constructor(container) {
@@ -15,8 +15,8 @@ export default class MovieController {
     const onFilmCardElementClick = (evt) => {
       evt.preventDefault();
       renderComponent(document.body, filmDetailsComponent);
-      filmDetailsComponent.addEscPressHandler(onFilmDetailsEscPress);
-      filmDetailsComponent.addCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
+      filmDetailsComponent.setEscPressHandler(onFilmDetailsEscPress);
+      filmDetailsComponent.setCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
     };
 
     const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
@@ -24,12 +24,10 @@ export default class MovieController {
     const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
 
     const closeFilmDetails = () => {
-      filmDetailsComponent.removeElement(document.body);
+      removeComponent(filmDetailsComponent);
       filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
     };
 
-    filmCardComponent.addElementsClickHandlers(onFilmCardElementClick);
+    filmCardComponent.setElementsClickHandlers(onFilmCardElementClick);
   }
-
-
 }

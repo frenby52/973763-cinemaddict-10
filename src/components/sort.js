@@ -24,11 +24,14 @@ export default class Sort extends AbstractComponent {
     return createSortTemplate();
   }
 
-  addSortTypeChangeHandler(handler) {
+  setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      if (evt.target.tagName === `A` && evt.target.getAttribute(`data-sort-type`) !== this._sortType) {
+      if (evt.target.classList.contains(`sort__button`) && evt.target.getAttribute(`data-sort-type`) !== this._sortType) {
+        const sortElements = Array.from(this.getElement().querySelectorAll(`.sort__button`));
+        sortElements.forEach((it) => it.classList.remove(`sort__button--active`));
         this._sortType = sortTypes[evt.target.getAttribute(`data-sort-type`)];
+        evt.target.classList.add(`sort__button--active`);
         handler(this._sortType);
       }
     });
