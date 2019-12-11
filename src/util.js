@@ -20,8 +20,6 @@ const getHighestValuesData = (data, key) => {
 
 const getRandomArrayItems = (data, qty)=> data.sort(() => Math.random() - 0.5).slice(0, qty);
 
-const getFilmsListContainer = (elem) => elem.querySelector(`.films-list__container`);
-
 const createElement = (templateString) => {
   const template = document.createElement(`template`);
   template.innerHTML = templateString;
@@ -30,15 +28,10 @@ const createElement = (templateString) => {
 
 const renderComponent = (container, component, place) => (place === `afterbegin`) ? container.prepend(component.getElement()) : container.append(component.getElement());
 
-const removeComponent = (component) => {
-  component.getElement().remove();
-  component.removeElement();
-};
-
 const isEscEvent = (evt, action) => {
   if (evt.keyCode === ESC_KEYCODE) {
     action();
   }
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, getFilmsListContainer, removeComponent};
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent};

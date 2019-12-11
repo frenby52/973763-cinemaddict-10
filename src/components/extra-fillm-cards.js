@@ -16,4 +16,8 @@ export default class ExtraFilmCards extends AbstractComponent {
   getTemplate() {
     return createExtraFilmCardsTemplate(this._title);
   }
+
+  getContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
+  }
 }

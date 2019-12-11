@@ -1,4 +1,4 @@
-import {getHighestValuesData, getRandomArrayItems, getSortedData, renderComponent, removeComponent} from "../util";
+import {getHighestValuesData, getRandomArrayItems, getSortedData, renderComponent} from "../util";
 import SiteMenuComponent from "../components/site-menu";
 import SortComponent from "../components/sort";
 import FilmsContainerComponent from "../components/films-container";
@@ -27,7 +27,9 @@ const renderFilmCards = (cards, container) => cards.forEach((card) => {
 
 const renderExtraFilmCards = (data, key, cardsContainer) => {
   const filteredData = getExtraFilmCardsData(data, key);
-  if ((data.length && Array.isArray(data[0][key]) && !data.some((it) => it[key].length)) || !data.some((it) => it[key])) {
+  const isTotalRatingNull = !data.some((it) => it[key]);
+  const isTotalCommentsNull = data.length && Array.isArray(data[0][key]) && !data.some((it) => it[key].length);
+  if (isTotalCommentsNull || isTotalRatingNull) {
     cardsContainer.innerHTML = ``;
   } else {
     renderFilmCards(filteredData, cardsContainer);
@@ -43,28 +45,27 @@ export default class PageController {
     this._mainFilmCardsComponent = new MainFilmCardsComponent();
     this._topRatedComponent = new ExtraFilmCardsComponent(`Top rated`);
     this._mostCommentedComponent = new ExtraFilmCardsComponent(`Most commented`);
-    this._sortedData = null;
   }
 
   render(data) {
     renderComponent(this._container, new SiteMenuComponent(data));
     renderComponent(this._container, this._sortComponent);
     renderComponent(this._container, this._filmsContainerComponent);
+    this._renderMainFilmCards(data);
+    this._renderTopRatedFilmCards(data);
+    this._renderMostCommentedFilmCards(data);
+
     const filmsContainerElement = this._filmsContainerComponent.getElement();
     renderComponent(filmsContainerElement, this._mainFilmCardsComponent);
     renderComponent(filmsContainerElement, this._topRatedComponent);
     renderComponent(filmsContainerElement, this._mostCommentedComponent);
 
     this._sortComponent.setSortTypeChangeHandler(() => {
-      this._sortedData = this._sortComponent.getSortedData(data);
-      removeComponent(this._mainFilmCardsComponent);
+      const sortedData = this._sortComponent.getSortedData(data);
+      this._mainFilmCardsComponent.removeElement();
       renderComponent(filmsContainerElement, this._mainFilmCardsComponent, `afterbegin`);
-      this._renderMainFilmCards(this._sortedData);
+      this._renderMainFilmCards(sortedData);
     });
-
-    this._renderMainFilmCards(data);
-    this._renderTopRatedFilmCards(data);
-    this._renderMostCommentedFilmCards(data);
   }
 
   _renderMainFilmCards(data) {
@@ -73,7 +74,7 @@ export default class PageController {
     const onShowMoreButtonClick = () => {
       const mainFilmCardsPreviouslyShowedCount = mainFilmCardsShowedCount;
       mainFilmCardsShowedCount += FILM_COUNT_BY_BUTTON;
-      renderFilmCards(data.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), this._mainFilmCardsComponent.getElement());
+      renderFilmCards(data.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), this._mainFilmCardsComponent.getContainer());
 
       if (mainFilmCardsShowedCount >= data.length) {
         this._mainFilmCardsComponent.removeShowMoreBtn();
@@ -83,22 +84,22 @@ export default class PageController {
     if (data.length === 0) {
       this._mainFilmCardsComponent.removeShowMoreBtn();
       this._mainFilmCardsComponent.showNoMoviesMessage();
-      removeComponent(this._topRatedComponent);
-      removeComponent(this._mostCommentedComponent);
+      this._topRatedComponent.removeElement();
+      this._mostCommentedComponent.removeElement();
     } else {
       if (data.length <= FILM_COUNT_ON_START) {
         this._mainFilmCardsComponent.removeShowMoreBtn();
       }
-      renderFilmCards(data.slice(0, FILM_COUNT_ON_START), this._mainFilmCardsComponent.getElement());
+      renderFilmCards(data.slice(0, FILM_COUNT_ON_START), this._mainFilmCardsComponent.getContainer());
       this._mainFilmCardsComponent.setShowMoreBtnClickHandler(onShowMoreButtonClick);
     }
   }
 
   _renderTopRatedFilmCards(data) {
-    renderExtraFilmCards(data, `rating`, this._topRatedComponent.getElement());
+    renderExtraFilmCards(data, `rating`, this._topRatedComponent.getContainer());
   }
 
   _renderMostCommentedFilmCards(data) {
-    renderExtraFilmCards(data, `comments`, this._mostCommentedComponent.getElement());
+    renderExtraFilmCards(data, `comments`, this._mostCommentedComponent.getContainer());
   }
 }

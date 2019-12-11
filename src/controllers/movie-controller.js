@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {getFilmsListContainer, isEscEvent, renderComponent, removeComponent} from "../util";
+import {isEscEvent, renderComponent} from "../util";
 
 export default class MovieController {
   constructor(container) {
@@ -10,7 +10,7 @@ export default class MovieController {
   render(card) {
     const filmCardComponent = new FilmCardComponent(card);
     const filmDetailsComponent = new FilmDetailsComponent(card);
-    renderComponent(getFilmsListContainer(this._container), filmCardComponent);
+    renderComponent(this._container, filmCardComponent);
 
     const onFilmCardElementClick = (evt) => {
       evt.preventDefault();
@@ -24,7 +24,7 @@ export default class MovieController {
     const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
 
     const closeFilmDetails = () => {
-      removeComponent(filmDetailsComponent);
+      filmDetailsComponent.removeElement();
       filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
     };
 
