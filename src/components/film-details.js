@@ -145,11 +145,11 @@ export default class FilmDetails extends AbstractComponent {
     return createFilmDetailsTemplate(this._data);
   }
 
-  addCloseBtnClickHandler(handler) {
+  setCloseBtnClickHandler(handler) {
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
-  addEscPressHandler(handler) {
+  setEscPressHandler(handler) {
     document.addEventListener(`keydown`, handler);
   }
 

@@ -12,6 +12,10 @@ export default class MainFilmCards extends AbstractComponent {
     return createMainFilmCardsTemplate();
   }
 
+  getContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
+  }
+
   showNoMoviesMessage() {
     const title = this._element.querySelector(`.films-list__title`);
     title.classList.remove(`visually-hidden`);
@@ -26,7 +30,9 @@ export default class MainFilmCards extends AbstractComponent {
     this.getShowMoreBtnElement().remove();
   }
 
-  addShowMoreBtnClickHandler(handler) {
-    this.getShowMoreBtnElement().addEventListener(`click`, handler);
+  setShowMoreBtnClickHandler(handler) {
+    if (this.getShowMoreBtnElement()) {
+      this.getShowMoreBtnElement().addEventListener(`click`, handler);
+    }
   }
 }
