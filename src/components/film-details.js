@@ -18,7 +18,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
 
 
 const createFilmDetailsTemplate = (data) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments} = data;
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments, watchlist, watched, favorite} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
@@ -80,13 +80,13 @@ const createFilmDetailsTemplate = (data) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watched ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -155,5 +155,17 @@ export default class FilmDetails extends AbstractComponent {
 
   removeEscPressHandler(handler) {
     document.removeEventListener(`keydown`, handler);
+  }
+
+  setWatchlistInputClickHandler(handler) {
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, handler);
+  }
+
+  setWatchedInputClickHandler(handler) {
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
+  }
+
+  setFavoritesInputClickHandler(handler) {
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
   }
 }

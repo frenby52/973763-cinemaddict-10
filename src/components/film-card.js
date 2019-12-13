@@ -35,7 +35,55 @@ export default class FilmCard extends AbstractComponent {
     return createFilmCardTemplate(this._data);
   }
 
+  getWatchlistButtonElement() {
+    return this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`);
+  }
+
+  getWatchedButtonElement() {
+    return this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`);
+  }
+
+  getFavoritesButtonElement() {
+    return this.getElement().querySelector(`.film-card__controls-item--favorite`);
+  }
+
+  setWatchlistButtonActiveClass() {
+    if (this._data.watchlist) {
+      this.getWatchlistButtonElement().classList.add(`film-card__controls-item--active`);
+    } else {
+      this.getWatchlistButtonElement().classList.remove(`film-card__controls-item--active`);
+    }
+  }
+
+  setWatchedButtonActiveClass() {
+    if (this._data.watched) {
+      this.getWatchedButtonElement().classList.add(`film-card__controls-item--active`);
+    } else {
+      this.getWatchedButtonElement().classList.remove(`film-card__controls-item--active`);
+    }
+  }
+
+  setFavoritesButtonActiveClass() {
+    if (this._data.favorite) {
+      this.getFavoritesButtonElement().classList.add(`film-card__controls-item--active`);
+    } else {
+      this.getFavoritesButtonElement().classList.remove(`film-card__controls-item--active`);
+    }
+  }
+
   setElementsClickHandlers(handler) {
     this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler));
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getWatchlistButtonElement().addEventListener(`click`, handler);
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this.getWatchedButtonElement().addEventListener(`click`, handler);
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getFavoritesButtonElement().addEventListener(`click`, handler);
   }
 }

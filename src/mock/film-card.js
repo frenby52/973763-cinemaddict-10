@@ -26,8 +26,8 @@ const generateFilmCard = () => ({
   genre: generateRandomArray([...genres]),
   description: generateRandomArray(description).join(` `),
   watchlist: Math.random() > 0.5,
-  history: Math.random() > 0.5,
-  favorites: Math.random() > 0.5,
+  watched: Math.random() > 0.5,
+  favorite: Math.random() > 0.5,
   comments: generateComments(getRandomInteger(0, description.length - 1))
 });
 
