@@ -3,11 +3,12 @@ import FilmDetailsComponent from "../components/film-details";
 import {isEscEvent, renderComponent, replaceComponent} from "../util";
 
 export default class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
+    this._onViewChange = onViewChange;
 
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
@@ -91,8 +92,13 @@ export default class MovieController {
   _onFilmCardElementClick(evt) {
     evt.preventDefault();
     // renderComponent(document.body, filmDetailsComponent);
+    this._onViewChange();
     renderComponent(this._container, this._filmDetailsComponent);
     this._filmDetailsComponent.setEscPressHandler(this._onFilmDetailsEscPress);
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
+  }
+
+  setDefaultView() {
+    this._closeFilmDetails();
   }
 }

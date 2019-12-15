@@ -235,7 +235,6 @@ export default class FilmDetails extends AbstractSmartComponent {
   rerender() {
     super.rerender();
 
-    // this._applyFlatpickr();
   }
 
   _onEmojiClick() {
