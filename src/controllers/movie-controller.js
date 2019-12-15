@@ -24,6 +24,7 @@ export default class MovieController {
     if (oldFilmDetailsComponent && oldFilmCardComponent) {
       replaceComponent(this._filmCardComponent, oldFilmCardComponent);
       replaceComponent(this._filmDetailsComponent, oldFilmDetailsComponent);
+      this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
     } else {
       renderComponent(this._container, this._filmCardComponent);
     }
@@ -78,7 +79,8 @@ export default class MovieController {
   }
 
   _closeFilmDetails() {
-    this._filmDetailsComponent.removeElement();
+    // this._filmDetailsComponent.removeElement();
+    this._filmDetailsComponent.getElement().remove();
     this._filmDetailsComponent.removeEscPressHandler(this._onFilmDetailsEscPress);
   }
 
