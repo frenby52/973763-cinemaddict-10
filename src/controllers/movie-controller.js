@@ -32,9 +32,9 @@ export default class MovieController {
 
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
 
-    this._filmCardComponent.setWatchlistButtonActiveClass();
-    this._filmCardComponent.setWatchedButtonActiveClass();
-    this._filmCardComponent.setFavoritesButtonActiveClass();
+    // this._filmCardComponent.setWatchlistButtonActiveClass();
+    // this._filmCardComponent.setWatchedButtonActiveClass();
+    // this._filmCardComponent.setFavoritesButtonActiveClass();
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
@@ -80,9 +80,8 @@ export default class MovieController {
   }
 
   _closeFilmDetails() {
-    // this._filmDetailsComponent.removeElement();
     this._filmDetailsComponent.getElement().remove();
-    this._filmDetailsComponent.removeEscPressHandler(this._onFilmDetailsEscPress);
+    document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
   }
 
   _onFilmDetailsEscPress(evt) {
@@ -94,7 +93,7 @@ export default class MovieController {
     // renderComponent(document.body, filmDetailsComponent);
     this._onViewChange();
     renderComponent(this._container, this._filmDetailsComponent);
-    this._filmDetailsComponent.setEscPressHandler(this._onFilmDetailsEscPress);
+    document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
   }
 

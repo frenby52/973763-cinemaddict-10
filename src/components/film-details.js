@@ -205,14 +205,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
-  setEscPressHandler(handler) {
-    document.addEventListener(`keydown`, handler);
-  }
-
-  removeEscPressHandler(handler) {
-    document.removeEventListener(`keydown`, handler);
-  }
-
   setWatchlistInputClickHandler(handler) {
     this._watchlistInputClickHandler = handler;
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, handler);
@@ -235,6 +227,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   rerender() {
     super.rerender();
 
+    // this._applyFlatpickr();
   }
 
   _onEmojiClick() {

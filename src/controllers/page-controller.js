@@ -50,14 +50,15 @@ export default class PageController {
     renderComponent(this._container, this._sortComponent);
     renderComponent(this._container, this._filmsContainerComponent);
     this._renderMainFilmCards(this._cards);
-    this._renderTopRatedFilmCards(this._cards);
-    this._renderMostCommentedFilmCards(this._cards);
-
     renderComponent(this._filmsContainerComponent.getElement(), this._mainFilmCardsComponent);
-    renderComponent(this._filmsContainerComponent.getElement(), this._topRatedComponent);
-    renderComponent(this._filmsContainerComponent.getElement(), this._mostCommentedComponent);
+    if (cards.length) {
+      this._renderTopRatedFilmCards(this._cards);
+      this._renderMostCommentedFilmCards(this._cards);
+      renderComponent(this._filmsContainerComponent.getElement(), this._topRatedComponent);
+      renderComponent(this._filmsContainerComponent.getElement(), this._mostCommentedComponent);
 
-    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+      this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    }
   }
 
   _renderMainFilmCards(cards) {
@@ -74,18 +75,17 @@ export default class PageController {
       }
     };
 
-    if (cards.length === 0) {
+    if (!cards.length) {
       this._mainFilmCardsComponent.removeShowMoreBtn();
       this._mainFilmCardsComponent.showNoMoviesMessage();
-      this._topRatedComponent.removeElement();
-      this._mostCommentedComponent.removeElement();
     } else {
       if (cards.length <= FILM_COUNT_ON_START) {
         this._mainFilmCardsComponent.removeShowMoreBtn();
+      } else {
+        this._mainFilmCardsComponent.setShowMoreBtnClickHandler(onShowMoreButtonClick);
       }
       const newCards = renderFilmCards(cards.slice(0, FILM_COUNT_ON_START), this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
       this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
-      this._mainFilmCardsComponent.setShowMoreBtnClickHandler(onShowMoreButtonClick);
     }
   }
 

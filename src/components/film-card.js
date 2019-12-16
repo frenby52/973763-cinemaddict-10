@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component";
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
 const createFilmCardTemplate = (data) => {
-  const {title, rating, date, runtime, genre, poster, description, comments} = data;
+  const {title, rating, date, runtime, genre, poster, description, comments, watchlist, watched, favorite} = data;
   return (`<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
@@ -16,9 +16,9 @@ const createFilmCardTemplate = (data) => {
           <p class="film-card__description">${getCroppedDescription(description)}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <form class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist  ${watchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
+            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite ${favorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
           </form>
    </article>`);
 };
@@ -45,30 +45,6 @@ export default class FilmCard extends AbstractComponent {
 
   getFavoritesButtonElement() {
     return this.getElement().querySelector(`.film-card__controls-item--favorite`);
-  }
-
-  setWatchlistButtonActiveClass() {
-    if (this._data.watchlist) {
-      this.getWatchlistButtonElement().classList.add(`film-card__controls-item--active`);
-    } else {
-      this.getWatchlistButtonElement().classList.remove(`film-card__controls-item--active`);
-    }
-  }
-
-  setWatchedButtonActiveClass() {
-    if (this._data.watched) {
-      this.getWatchedButtonElement().classList.add(`film-card__controls-item--active`);
-    } else {
-      this.getWatchedButtonElement().classList.remove(`film-card__controls-item--active`);
-    }
-  }
-
-  setFavoritesButtonActiveClass() {
-    if (this._data.favorite) {
-      this.getFavoritesButtonElement().classList.add(`film-card__controls-item--active`);
-    } else {
-      this.getFavoritesButtonElement().classList.remove(`film-card__controls-item--active`);
-    }
   }
 
   setElementsClickHandlers(handler) {
