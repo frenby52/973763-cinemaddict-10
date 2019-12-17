@@ -28,17 +28,17 @@ const createElement = (templateString) => {
 
 const renderComponent = (container, component, place) => (place === `afterbegin`) ? container.prepend(component.getElement()) : container.append(component.getElement());
 
-const replaceComponent = (newComponent, oldComponent) => {
-  const parentElement = oldComponent.getElement().parentElement;
-  const newElement = newComponent.getElement();
-  const oldElement = oldComponent.getElement();
-
-  const isExistElements = !!(parentElement && newElement && oldElement);
-
-  if (isExistElements && parentElement.contains(oldElement)) {
-    parentElement.replaceChild(newElement, oldElement);
-  }
-};
+// const replaceComponent = (newComponent, oldComponent) => {
+//   const parentElement = oldComponent.getElement().parentElement;
+//   const newElement = newComponent.getElement();
+//   const oldElement = oldComponent.getElement();
+//
+//   const isExistElements = !!(parentElement && newElement && oldElement);
+//
+//   if (isExistElements && parentElement.contains(oldElement)) {
+//     parentElement.replaceChild(newElement, oldElement);
+//   }
+// };
 
 const isEscEvent = (evt, action) => {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -46,4 +46,4 @@ const isEscEvent = (evt, action) => {
   }
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, replaceComponent, isEscEvent};
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent};

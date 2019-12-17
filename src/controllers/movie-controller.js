@@ -1,6 +1,6 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {isEscEvent, renderComponent, replaceComponent} from "../util";
+import {isEscEvent, renderComponent} from "../util";
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange) {
@@ -13,8 +13,6 @@ export default class MovieController {
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._onFilmCardElementClick = this._onFilmCardElementClick.bind(this);
-    this.rerender = this.rerender.bind(this);
-    this._setClickHandlers = this._setClickHandlers.bind(this);
   }
 
   render(card) {
@@ -22,28 +20,22 @@ export default class MovieController {
     this._filmDetailsComponent = new FilmDetailsComponent(card);
     renderComponent(this._container, this._filmCardComponent);
 
-    this._setClickHandlers(card);
+    this._setComponentsClickHandlers(card);
   }
 
   rerender(card) {
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
-
     this._filmCardComponent = new FilmCardComponent(card);
     this._filmDetailsComponent = new FilmDetailsComponent(card);
+    this._filmCardComponent.rerender(oldFilmCardComponent);
+    this._filmDetailsComponent.rerender(oldFilmDetailsComponent);
 
-    if (oldFilmDetailsComponent && oldFilmCardComponent) {
-      // this._filmDetailsComponent.rerender();
-      replaceComponent(this._filmCardComponent, oldFilmCardComponent);
-      replaceComponent(this._filmDetailsComponent, oldFilmDetailsComponent);
-
-      this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
-    }
-
-    this._setClickHandlers(card);
+    this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
+    this._setComponentsClickHandlers(card);
   }
 
-  _setClickHandlers(card) {
+  _setComponentsClickHandlers(card) {
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {

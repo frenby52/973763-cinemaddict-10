@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
@@ -23,7 +23,7 @@ const createFilmCardTemplate = (data) => {
    </article>`);
 };
 
-export default class FilmCard extends AbstractComponent {
+export default class FilmCard extends AbstractSmartComponent {
   constructor(data) {
     super();
 
@@ -61,5 +61,16 @@ export default class FilmCard extends AbstractComponent {
 
   setFavoritesButtonClickHandler(handler) {
     this.getFavoritesButtonElement().addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+
+  rerender(oldComponent) {
+    super.rerender(oldComponent);
+  }
+
+  _subscribeOnEvents() {
   }
 }
