@@ -188,7 +188,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     super();
 
     this._data = data;
-    this._subscribeOnEvents();
+    // this._subscribeOnEvents();
     this._emoji = null;
     this._closeBtnClickHandler = null;
     this._watchlistInputClickHandler = null;

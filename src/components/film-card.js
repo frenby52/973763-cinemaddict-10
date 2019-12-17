@@ -64,13 +64,10 @@ export default class FilmCard extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-    this._subscribeOnEvents();
+    // this._subscribeOnEvents();
   }
 
   rerender(oldComponent) {
     super.rerender(oldComponent);
-  }
-
-  _subscribeOnEvents() {
   }
 }

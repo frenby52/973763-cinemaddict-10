@@ -127,7 +127,6 @@ export default class PageController {
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
 
     sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
-    // movieController.render(this._cards[index]);
   }
 
   _onViewChange() {
