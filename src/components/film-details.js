@@ -1,4 +1,9 @@
 import AbstractSmartComponent from "./abstract-smart-component";
+import moment from "moment";
+
+const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
+
+const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD HH:MM`);
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 const createCommentsMarkup = (comments) => comments.map((comment) =>
@@ -10,7 +15,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
     <p class="film-details__comment-text">${comment.comment}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
-      <span class="film-details__comment-day">${new Date(comment.date).toDateString()}</span>
+      <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div> 
@@ -108,7 +113,7 @@ const createFilmDetailsTemplate = (data, emoji) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${new Date(date).toDateString()}</td>
+              <td class="film-details__cell">${formatReleaseDate(date)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
