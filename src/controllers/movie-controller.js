@@ -13,9 +13,19 @@ export default class MovieController {
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._onFilmCardElementClick = this._onFilmCardElementClick.bind(this);
+    this.rerender = this.rerender.bind(this);
+    this._setClickHandlers = this._setClickHandlers.bind(this);
   }
 
   render(card) {
+    this._filmCardComponent = new FilmCardComponent(card);
+    this._filmDetailsComponent = new FilmDetailsComponent(card);
+    renderComponent(this._container, this._filmCardComponent);
+
+    this._setClickHandlers(card);
+  }
+
+  rerender(card) {
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
@@ -23,57 +33,57 @@ export default class MovieController {
     this._filmDetailsComponent = new FilmDetailsComponent(card);
 
     if (oldFilmDetailsComponent && oldFilmCardComponent) {
+      // this._filmDetailsComponent.rerender();
       replaceComponent(this._filmCardComponent, oldFilmCardComponent);
       replaceComponent(this._filmDetailsComponent, oldFilmDetailsComponent);
+
       this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
-    } else {
-      renderComponent(this._container, this._filmCardComponent);
     }
 
-    this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
+    this._setClickHandlers(card);
+  }
 
-    // this._filmCardComponent.setWatchlistButtonActiveClass();
-    // this._filmCardComponent.setWatchedButtonActiveClass();
-    // this._filmCardComponent.setFavoritesButtonActiveClass();
+  _setClickHandlers(card) {
+    this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         watchlist: !card.watchlist,
       }));
     });
 
     this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         watched: !card.watched,
       }));
     });
 
     this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         favorite: !card.favorite,
       }));
     });
 
     this._filmDetailsComponent.setWatchlistInputClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         watchlist: !card.watchlist,
       }));
     });
 
     this._filmDetailsComponent.setWatchedInputClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         watched: !card.watched,
       }));
     });
 
     this._filmDetailsComponent.setFavoritesInputClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, card, Object.assign({}, card, {
+      this._onDataChange(card, Object.assign({}, card, {
         favorite: !card.favorite,
       }));
     });

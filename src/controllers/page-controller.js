@@ -116,8 +116,9 @@ export default class PageController {
     this._renderMainFilmCards(sortedData);
   }
 
-  _onDataChange(movieController, oldData, newData) {
+  _onDataChange(oldData, newData) {
     const index = this._cards.findIndex((it) => it === oldData);
+    const sameMovieControllers = this._showedMovieControllers.filter((it) => it._filmCardComponent._data === oldData);
 
     if (index === -1) {
       return;
@@ -125,7 +126,8 @@ export default class PageController {
 
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
 
-    movieController.render(this._cards[index]);
+    sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
+    // movieController.render(this._cards[index]);
   }
 
   _onViewChange() {
