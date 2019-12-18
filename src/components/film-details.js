@@ -229,7 +229,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
-  rerender(oldComponent) {
+  rerender(oldComponent, card) {
+    this._data = card;
     super.rerender(oldComponent);
   }
 
@@ -239,7 +240,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       const oldEmoji = this._emoji;
       this._emoji = it.getAttribute(`src`);
       if (this._emoji !== oldEmoji) {
-        this.rerender(this);
+        this.rerender(this, this._data);
       }
     }));
   }

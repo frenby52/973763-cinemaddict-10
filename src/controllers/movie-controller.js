@@ -24,12 +24,10 @@ export default class MovieController {
   }
 
   rerender(card) {
-    const oldFilmCardComponent = this._filmCardComponent;
-    const oldFilmDetailsComponent = this._filmDetailsComponent;
-    this._filmCardComponent = new FilmCardComponent(card);
-    this._filmDetailsComponent = new FilmDetailsComponent(card);
-    this._filmCardComponent.rerender(oldFilmCardComponent);
-    this._filmDetailsComponent.rerender(oldFilmDetailsComponent);
+    // this._filmCardComponent = new FilmCardComponent(card);
+    // this._filmDetailsComponent = new FilmDetailsComponent(card);
+    this._filmCardComponent.rerender(this._filmCardComponent, card);
+    this._filmDetailsComponent.rerender(this._filmDetailsComponent, card);
 
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
     this._setComponentsClickHandlers(card);
