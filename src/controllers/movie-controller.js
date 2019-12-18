@@ -3,31 +3,110 @@ import FilmDetailsComponent from "../components/film-details";
 import {isEscEvent, renderComponent} from "../util";
 
 export default class MovieController {
-  constructor(container) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
+    this._filmCardComponent = null;
+    this._filmDetailsComponent = null;
+    this._onViewChange = onViewChange;
+    this.data = {};
+
+    this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
+    this._closeFilmDetails = this._closeFilmDetails.bind(this);
+    this._onFilmCardElementClick = this._onFilmCardElementClick.bind(this);
   }
 
   render(card) {
-    const filmCardComponent = new FilmCardComponent(card);
-    const filmDetailsComponent = new FilmDetailsComponent(card);
-    renderComponent(this._container, filmCardComponent);
+    this.data = card;
+    this._filmCardComponent = new FilmCardComponent(card);
+    renderComponent(this._container, this._filmCardComponent);
 
-    const onFilmCardElementClick = (evt) => {
+    this._setFilmCardComponentClickHandlers(card);
+  }
+
+  rerender(card) {
+    this.data = card;
+    this._filmCardComponent.rerender(this._filmCardComponent, card);
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.rerender(this._filmDetailsComponent, card);
+      this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
+      this._setFilmDetailsComponentClickHandlers(card);
+    }
+
+    this._setFilmCardComponentClickHandlers(card);
+  }
+
+  _setFilmCardComponentClickHandlers(card) {
+    this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
+
+    this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      renderComponent(document.body, filmDetailsComponent);
-      filmDetailsComponent.setEscPressHandler(onFilmDetailsEscPress);
-      filmDetailsComponent.setCloseBtnClickHandler(onFilmDetailsCloseBtnClick);
-    };
+      this._onDataChange(card, Object.assign({}, card, {
+        watchlist: !card.watchlist,
+      }));
+    });
 
-    const onFilmDetailsCloseBtnClick = () => closeFilmDetails();
+    this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(card, Object.assign({}, card, {
+        watched: !card.watched,
+      }));
+    });
 
-    const onFilmDetailsEscPress = (evt) => isEscEvent(evt, closeFilmDetails);
+    this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(card, Object.assign({}, card, {
+        favorite: !card.favorite,
+      }));
+    });
+  }
 
-    const closeFilmDetails = () => {
-      filmDetailsComponent.removeElement();
-      filmDetailsComponent.removeEscPressHandler(onFilmDetailsEscPress);
-    };
+  _setFilmDetailsComponentClickHandlers(card) {
+    this._filmDetailsComponent.setWatchlistInputClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(card, Object.assign({}, card, {
+        watchlist: !card.watchlist,
+      }));
+    });
 
-    filmCardComponent.setElementsClickHandlers(onFilmCardElementClick);
+    this._filmDetailsComponent.setWatchedInputClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(card, Object.assign({}, card, {
+        watched: !card.watched,
+      }));
+    });
+
+    this._filmDetailsComponent.setFavoritesInputClickHandler((evt) => {
+      evt.preventDefault();
+      this._onDataChange(card, Object.assign({}, card, {
+        favorite: !card.favorite,
+      }));
+    });
+  }
+
+  _closeFilmDetails() {
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.getElement().remove();
+      document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
+    }
+  }
+
+  _onFilmDetailsEscPress(evt) {
+    isEscEvent(evt, this._closeFilmDetails);
+  }
+
+  _onFilmCardElementClick(evt) {
+    evt.preventDefault();
+    this._onViewChange();
+    this._filmDetailsComponent = new FilmDetailsComponent(this.data);
+    renderComponent(this._container, this._filmDetailsComponent);
+    this._setFilmDetailsComponentClickHandlers(this.data);
+
+    document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
+    this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
+  }
+
+  setDefaultView() {
+    this._closeFilmDetails();
   }
 }

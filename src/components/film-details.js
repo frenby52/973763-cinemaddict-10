@@ -1,4 +1,9 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
+import moment from "moment";
+
+const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
+
+const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD HH:MM`);
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 const createCommentsMarkup = (comments) => comments.map((comment) =>
@@ -10,15 +15,64 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
     <p class="film-details__comment-text">${comment.comment}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
-      <span class="film-details__comment-day">${new Date(comment.date).toDateString()}</span>
+      <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div> 
   </li>`).join(`\n`);
 
+const createFilmRatingTemplate = (poster, title) => {
+  return (`<section class="film-details__user-rating-wrap">
+        <div class="film-details__user-rating-controls">
+          <button class="film-details__watched-reset" type="button">Undo</button>
+        </div>
 
-const createFilmDetailsTemplate = (data) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments} = data;
+        <div class="film-details__user-score">
+          <div class="film-details__user-rating-poster">
+            <img src="./images/posters/${poster}" alt="film-poster" class="film-details__user-rating-img">
+          </div>
+
+          <section class="film-details__user-rating-inner">
+            <h3 class="film-details__user-rating-title">${title}</h3>
+
+            <p class="film-details__user-rating-feelings">How you feel it?</p>
+
+            <div class="film-details__user-rating-score">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
+              <label class="film-details__user-rating-label" for="rating-1">1</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
+              <label class="film-details__user-rating-label" for="rating-2">2</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
+              <label class="film-details__user-rating-label" for="rating-3">3</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
+              <label class="film-details__user-rating-label" for="rating-4">4</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
+              <label class="film-details__user-rating-label" for="rating-5">5</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
+              <label class="film-details__user-rating-label" for="rating-6">6</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
+              <label class="film-details__user-rating-label" for="rating-7">7</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
+              <label class="film-details__user-rating-label" for="rating-8">8</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
+              <label class="film-details__user-rating-label" for="rating-9">9</label>
+
+            </div>
+          </section>
+        </div>
+      </section>`);
+};
+
+const createFilmDetailsTemplate = (data, emoji) => {
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments, watchlist, watched, favorite} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
@@ -59,7 +113,7 @@ const createFilmDetailsTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${new Date(date).toDateString()}</td>
+              <td class="film-details__cell">${formatReleaseDate(date)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -80,17 +134,17 @@ const createFilmDetailsTemplate = (data) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watched ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-
+    <div class="form-details__middle-container">${watched ? createFilmRatingTemplate(poster, title) : ``}</div>
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -100,7 +154,7 @@ const createFilmDetailsTemplate = (data) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+          <div for="add-emoji" class="film-details__add-emoji-label">${emoji ? `<img src="${emoji}" width="55" height="55" alt="emoji">` : ``}</div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -134,26 +188,69 @@ const createFilmDetailsTemplate = (data) => {
 </section>`);
 };
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(data) {
     super();
 
     this._data = data;
+    this._subscribeOnEvents();
+    this._emoji = null;
+    this._closeBtnClickHandler = null;
+    this._watchlistInputClickHandler = null;
+    this._watchedInputClickHandler = null;
+    this._favoriteInputClickHandler = null;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._data);
+    return createFilmDetailsTemplate(this._data, this._emoji);
   }
 
   setCloseBtnClickHandler(handler) {
+    this._closeBtnClickHandler = handler;
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
-  setEscPressHandler(handler) {
-    document.addEventListener(`keydown`, handler);
+  setWatchlistInputClickHandler(handler) {
+    this._watchlistInputClickHandler = handler;
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, handler);
   }
 
-  removeEscPressHandler(handler) {
-    document.removeEventListener(`keydown`, handler);
+  setWatchedInputClickHandler(handler) {
+    this._watchedInputClickHandler = handler;
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
+  }
+
+  setFavoritesInputClickHandler(handler) {
+    this._favoriteInputClickHandler = handler;
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+
+  rerender(oldComponent, card) {
+    this._data = card;
+    super.rerender(oldComponent);
+  }
+
+  _onEmojiClick() {
+    const emojiList = this.getElement().querySelector(`.film-details__emoji-list`).querySelectorAll(`img`);
+    emojiList.forEach((it) => it.addEventListener(`click`, () => {
+      const oldEmoji = this._emoji;
+      this._emoji = it.getAttribute(`src`);
+      if (this._emoji !== oldEmoji) {
+        this.rerender(this, this._data);
+      }
+    }));
+  }
+
+  _subscribeOnEvents() {
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedInputClickHandler);
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteInputClickHandler);
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnClickHandler);
+
+    this._onEmojiClick();
   }
 }
