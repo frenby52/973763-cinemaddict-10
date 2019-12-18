@@ -9,6 +9,7 @@ export default class MovieController {
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
     this._onViewChange = onViewChange;
+    this.data = {};
 
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
@@ -16,24 +17,26 @@ export default class MovieController {
   }
 
   render(card) {
+    this.data = card;
     this._filmCardComponent = new FilmCardComponent(card);
-    this._filmDetailsComponent = new FilmDetailsComponent(card);
     renderComponent(this._container, this._filmCardComponent);
 
-    this._setComponentsClickHandlers(card);
+    this._setFilmCardComponentClickHandlers(card);
   }
 
   rerender(card) {
-    // this._filmCardComponent = new FilmCardComponent(card);
-    // this._filmDetailsComponent = new FilmDetailsComponent(card);
+    this.data = card;
     this._filmCardComponent.rerender(this._filmCardComponent, card);
-    this._filmDetailsComponent.rerender(this._filmDetailsComponent, card);
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.rerender(this._filmDetailsComponent, card);
+      this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
+      this._setFilmDetailsComponentClickHandlers(card);
+    }
 
-    this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
-    this._setComponentsClickHandlers(card);
+    this._setFilmCardComponentClickHandlers(card);
   }
 
-  _setComponentsClickHandlers(card) {
+  _setFilmCardComponentClickHandlers(card) {
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
@@ -56,7 +59,9 @@ export default class MovieController {
         favorite: !card.favorite,
       }));
     });
+  }
 
+  _setFilmDetailsComponentClickHandlers(card) {
     this._filmDetailsComponent.setWatchlistInputClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(card, Object.assign({}, card, {
@@ -80,8 +85,10 @@ export default class MovieController {
   }
 
   _closeFilmDetails() {
-    this._filmDetailsComponent.getElement().remove();
-    document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.getElement().remove();
+      document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
+    }
   }
 
   _onFilmDetailsEscPress(evt) {
@@ -90,9 +97,11 @@ export default class MovieController {
 
   _onFilmCardElementClick(evt) {
     evt.preventDefault();
-    // renderComponent(document.body, filmDetailsComponent);
     this._onViewChange();
+    this._filmDetailsComponent = new FilmDetailsComponent(this.data);
     renderComponent(this._container, this._filmDetailsComponent);
+    this._setFilmDetailsComponentClickHandlers(this.data);
+
     document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
   }

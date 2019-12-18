@@ -118,12 +118,12 @@ export default class PageController {
 
   _onDataChange(oldData, newData) {
     const index = this._cards.findIndex((it) => it === oldData);
-    const sameMovieControllers = this._showedMovieControllers.filter((it) => it._filmCardComponent._data === oldData);
 
     if (index === -1) {
       return;
     }
 
+    const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data === oldData);
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
 
     sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
