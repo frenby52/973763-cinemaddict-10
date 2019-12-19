@@ -29,9 +29,10 @@ const renderFilmCards = (cards, container, onDataChange, onViewChange) => {
 };
 
 export default class PageController {
-  constructor(container) {
+  constructor(container, moviesModel) {
     this._container = container;
-    this._cards = [];
+    this._moviesModel = moviesModel;
+    // this._cards = [];
     this._showedMovieControllers = [];
 
     this._sortComponent = new SortComponent();
@@ -42,18 +43,22 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+
+
   }
 
-  render(cards) {
-    this._cards = cards;
-    renderComponent(this._container, new SiteMenuComponent(this._cards));
+  // render(cards) {
+  render() {
+    // this._cards = cards;
+    const cards = this._moviesModel.getCards();
+    renderComponent(this._container, new SiteMenuComponent(cards));
     renderComponent(this._container, this._sortComponent);
     renderComponent(this._container, this._filmsContainerComponent);
-    this._renderMainFilmCards(this._cards);
+    this._renderMainFilmCards(cards);
     renderComponent(this._filmsContainerComponent.getElement(), this._mainFilmCardsComponent);
     if (cards.length) {
-      this._renderTopRatedFilmCards(this._cards);
-      this._renderMostCommentedFilmCards(this._cards);
+      this._renderTopRatedFilmCards(cards);
+      this._renderMostCommentedFilmCards(cards);
       renderComponent(this._filmsContainerComponent.getElement(), this._topRatedComponent);
       renderComponent(this._filmsContainerComponent.getElement(), this._mostCommentedComponent);
 
@@ -110,23 +115,26 @@ export default class PageController {
   }
 
   _onSortTypeChange() {
-    const sortedData = this._sortComponent.getSortedData(this._cards);
+    // const sortedData = this._sortComponent.getSortedData(this._cards);
+    const sortedData = this._sortComponent.getSortedData(this._moviesModel.getCards());
     this._mainFilmCardsComponent.removeElement();
     renderComponent(this._filmsContainerComponent.getElement(), this._mainFilmCardsComponent, `afterbegin`);
     this._renderMainFilmCards(sortedData);
   }
 
-  _onDataChange(oldData, newData) {
-    const index = this._cards.findIndex((it) => it === oldData);
-
-    if (index === -1) {
-      return;
-    }
-
-    const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data === oldData);
-    this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
-
-    sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
+  _onDataChange(id, newData) {
+    this._moviesModel.setShowedMoviesControllers(this._showedMovieControllers);
+    this._moviesModel.updateCard(id, newData);
+    // const index = this._cards.findIndex((it) => it.id === id);
+    //
+    // if (index === -1) {
+    //   return;
+    // }
+    //
+    // this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
+    // const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+    //
+    // sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
   }
 
   _onViewChange() {

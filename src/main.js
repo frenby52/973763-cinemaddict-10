@@ -3,6 +3,7 @@ import {generateRank} from "./mock/rating";
 import {renderComponent} from "./util";
 import UserRatingComponent from "./components/user-rating";
 import PageController from "./controllers/page-controller";
+import Movies from "./models/movies";
 
 const FILM_COUNT = 11;
 
@@ -12,10 +13,15 @@ const rank = generateRank();
 const siteHeaderElement = document.querySelector(`.header`);
 renderComponent(siteHeaderElement, new UserRatingComponent(rank));
 
-const mainContainer = document.querySelector(`.main`);
-const pageController = new PageController(mainContainer);
+const moviesModel = new Movies();
+moviesModel.setCards(cardsData);
 
-pageController.render(cardsData);
+const mainContainer = document.querySelector(`.main`);
+// const pageController = new PageController(mainContainer);
+const pageController = new PageController(mainContainer, moviesModel);
+
+// pageController.render(cardsData);
+pageController.render();
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = () => {
