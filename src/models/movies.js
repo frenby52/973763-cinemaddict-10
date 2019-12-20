@@ -1,11 +1,22 @@
+import {FilterType, getFilmCardsByFilter} from "../util";
+
 export default class Movies {
   constructor() {
     this._cards = [];
 
-    this._showedMovieControllers = [];
+    this._filterChangeHandler = null;
+    this._activeFilterType = FilterType.ALL;
+
+    // // //
+    this._dataChangeHandler = [];
+
   }
 
   getCards() {
+    return getFilmCardsByFilter(this._cards, this._activeFilterType);
+  }
+
+  getCardsAll() {
     return this._cards;
   }
 
@@ -13,21 +24,41 @@ export default class Movies {
     this._cards = cards;
   }
 
-  setShowedMoviesControllers(showedMovieControllers) {
-    this._showedMovieControllers = showedMovieControllers;
-  }
-
   updateCard(id, newData) {
     const index = this._cards.findIndex((it) => it.id === id);
 
     if (index === -1) {
-      return;
+      return false;
+      // return;
     }
 
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
-    const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+    // const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+    // // sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
+    // sameMovieControllers.forEach((it)=> it.rerender(newData));
 
-    sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
+    // // //
+    console.log(this._dataChangeHandler)
+    // this._dataChangeHandlers.forEach((handler) => handler());
+    this._dataChangeHandler();
+    return true;
+  }
+
+  // _setFilterChangeHandler() {}
+  activateFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._filterChangeHandler();
+  }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandler = handler;
+  }
+
+
+  // // //
+  setDataChangeHandler(handler) {
+    // this._dataChangeHandlers.push(handler);
+    this._dataChangeHandler = handler;
   }
 
 }

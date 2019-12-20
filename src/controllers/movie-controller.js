@@ -110,4 +110,12 @@ export default class MovieController {
   setDefaultView() {
     this._closeFilmDetails();
   }
+
+  // /////////
+  destroy() {
+    // this._filmDetailsComponent.removeElement();
+    this._filmCardComponent.removeElement();
+
+    // document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
 }

@@ -43,6 +43,7 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
 
   }
@@ -51,7 +52,7 @@ export default class PageController {
   render() {
     // this._cards = cards;
     const cards = this._moviesModel.getCards();
-    renderComponent(this._container, new SiteMenuComponent(cards));
+    // renderComponent(this._container, new SiteMenuComponent(cards));
     renderComponent(this._container, this._sortComponent);
     renderComponent(this._container, this._filmsContainerComponent);
     this._renderMainFilmCards(cards);
@@ -63,6 +64,7 @@ export default class PageController {
       renderComponent(this._filmsContainerComponent.getElement(), this._mostCommentedComponent);
 
       this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+      this._moviesModel.setFilterChangeHandler(this._onFilterChange);
     }
   }
 
@@ -123,8 +125,13 @@ export default class PageController {
   }
 
   _onDataChange(id, newData) {
-    this._moviesModel.setShowedMoviesControllers(this._showedMovieControllers);
-    this._moviesModel.updateCard(id, newData);
+    // this._moviesModel.updateCard(id, newData);
+    const isCardUpdated = this._moviesModel.updateCard(id, newData);
+    if (isCardUpdated) {
+      const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+      // sameMovieControllers.forEach((it)=> it.rerender(this._cards[index]));
+      sameMovieControllers.forEach((it)=> it.rerender(newData));
+    }
     // const index = this._cards.findIndex((it) => it.id === id);
     //
     // if (index === -1) {
@@ -139,5 +146,20 @@ export default class PageController {
 
   _onViewChange() {
     this._showedMovieControllers.forEach((it) => it.setDefaultView());
+  }
+
+  /////////////
+  _removeCards() {
+    this._showedMovieControllers.forEach((movieController) => movieController.destroy());
+    this._showedMovieControllers = [];
+  }
+
+  ///////////
+
+  _onFilterChange() {
+    this._removeCards();
+    // this._renderMainFilmCards(this._moviesModel.getCards());
+    this.render();
+    // this._renderLoadMoreButton();
   }
 }

@@ -27,7 +27,10 @@ export default class MainFilmCards extends AbstractComponent {
   }
 
   removeShowMoreBtn() {
-    this.getShowMoreBtnElement().remove();
+    if (this.getShowMoreBtnElement()) {
+      this.getShowMoreBtnElement().remove();
+    }
+    // this.getShowMoreBtnElement().remove();
   }
 
   setShowMoreBtnClickHandler(handler) {
