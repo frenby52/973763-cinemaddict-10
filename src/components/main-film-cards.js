@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component";
+import {createElement} from "../util";
 
 const createMainFilmCardsTemplate = () =>
   `<section class="films-list">
@@ -8,6 +9,12 @@ const createMainFilmCardsTemplate = () =>
     </section>`;
 
 export default class MainFilmCards extends AbstractComponent {
+  constructor() {
+    super();
+
+    this._showMoreBtnClickHandler = null;
+  }
+
   getTemplate() {
     return createMainFilmCardsTemplate();
   }
@@ -26,6 +33,17 @@ export default class MainFilmCards extends AbstractComponent {
     return this.getElement().querySelector(`.films-list__show-more`);
   }
 
+  renderShowMoreBtn() {
+    if (!this.getShowMoreBtnElement()) {
+    const showMoreBtnTemplate = `<button class="films-list__show-more">Show more</button>`;
+    const showMoreBtn = createElement(showMoreBtnTemplate);
+    this.getContainer().append(showMoreBtn)
+      // this.getContainer().append(this.getShowMoreBtnElement());
+
+    }
+    // this.getShowMoreBtnElement().remove();
+  }
+
   removeShowMoreBtn() {
     if (this.getShowMoreBtnElement()) {
       this.getShowMoreBtnElement().remove();
@@ -35,7 +53,12 @@ export default class MainFilmCards extends AbstractComponent {
 
   setShowMoreBtnClickHandler(handler) {
     if (this.getShowMoreBtnElement()) {
+      this._showMoreBtnClickHandler = handler
       this.getShowMoreBtnElement().addEventListener(`click`, handler);
     }
+  }
+
+  recoverShowMoreBtnListener() {
+    this.getShowMoreBtnElement().addEventListener(`click`, this._showMoreBtnClickHandler);
   }
 }

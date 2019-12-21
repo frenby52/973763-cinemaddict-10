@@ -31,7 +31,7 @@ export default class FilterController {
 
     const filters = Object.values(FilterType).map((filterType) => getFilmCardsByFilter(allCards, filterType).length);
 
-
+    // переделать на ререндер? в задании почему то указано перерендеривать компонент фильтров.
 
     const oldComponent = this._siteMenuComponent;
     this._siteMenuComponent = new SiteMenuComponent(filters);
@@ -39,9 +39,11 @@ export default class FilterController {
 
 
     if (oldComponent) {
+      console.log(`replace`)
       replaceComponent(this._siteMenuComponent, oldComponent);
       console.log(this._siteMenuComponent.getElement())
     } else {
+      console.log(`render`)
       renderComponent(this._container, this._siteMenuComponent);
     }
   }

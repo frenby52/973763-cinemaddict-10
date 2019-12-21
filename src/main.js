@@ -9,6 +9,7 @@ import Movies from "./models/movies";
 const FILM_COUNT = 11;
 
 const cardsData = generateFilmCards(FILM_COUNT);
+console.log(cardsData)
 const rank = generateRank();
 
 const siteHeaderElement = document.querySelector(`.header`);

@@ -32,7 +32,6 @@ export default class SiteMenu extends AbstractComponent {
       evt.preventDefault();
       if (evt.target.classList.contains(`main-navigation__item`) && evt.target.getAttribute(`href`) !== this._filterType && !evt.target.classList.contains(`main-navigation__item--additional`)) {
         const filterElements = Array.from(this.getElement().querySelectorAll(`.main-navigation__item:not(.main-navigation__item--additional)`));
-        console.log(filterElements)
         const AllFilterElementIndex = filterElements.findIndex((it) => it.getAttribute(`href`) === FilterType.ALL);
         const activeFilterElementIndex = filterElements.findIndex((it) => it.getAttribute(`href`) === this._filterType);
         if (this._filterType) {
