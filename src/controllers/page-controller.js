@@ -52,9 +52,15 @@ export default class PageController {
     renderComponent(this._container, this._sortComponent);
     renderComponent(this._container, this._filmsContainerComponent);
     this._renderMainFilmCards(cards.slice(0, this._showingCardsCount));
-
     renderComponent(this._filmsContainerComponent.getElement(), this._mainFilmCardsComponent);
-    if (cards.length) {
+
+    if (!cards.length) {
+      this._mainFilmCardsComponent.removeShowMoreBtn();
+      this._mainFilmCardsComponent.showNoMoviesMessage();
+    } else {
+      if (cards.length <= FILM_COUNT_ON_START) {
+        this._mainFilmCardsComponent.removeShowMoreBtn();
+      }
       this._renderTopRatedFilmCards(cards);
       this._renderMostCommentedFilmCards(cards);
       renderComponent(this._filmsContainerComponent.getElement(), this._topRatedComponent);

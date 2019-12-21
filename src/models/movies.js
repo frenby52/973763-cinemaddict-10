@@ -35,7 +35,9 @@ export default class Movies {
 
   activateFilter(filterType) {
     this._activeFilterType = filterType;
-    this._filterChangeHandler();
+    if (this._filterChangeHandler) {
+      this._filterChangeHandler();
+    }
   }
 
   setFilterChangeHandler(handler) {
