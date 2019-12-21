@@ -111,11 +111,7 @@ export default class MovieController {
     this._closeFilmDetails();
   }
 
-  // /////////
   destroy() {
-    // this._filmDetailsComponent.removeElement();
     this._filmCardComponent.removeElement();
-
-    // document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 }

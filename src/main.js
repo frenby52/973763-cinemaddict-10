@@ -9,7 +9,6 @@ import Movies from "./models/movies";
 const FILM_COUNT = 11;
 
 const cardsData = generateFilmCards(FILM_COUNT);
-console.log(cardsData)
 const rank = generateRank();
 
 const siteHeaderElement = document.querySelector(`.header`);
@@ -23,13 +22,8 @@ moviesModel.setCards(cardsData);
 const filterController = new FilterController(mainContainer, moviesModel);
 filterController.render();
 
-// const pageController = new PageController(mainContainer);
 const pageController = new PageController(mainContainer, moviesModel);
-
-// pageController.render(cardsData);
 pageController.render();
-
-
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = () => {

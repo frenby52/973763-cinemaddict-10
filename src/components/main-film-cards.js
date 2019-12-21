@@ -35,25 +35,21 @@ export default class MainFilmCards extends AbstractComponent {
 
   renderShowMoreBtn() {
     if (!this.getShowMoreBtnElement()) {
-    const showMoreBtnTemplate = `<button class="films-list__show-more">Show more</button>`;
-    const showMoreBtn = createElement(showMoreBtnTemplate);
-    this.getContainer().append(showMoreBtn)
-      // this.getContainer().append(this.getShowMoreBtnElement());
-
+      const showMoreBtnTemplate = `<button class="films-list__show-more">Show more</button>`;
+      const showMoreBtn = createElement(showMoreBtnTemplate);
+      this.getContainer().append(showMoreBtn);
     }
-    // this.getShowMoreBtnElement().remove();
   }
 
   removeShowMoreBtn() {
     if (this.getShowMoreBtnElement()) {
       this.getShowMoreBtnElement().remove();
     }
-    // this.getShowMoreBtnElement().remove();
   }
 
   setShowMoreBtnClickHandler(handler) {
     if (this.getShowMoreBtnElement()) {
-      this._showMoreBtnClickHandler = handler
+      this._showMoreBtnClickHandler = handler;
       this.getShowMoreBtnElement().addEventListener(`click`, handler);
     }
   }

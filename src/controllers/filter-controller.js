@@ -5,19 +5,14 @@ export default class FilterController {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
-    // this._activeFilterType = FilterType.ALL;
     this._siteMenuComponent = null;
 
-    // this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
-
-    // //
     this._onDataChange = this._onDataChange.bind(this);
     this._moviesModel.setDataChangeHandler(this._onDataChange);
   }
 
   render() {
-    // const container = this._container;
     const allCards = this._moviesModel.getCardsAll();
 
     // const filters = Object.values(FilterType).map((filterType) => {
@@ -27,7 +22,6 @@ export default class FilterController {
     //     active: filterType === this._activeFilterType,
     //   };
     // });
-
 
     const filters = Object.values(FilterType).map((filterType) => getFilmCardsByFilter(allCards, filterType).length);
 

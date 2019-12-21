@@ -53,17 +53,9 @@ const isEscEvent = (evt, action) => {
   }
 };
 
-// const getWatchlistFilmCards = (data) => data.filter((it) => it.watchlist);
-// const getHistoryFilmCards = (data) => data.filter((it) => it.watched);
-// const getFavoritesFilmCards = (data) => data.filter((it) => it.favorite);
-// const getFilmCardsByfilt = (data, key) => data.filter((it) => it[key]);
-
 const getFilmCardsByFilter = (data, filterType) => {
   switch (filterType) {
-    // case FilterType.ALL:
-    //   return data;
     case FilterType.WATCHLIST:
-      // return getFilmCardsByfilt(data, `watchlist`);
       return data.filter((it) => it.watchlist);
     case FilterType.HISTORY:
       return data.filter((it) => it.watched);
