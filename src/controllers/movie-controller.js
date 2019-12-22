@@ -14,6 +14,7 @@ export default class MovieController {
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._onFilmCardElementClick = this._onFilmCardElementClick.bind(this);
+    // this._onCtrlEnterPress = this._onCtrlEnterPress.bind(this);
   }
 
   render(card) {
@@ -63,7 +64,6 @@ export default class MovieController {
   }
 
   _setFilmDetailsComponentClickHandlers(card) {
-    console.log(card)
     this._filmDetailsComponent.setWatchlistInputClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(card.id, Object.assign({}, card, {
@@ -89,15 +89,20 @@ export default class MovieController {
     this._filmDetailsComponent.setDeleteCommentsButtonClickHandler((evt) => {
       evt.preventDefault();
       if (evt.target.classList.contains(`film-details__comment-delete`)) {
-        console.log(evt.target.getAttribute(`data-comment-id`))
-        card.comments.forEach((it) => console.log(it.id));
         const newCommentsData = card.comments.filter((it) => it.id !== parseInt(evt.target.getAttribute(`data-comment-id`), 10));
-        console.log(newCommentsData)
 
         this._onDataChange(card.id, Object.assign({}, card, {
           comments: newCommentsData,
         }));
       }
+    });
+
+    this._filmDetailsComponent.setCommentSubmitHandler((evt) => {
+      evt.preventDefault();
+      const data = this._filmDetailsComponent.getData();
+      const myComment = Object.assign({}, data);
+      card.comments.push(myComment);
+      this._onDataChange(card.id, card);
     });
   }
 
@@ -105,6 +110,7 @@ export default class MovieController {
     if (this._filmDetailsComponent) {
       this._filmDetailsComponent.getElement().remove();
       document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
+      // document.removeEventListener(`keydown`, this._onCtrlEnterPress);
     }
   }
 
@@ -120,8 +126,16 @@ export default class MovieController {
     this._setFilmDetailsComponentClickHandlers(this.data);
 
     document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
+    // document.addEventListener(`keydown`, this._onCtrlEnterPress);
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
   }
+
+  // _onCtrlEnterPress(evt) {
+  //   if (evt.ctrlKey && evt.keyCode === 13) {
+  //     const form = this._filmDetailsComponent.getForm();
+  //     // form.submit();
+  //   }
+  // }
 
   setDefaultView() {
     this._closeFilmDetails();

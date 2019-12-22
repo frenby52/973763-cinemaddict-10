@@ -1,4 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component";
+import {getRandomInteger} from "../util";
 import moment from "moment";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
@@ -184,8 +185,21 @@ const createFilmDetailsTemplate = (data, emoji) => {
         </div>
       </section>
     </div>
+      <button type="submit">submit</button>
   </form>
+
 </section>`);
+};
+
+const parseFormData = (formData) => {
+
+  return {
+    id: getRandomInteger(0, 100),
+    comment: formData.get(`comment`),
+    date: 599184000000,
+    author: `you`,
+    emoji: `emoji`
+  };
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
@@ -199,8 +213,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistInputClickHandler = null;
     this._watchedInputClickHandler = null;
     this._favoriteInputClickHandler = null;
-    this._deleteCommentsButtonClickHandler = null;
-    this._commentId = null;
+    // this._deleteCommentsButtonClickHandler = null;
+    // this._commentSubmitHandler = null;
   }
 
   getTemplate() {
@@ -227,42 +241,27 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
   }
 
-  // setDeleteCommentsButtonClickHandler(handler) {
-  //
-  //   this._deleteCommentsButtonClickHandler = handler;
-  //   this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
-  //     evt.preventDefault();
-  //     if (evt.target.classList.contains(`film-details__comment-delete`)) {
-  //       console.log(`clicked`)
-  //       console.log(evt.target.getAttribute(`data-comment-id`))
-  //
-  //       // handler(this._sortType);
-  //     }
-  //   });
-  // }
-
   setDeleteCommentsButtonClickHandler(handler) {
-    this._deleteCommentsButtonClickHandler = handler;
+    // this._deleteCommentsButtonClickHandler = handler;
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, handler);
   }
 
-  setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      if (evt.target.classList.contains(`sort__button`) && evt.target.getAttribute(`data-sort-type`) !== this._sortType) {
-        const sortElements = Array.from(this.getElement().querySelectorAll(`.sort__button`));
-        const defaultSortElementIndex = sortElements.findIndex((it) => it.getAttribute(`data-sort-type`) === `default`);
-        const activeSortElementIndex = sortElements.findIndex((it) => it.getAttribute(`data-sort-type`) === this._sortType);
-        if (this._sortType) {
-          sortElements[activeSortElementIndex].classList.remove(`sort__button--active`);
-        } else {
-          sortElements[defaultSortElementIndex].classList.remove(`sort__button--active`);
-        }
-        this._sortType = evt.target.getAttribute(`data-sort-type`);
-        evt.target.classList.add(`sort__button--active`);
-        handler(this._sortType);
-      }
-    });
+  getForm() {
+    return this.getElement().querySelector(`.film-details__inner`);
+  }
+
+  getData() {
+    const form = this.getForm();
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+
+  setCommentSubmitHandler(handler) {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    // this._commentSubmitHandler = handler;
+
+    form.addEventListener(`submit`, handler);
   }
 
   rerender(oldComponent, card) {
