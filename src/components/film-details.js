@@ -16,7 +16,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
       <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <button class="film-details__comment-delete" data-comment-id="${comment.id}">Delete</button>
     </p>
   </div> 
   </li>`).join(`\n`);
@@ -199,6 +199,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._watchlistInputClickHandler = null;
     this._watchedInputClickHandler = null;
     this._favoriteInputClickHandler = null;
+    this._deleteCommentsButtonClickHandler = null;
+    this._commentId = null;
   }
 
   getTemplate() {
@@ -223,6 +225,44 @@ export default class FilmDetails extends AbstractSmartComponent {
   setFavoritesInputClickHandler(handler) {
     this._favoriteInputClickHandler = handler;
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+  }
+
+  // setDeleteCommentsButtonClickHandler(handler) {
+  //
+  //   this._deleteCommentsButtonClickHandler = handler;
+  //   this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
+  //     evt.preventDefault();
+  //     if (evt.target.classList.contains(`film-details__comment-delete`)) {
+  //       console.log(`clicked`)
+  //       console.log(evt.target.getAttribute(`data-comment-id`))
+  //
+  //       // handler(this._sortType);
+  //     }
+  //   });
+  // }
+
+  setDeleteCommentsButtonClickHandler(handler) {
+    this._deleteCommentsButtonClickHandler = handler;
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, handler);
+  }
+
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      if (evt.target.classList.contains(`sort__button`) && evt.target.getAttribute(`data-sort-type`) !== this._sortType) {
+        const sortElements = Array.from(this.getElement().querySelectorAll(`.sort__button`));
+        const defaultSortElementIndex = sortElements.findIndex((it) => it.getAttribute(`data-sort-type`) === `default`);
+        const activeSortElementIndex = sortElements.findIndex((it) => it.getAttribute(`data-sort-type`) === this._sortType);
+        if (this._sortType) {
+          sortElements[activeSortElementIndex].classList.remove(`sort__button--active`);
+        } else {
+          sortElements[defaultSortElementIndex].classList.remove(`sort__button--active`);
+        }
+        this._sortType = evt.target.getAttribute(`data-sort-type`);
+        evt.target.classList.add(`sort__button--active`);
+        handler(this._sortType);
+      }
+    });
   }
 
   rerender(oldComponent, card) {

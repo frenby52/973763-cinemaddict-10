@@ -63,6 +63,7 @@ export default class MovieController {
   }
 
   _setFilmDetailsComponentClickHandlers(card) {
+    console.log(card)
     this._filmDetailsComponent.setWatchlistInputClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(card.id, Object.assign({}, card, {
@@ -82,6 +83,21 @@ export default class MovieController {
       this._onDataChange(card.id, Object.assign({}, card, {
         favorite: !card.favorite,
       }));
+    });
+
+    // this._filmDetailsComponent.setDeleteCommentsButtonClickHandler(() => this._onDataChange(card.id, null));
+    this._filmDetailsComponent.setDeleteCommentsButtonClickHandler((evt) => {
+      evt.preventDefault();
+      if (evt.target.classList.contains(`film-details__comment-delete`)) {
+        console.log(evt.target.getAttribute(`data-comment-id`))
+        card.comments.forEach((it) => console.log(it.id));
+        const newCommentsData = card.comments.filter((it) => it.id !== parseInt(evt.target.getAttribute(`data-comment-id`), 10));
+        console.log(newCommentsData)
+
+        this._onDataChange(card.id, Object.assign({}, card, {
+          comments: newCommentsData,
+        }));
+      }
     });
   }
 

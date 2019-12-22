@@ -33,6 +33,18 @@ export default class Movies {
     return true;
   }
 
+  // removeCard(id) {
+  //   const index = this._cards.findIndex((it) => it.id === id);
+  //
+  //   if (index === -1) {
+  //     return false;
+  //   }
+  //
+  //   this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
+  //   this._dataChangeHandler();
+  //   return true;
+  // }
+
   activateFilter(filterType) {
     this._activeFilterType = filterType;
     if (this._filterChangeHandler) {

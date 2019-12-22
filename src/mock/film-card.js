@@ -33,6 +33,7 @@ const generateFilmCard = () => ({
 });
 
 const generateComment = () => ({
+  id: getRandomInteger(0, 100),
   author: authors[getRandomInteger(0, authors.length - 1)],
   comment: generateRandomArray(description).join(` `),
   date: getRandomInteger(0, 29) * 365 * 24 * 3600 * 1000,

@@ -43,7 +43,7 @@ export default class PageController {
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
-    this.onShowMoreButtonClick = this.onShowMoreButtonClick.bind(this);
+    this._onShowMoreButtonClick = this._onShowMoreButtonClick.bind(this);
 
   }
 
@@ -68,7 +68,7 @@ export default class PageController {
 
       this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
       this._moviesModel.setFilterChangeHandler(this._onFilterChange);
-      this._mainFilmCardsComponent.setShowMoreBtnClickHandler(this.onShowMoreButtonClick);
+      this._mainFilmCardsComponent.setShowMoreBtnClickHandler(this._onShowMoreButtonClick);
     }
   }
 
@@ -77,7 +77,7 @@ export default class PageController {
     this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
   }
 
-  onShowMoreButtonClick() {
+  _onShowMoreButtonClick() {
     this._mainFilmCardsComponent.removeShowMoreBtn();
     const prevCardsCount = this._showingCardsCount;
     const cards = this._moviesModel.getCards();
@@ -90,35 +90,6 @@ export default class PageController {
       this._mainFilmCardsComponent.recoverShowMoreBtnListener();
     }
   }
-
-  // let mainFilmCardsShowedCount = FILM_COUNT_ON_START;
-  // this._showingCardsCount = FILM_COUNT_ON_START;
-  //
-  // const onShowMoreButtonClick = () => {
-  //   const mainFilmCardsPreviouslyShowedCount = mainFilmCardsShowedCount;
-  //   if (mainFilmCardsShowedCount >= cards.length) {
-  //     this._showingCardsCount = cards.length;
-  //     this._mainFilmCardsComponent.removeShowMoreBtn();
-  //   }
-  //   mainFilmCardsShowedCount += FILM_COUNT_BY_BUTTON;
-  //   this._showingCardsCount += FILM_COUNT_BY_BUTTON;
-  //   const newCards = renderFilmCards(cards.slice(mainFilmCardsPreviouslyShowedCount, mainFilmCardsShowedCount), this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
-  //   this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
-  // };
-
-  // if (!cards.length) {
-  //   this._mainFilmCardsComponent.removeShowMoreBtn();
-  //   this._mainFilmCardsComponent.showNoMoviesMessage();
-  // } else {
-  //   if (cards.length <= FILM_COUNT_ON_START) {
-  //     this._mainFilmCardsComponent.removeShowMoreBtn();
-  //   } else {
-  //     this._mainFilmCardsComponent.setShowMoreBtnClickHandler(onShowMoreButtonClick);
-  //   }
-  //   const newCards = renderFilmCards(cards.slice(0, FILM_COUNT_ON_START), this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
-  //   this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
-  //   this._showingCardsCount = this._showedMovieControllers.length;
-  // }
 
   _renderExtraFilmCards(cards, container, key) {
     const filteredData = getExtraFilmCardsData(cards, key);
@@ -145,6 +116,7 @@ export default class PageController {
     this._mainFilmCardsComponent.removeElement();
     renderComponent(this._filmsContainerComponent.getElement(), this._mainFilmCardsComponent, `afterbegin`);
     this._renderMainFilmCards(sortedData);
+    this._mainFilmCardsComponent.removeShowMoreBtn();
   }
 
   _onDataChange(id, newData) {
