@@ -1,18 +1,18 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 import {FilterType} from "../util";
 
 const createSiteMenuTemplate = (data) => {
-  const [, watchlist, history, favorites] = data;
+  const [all, watchlist, history, favorites] = data;
   return (`<nav class="main-navigation">
-    <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-    <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${watchlist}</span></a>
-    <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${history}</span></a>
-    <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${favorites}</span></a>
+    <a href="#all" class="main-navigation__item ${all.active ? `main-navigation__item--active` : ``}">All movies</a>
+    <a href="#watchlist" class="main-navigation__item ${watchlist.active ? `main-navigation__item--active` : ``} ">Watchlist <span class="main-navigation__item-count">${watchlist.count}</span></a>
+    <a href="#history" class="main-navigation__item ${history.active ? `main-navigation__item--active` : ``}">History <span class="main-navigation__item-count">${history.count}</span></a>
+    <a href="#favorites" class="main-navigation__item ${favorites.active ? `main-navigation__item--active` : ``}">Favorites <span class="main-navigation__item-count">${favorites.count}</span></a>
     <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
   </nav>`);
 };
 
-export default class SiteMenu extends AbstractComponent {
+export default class SiteMenu extends AbstractSmartComponent {
   constructor(data) {
     super();
     this._data = data;
@@ -21,6 +21,11 @@ export default class SiteMenu extends AbstractComponent {
 
   getTemplate() {
     return createSiteMenuTemplate(this._data);
+  }
+
+  rerender(oldComponent, data) {
+    this._data = data;
+    super.rerender(oldComponent);
   }
 
   setFilterClickHandler(handler) {

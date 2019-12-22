@@ -63,10 +63,6 @@ export default class FilmCard extends AbstractSmartComponent {
     this.getFavoritesButtonElement().addEventListener(`click`, handler);
   }
 
-  recoveryListeners() {
-    // this._subscribeOnEvents();
-  }
-
   rerender(oldComponent, card) {
     this._data = card;
     super.rerender(oldComponent);

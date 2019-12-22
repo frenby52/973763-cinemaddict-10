@@ -225,13 +225,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
   }
 
-  recoveryListeners() {
-    this._subscribeOnEvents();
-  }
-
   rerender(oldComponent, card) {
     this._data = card;
     super.rerender(oldComponent);
+    this._subscribeOnEvents();
   }
 
   _onEmojiClick() {
