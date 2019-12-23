@@ -99,11 +99,16 @@ export default class MovieController {
 
     this._filmDetailsComponent.setCommentSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._filmDetailsComponent.getData();
+      const data = this._filmDetailsComponent.getFormData();
+      // console.log(...data);
+      // console.log(card);
+      // console.log(card.comments);
+      // console.log(data);
       const myComment = Object.assign({}, data);
       card.comments.push(myComment);
       this._onDataChange(card.id, card);
     });
+
   }
 
   _closeFilmDetails() {
