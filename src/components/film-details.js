@@ -253,9 +253,13 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   getFormData() {
     const form = this.getForm();
+    let newCommentId = 0;
     const formData = new FormData(form);
-    const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
-    const newCommentId = highestIdComment[0].id + 1;
+    if (this._data.comments.length) {
+      const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
+      newCommentId = highestIdComment[0].id + 1;
+    }
+
     return parseFormData(formData, newCommentId);
     // return formData;
   }
@@ -266,7 +270,7 @@ export default class FilmDetails extends AbstractSmartComponent {
         this._emojiSrc = evt.target.getAttribute(`src`);
         this._removeEmoji();
         if (this._emojiSrc) {
-          this._renderEmoji(this._emojiSrc);
+          this._renderEmoji();
         }
       }
     });
@@ -286,10 +290,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     }
   }
 
-  _renderEmoji(src) {
+  _renderEmoji() {
     const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
     const emojiImg = createElement(emojiTemplate);
-    emojiImg.src = src;
+    emojiImg.src = this._emojiSrc;
     this._getEmojiContainer().append(emojiImg);
   }
 
@@ -310,6 +314,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   rerender(card) {
     this._data = card;
+    this._emojiSrc = null;
     super.rerender();
     this.recoveryListeners();
   }
