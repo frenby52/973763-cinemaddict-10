@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {createElement} from "../util";
 import moment from "moment";
+import he from "he";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
@@ -13,7 +14,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
       <img src="./images/emoji/${comment.emoji}.png" width="55" height="55" alt="emoji">
     </span>
   <div>
-    <p class="film-details__comment-text">${comment.comment}</p>
+    <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
       <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
@@ -308,6 +309,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     form.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.keyCode === 13) {
         evt.preventDefault();
+
         form.submit();
       }
     });
