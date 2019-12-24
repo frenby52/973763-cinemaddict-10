@@ -109,6 +109,10 @@ export default class MovieController {
       // console.log(card);
       // console.log(card.comments);
       // console.log(data);
+      if (!data.emoji) {
+        this._filmDetailsComponent.getEmojiContainer().setAttribute(`style`, `box-shadow: inset 0 0 8px red;`);
+        return;
+      }
       const myComment = Object.assign({}, data);
       this.data.comments.push(myComment);
       this._onDataChange(this.data.id, this.data);

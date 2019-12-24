@@ -271,17 +271,18 @@ export default class FilmDetails extends AbstractSmartComponent {
         this._removeEmoji();
         if (this._emojiSrc) {
           this._renderEmoji();
+          this.getEmojiContainer().setAttribute(`style`, `box-shadow: 0;`);
         }
       }
     });
   }
 
-  _getEmojiContainer() {
+  getEmojiContainer() {
     return this.getElement().querySelector(`.film-details__add-emoji-label`);
   }
 
   _getEmoji() {
-    return this._getEmojiContainer().querySelector(`img`);
+    return this.getEmojiContainer().querySelector(`img`);
   }
 
   _removeEmoji() {
@@ -294,7 +295,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
     const emojiImg = createElement(emojiTemplate);
     emojiImg.src = this._emojiSrc;
-    this._getEmojiContainer().append(emojiImg);
+    this.getEmojiContainer().append(emojiImg);
   }
 
   setCommentSubmitHandler(handler) {
