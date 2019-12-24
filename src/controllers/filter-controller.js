@@ -41,7 +41,6 @@ export default class FilterController {
     });
 
     this._siteMenuComponent.rerender(filters);
-    this._siteMenuComponent.setFilterClickHandler(this._onFilterChange);
   }
 
   _onFilterChange(filterType) {

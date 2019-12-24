@@ -17,6 +17,7 @@ export default class SiteMenu extends AbstractSmartComponent {
     super();
     this._data = data;
     this._filterType = null;
+    this._filterClickHandler = null;
   }
 
   getTemplate() {
@@ -29,6 +30,7 @@ export default class SiteMenu extends AbstractSmartComponent {
   }
 
   setFilterClickHandler(handler) {
+    this._filterClickHandler = handler;
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
       if (evt.target.classList.contains(`main-navigation__item`) && evt.target.getAttribute(`href`) !== this._filterType && !evt.target.classList.contains(`main-navigation__item--additional`)) {
@@ -45,5 +47,9 @@ export default class SiteMenu extends AbstractSmartComponent {
         handler(this._filterType);
       }
     });
+  }
+
+  recoveryListeners() {
+    this.setFilterClickHandler(this._filterClickHandler);
   }
 }

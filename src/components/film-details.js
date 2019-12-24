@@ -186,7 +186,6 @@ const createFilmDetailsTemplate = (data) => {
         </div>
       </section>
     </div>
-      <button type="submit">submit</button>
   </form>
 
 </section>`);
@@ -308,9 +307,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     const form = this.getElement().querySelector(`.film-details__inner`);
     form.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.keyCode === 13) {
-        evt.preventDefault();
-
-        form.submit();
+        form.dispatchEvent(new Event(`submit`));
       }
     });
   }
@@ -319,7 +316,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._data = card;
     this._emojiSrc = null;
     super.rerender();
-    this.recoveryListeners();
   }
 
   recoveryListeners() {
