@@ -28,6 +28,10 @@ export default class FilmCard extends AbstractSmartComponent {
     super();
 
     this._data = data;
+    this._elementsClickHandlers = null;
+    this._watchlistButtonClickHandler = null;
+    this._watchedButtonClickHandler = null;
+    this._favoritesButtonClickHandler = null;
     this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
   }
 
@@ -48,23 +52,35 @@ export default class FilmCard extends AbstractSmartComponent {
   }
 
   setElementsClickHandlers(handler) {
+    this._elementsClickHandlers = handler;
     this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler));
   }
 
   setWatchlistButtonClickHandler(handler) {
+    this._watchlistButtonClickHandler = handler;
     this.getWatchlistButtonElement().addEventListener(`click`, handler);
   }
 
   setWatchedButtonClickHandler(handler) {
+    this._watchedButtonClickHandler = handler;
     this.getWatchedButtonElement().addEventListener(`click`, handler);
   }
 
   setFavoritesButtonClickHandler(handler) {
+    this._favoritesButtonClickHandler = handler;
     this.getFavoritesButtonElement().addEventListener(`click`, handler);
   }
 
-  rerender(oldComponent, card) {
+  rerender(card) {
     this._data = card;
-    super.rerender(oldComponent);
+    super.rerender();
+    this.recoveryListeners();
+  }
+
+  recoveryListeners() {
+    this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, this._elementsClickHandlers));
+    this.getWatchlistButtonElement().addEventListener(`click`, this._watchlistButtonClickHandler);
+    this.getWatchedButtonElement().addEventListener(`click`, this._watchedButtonClickHandler);
+    this.getFavoritesButtonElement().addEventListener(`click`, this._favoritesButtonClickHandler);
   }
 }

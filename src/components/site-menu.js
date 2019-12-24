@@ -23,9 +23,9 @@ export default class SiteMenu extends AbstractSmartComponent {
     return createSiteMenuTemplate(this._data);
   }
 
-  rerender(oldComponent, data) {
+  rerender(data) {
     this._data = data;
-    super.rerender(oldComponent);
+    super.rerender();
   }
 
   setFilterClickHandler(handler) {

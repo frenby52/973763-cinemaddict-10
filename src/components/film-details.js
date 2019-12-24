@@ -209,15 +209,13 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._data = data;
     this._subscribeOnEvents();
-    this._emoji = null;
+    this._emojiSrc = null;
     this._closeBtnClickHandler = null;
     this._watchlistInputClickHandler = null;
     this._watchedInputClickHandler = null;
     this._favoriteInputClickHandler = null;
-    // this._deleteCommentsButtonClickHandler = null;
+    this._deleteCommentsButtonClickHandler = null;
     this._commentSubmitHandler = null;
-
-
   }
 
   getTemplate() {
@@ -245,7 +243,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setDeleteCommentsButtonClickHandler(handler) {
-    // this._deleteCommentsButtonClickHandler = handler;
+    this._deleteCommentsButtonClickHandler = handler;
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, handler);
   }
 
@@ -262,26 +260,13 @@ export default class FilmDetails extends AbstractSmartComponent {
     // return formData;
   }
 
-  // setCommentSubmitHandler(handler) {
-  //   const form = this.getElement().querySelector(`.film-details__inner`);
-  //   // this._commentSubmitHandler = handler;
-  //
-  //   form.addEventListener(`submit`, handler);
-  // }
-
-  rerender(oldComponent, card) {
-    this._data = card;
-    super.rerender(oldComponent);
-    this._subscribeOnEvents();
-  }
-
-  _setEmojiClickHandler() {
+  _onEmojiClick() {
     this.getElement().querySelector(`.film-details__new-comment`).addEventListener(`click`, (evt) => {
-      if (evt.target.tagName === `IMG` && evt.target.getAttribute(`src`) !== this._emoji) {
-        this._emoji = evt.target.getAttribute(`src`);
+      if (evt.target.tagName === `IMG` && evt.target.getAttribute(`src`) !== this._emojiSrc) {
+        this._emojiSrc = evt.target.getAttribute(`src`);
         this._removeEmoji();
-        if (this._emoji) {
-          this._renderEmoji(this._emoji);
+        if (this._emojiSrc) {
+          this._renderEmoji(this._emojiSrc);
         }
       }
     });
@@ -317,22 +302,31 @@ export default class FilmDetails extends AbstractSmartComponent {
     const form = this.getElement().querySelector(`.film-details__inner`);
     form.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.keyCode === 13) {
-        // console.log(`ok`);
         evt.preventDefault();
         form.submit();
       }
     });
   }
 
-  _subscribeOnEvents() {
+  rerender(card) {
+    this._data = card;
+    super.rerender();
+    this.recoveryListeners();
+  }
+
+  recoveryListeners() {
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);
     this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedInputClickHandler);
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteInputClickHandler);
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnClickHandler);
-    // this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, this._commentSubmitHandler);
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, this._deleteCommentsButtonClickHandler);
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, this._commentSubmitHandler);
 
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
     this._onKeyDownSubmit();
-    this._setEmojiClickHandler();
-
+    this._onEmojiClick();
   }
 }

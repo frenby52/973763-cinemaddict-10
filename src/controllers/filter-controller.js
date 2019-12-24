@@ -40,7 +40,7 @@ export default class FilterController {
       };
     });
 
-    this._siteMenuComponent.rerender(this._siteMenuComponent, filters);
+    this._siteMenuComponent.rerender(filters);
     this._siteMenuComponent.setFilterClickHandler(this._onFilterChange);
   }
 
