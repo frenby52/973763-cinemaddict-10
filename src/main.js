@@ -4,6 +4,7 @@ import {renderComponent} from "./util";
 import UserRatingComponent from "./components/user-rating";
 import PageController from "./controllers/page-controller";
 import FilterController from "./controllers/filter-controller";
+import SortController from "./controllers/sort-controller";
 import Movies from "./models/movies";
 
 const FILM_COUNT = 11;
@@ -21,6 +22,9 @@ moviesModel.setCards(cardsData);
 
 const filterController = new FilterController(mainContainer, moviesModel);
 filterController.render();
+
+const sortController = new SortController(mainContainer, moviesModel);
+sortController.render();
 
 const pageController = new PageController(mainContainer, moviesModel);
 pageController.render();

@@ -7,6 +7,12 @@ const FilterType = {
   FAVORITES: `#favorites`
 };
 
+const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
 const getRandomInteger = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 
 const generateRandomArray = (arr, min = 1, max = 3) => new Array(getRandomInteger(min, max)).fill(``).map(() => arr[getRandomInteger(0, arr.length - 1)]);
@@ -54,4 +60,12 @@ const getFilmCardsByFilter = (data, filterType) => {
   return data;
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter};
+
+const getFilmCardsBySort = (data, sortType) => {
+  if (sortType !== `default`) {
+    return data.slice().sort((a, b) => b[sortType] - a[sortType]);
+  }
+  return data;
+};
+
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort};
