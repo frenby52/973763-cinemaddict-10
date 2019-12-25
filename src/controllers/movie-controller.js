@@ -14,7 +14,6 @@ export default class MovieController {
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._onFilmCardElementClick = this._onFilmCardElementClick.bind(this);
-    // this._onCtrlEnterPress = this._onCtrlEnterPress.bind(this);
   }
 
   render(card) {
@@ -58,7 +57,6 @@ export default class MovieController {
     if (this._filmDetailsComponent) {
       this._filmDetailsComponent.getElement().remove();
       document.removeEventListener(`keydown`, this._onFilmDetailsEscPress);
-      // document.removeEventListener(`keydown`, this._onCtrlEnterPress);
     }
   }
 
@@ -118,17 +116,15 @@ export default class MovieController {
       this._onDataChange(this.data.id, this.data);
     });
 
+    this._filmDetailsComponent.setKeyDownHandler((evt) => {
+      if (evt.ctrlKey && evt.keyCode === 13) {
+        this._filmDetailsComponent.getElement().querySelector(`.film-details__inner`).dispatchEvent(new Event(`submit`));
+      }
+    });
+
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
     document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
-    // document.addEventListener(`keydown`, this._onCtrlEnterPress);
   }
-
-  // _onCtrlEnterPress(evt) {
-  //   if (evt.ctrlKey && evt.keyCode === 13) {
-  //     const form = this._filmDetailsComponent.getForm();
-  //     // form.submit();
-  //   }
-  // }
 
   setDefaultView() {
     this._closeFilmDetails();

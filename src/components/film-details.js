@@ -216,6 +216,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._favoriteInputClickHandler = null;
     this._deleteCommentsButtonClickHandler = null;
     this._commentSubmitHandler = null;
+    this._keyDowHandler = null;
   }
 
   getTemplate() {
@@ -245,6 +246,16 @@ export default class FilmDetails extends AbstractSmartComponent {
   setDeleteCommentsButtonClickHandler(handler) {
     this._deleteCommentsButtonClickHandler = handler;
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, handler);
+  }
+
+  setCommentSubmitHandler(handler) {
+    this._commentSubmitHandler = handler;
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, handler);
+  }
+
+  setKeyDownHandler(handler) {
+    this._keyDowHandler = handler;
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, handler);
   }
 
   getForm() {
@@ -298,20 +309,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getEmojiContainer().append(emojiImg);
   }
 
-  setCommentSubmitHandler(handler) {
-    this._commentSubmitHandler = handler;
-    this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, handler);
-  }
-
-  _onKeyDownSubmit() {
-    const form = this.getElement().querySelector(`.film-details__inner`);
-    form.addEventListener(`keydown`, (evt) => {
-      if (evt.ctrlKey && evt.keyCode === 13) {
-        form.dispatchEvent(new Event(`submit`));
-      }
-    });
-  }
-
   rerender(card) {
     this._data = card;
     this._emojiSrc = null;
@@ -325,12 +322,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnClickHandler);
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, this._deleteCommentsButtonClickHandler);
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, this._commentSubmitHandler);
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, this._keyDowHandler);
 
     this._subscribeOnEvents();
   }
 
   _subscribeOnEvents() {
-    this._onKeyDownSubmit();
     this._onEmojiClick();
   }
 }
