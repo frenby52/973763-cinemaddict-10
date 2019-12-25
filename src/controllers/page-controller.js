@@ -53,7 +53,10 @@ export default class PageController {
     if (!cards.length) {
       this._mainFilmCardsComponent.removeShowMoreBtn();
       this._mainFilmCardsComponent.showNoMoviesMessage();
+      this._topRatedComponent.removeElement();
+      this._mostCommentedComponent.removeElement();
     } else {
+      this._mainFilmCardsComponent.restoreDefaultTitle();
       if (cards.length <= FILM_COUNT_ON_START) {
         this._mainFilmCardsComponent.removeShowMoreBtn();
       }

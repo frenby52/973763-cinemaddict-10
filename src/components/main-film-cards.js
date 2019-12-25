@@ -29,6 +29,14 @@ export default class MainFilmCards extends AbstractComponent {
     title.textContent = `There are no movies in our database`;
   }
 
+  restoreDefaultTitle() {
+    const title = this._element.querySelector(`.films-list__title`);
+    if (!title.classList.contains(`visually-hidden`)) {
+      title.classList.add(`visually-hidden`);
+      title.textContent = `All movies. Upcoming`;
+    }
+  }
+
   getShowMoreBtnElement() {
     return this.getElement().querySelector(`.films-list__show-more`);
   }
