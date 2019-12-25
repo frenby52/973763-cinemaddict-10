@@ -38,6 +38,7 @@ export default class MainFilmCards extends AbstractComponent {
       const showMoreBtnTemplate = `<button class="films-list__show-more">Show more</button>`;
       const showMoreBtn = createElement(showMoreBtnTemplate);
       this.getContainer().append(showMoreBtn);
+      showMoreBtn.addEventListener(`click`, this._showMoreBtnClickHandler);
     }
   }
 
@@ -52,9 +53,5 @@ export default class MainFilmCards extends AbstractComponent {
       this._showMoreBtnClickHandler = handler;
       this.getShowMoreBtnElement().addEventListener(`click`, handler);
     }
-  }
-
-  recoverShowMoreBtnListener() {
-    this.getShowMoreBtnElement().addEventListener(`click`, this._showMoreBtnClickHandler);
   }
 }

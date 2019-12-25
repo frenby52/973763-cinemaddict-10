@@ -82,7 +82,6 @@ export default class PageController {
 
     if (this._showingCardsCount < cards.length) {
       this._mainFilmCardsComponent.renderShowMoreBtn();
-      this._mainFilmCardsComponent.recoverShowMoreBtnListener();
     }
   }
 
@@ -134,7 +133,6 @@ export default class PageController {
 
     if (cards.length > FILM_COUNT_ON_START) {
       this._mainFilmCardsComponent.renderShowMoreBtn();
-      this._mainFilmCardsComponent.recoverShowMoreBtnListener();
     }
   }
 }
