@@ -60,7 +60,6 @@ const getFilmCardsByFilter = (data, filterType) => {
   return data;
 };
 
-
 const getFilmCardsBySort = (data, sortType) => {
   if (sortType !== `default`) {
     return data.slice().sort((a, b) => b[sortType] - a[sortType]);

@@ -4,15 +4,13 @@ export default class Movies {
   constructor() {
     this._cards = [];
 
-    this._filterChangeHandler = null;
     this._dataChangeHandler = null;
-    this._activeFilterType = FilterType.WATCHLIST;
+    this._activeFilterType = FilterType.ALL;
     this._activeSortType = SortType.DEFAULT;
-    this._sortChangeHandler = null;
+    this._sortAndFilterChangeHandler = null;
   }
 
   getCards() {
-    // return getFilmCardsByFilter(this._cards, this._activeFilterType);
     const filteredData = getFilmCardsByFilter(this._cards, this._activeFilterType);
     return getFilmCardsBySort(filteredData, this._activeSortType);
   }
@@ -39,28 +37,23 @@ export default class Movies {
 
   activateFilter(filterType) {
     this._activeFilterType = filterType;
-    if (this._filterChangeHandler) {
-      this._filterChangeHandler();
+    if (this._sortAndFilterChangeHandler) {
+      this._sortAndFilterChangeHandler();
     }
-  }
-
-  setFilterChangeHandler(handler) {
-    this._filterChangeHandler = handler;
   }
 
   activateSort(sortType) {
     this._activeSortType = sortType;
-    if (this._sortChangeHandler) {
-      this._sortChangeHandler();
+    if (this._sortAndFilterChangeHandler) {
+      this._sortAndFilterChangeHandler();
     }
   }
 
-  setSortChangeHandler(handler) {
-    this._sortChangeHandler = handler;
+  setSortAndFilterChangeHandler(handler) {
+    this._sortAndFilterChangeHandler = handler;
   }
 
   setDataChangeHandler(handler) {
     this._dataChangeHandler = handler;
   }
-
 }
