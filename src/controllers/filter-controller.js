@@ -1,11 +1,11 @@
 import {FilterType, getFilmCardsByFilter, renderComponent} from "../util";
-import SiteMenuComponent from "../components/site-menu";
+import FilterComponent from "../components/filter";
 
 export default class FilterController {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
-    this._siteMenuComponent = null;
+    this._filterComponent = null;
 
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
@@ -22,9 +22,9 @@ export default class FilterController {
       };
     });
 
-    this._siteMenuComponent = new SiteMenuComponent(filters);
-    this._siteMenuComponent.setFilterClickHandler(this._onFilterChange);
-    renderComponent(this._container, this._siteMenuComponent);
+    this._filterComponent = new FilterComponent(filters);
+    this._filterComponent.setFilterClickHandler(this._onFilterChange);
+    renderComponent(this._container, this._filterComponent);
   }
 
   rerender() {
@@ -36,7 +36,7 @@ export default class FilterController {
       };
     });
 
-    this._siteMenuComponent.rerender(filters);
+    this._filterComponent.rerender(filters);
   }
 
   _onFilterChange(filterType) {

@@ -12,7 +12,7 @@ const createSiteMenuTemplate = (data) => {
   </nav>`);
 };
 
-export default class SiteMenu extends AbstractSmartComponent {
+export default class Filter extends AbstractSmartComponent {
   constructor(data) {
     super();
     this._data = data;
