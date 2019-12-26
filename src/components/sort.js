@@ -36,11 +36,4 @@ export default class Sort extends AbstractComponent {
       }
     });
   }
-
-  getSortedData(data) {
-    if (this._sortType !== `default`) {
-      return data.slice().sort((a, b) => b[this._sortType] - a[this._sortType]);
-    }
-    return data;
-  }
 }

@@ -1,5 +1,18 @@
 const ESC_KEYCODE = 27;
 
+const FilterType = {
+  ALL: `#all`,
+  WATCHLIST: `#watchlist`,
+  HISTORY: `#history`,
+  FAVORITES: `#favorites`
+};
+
+const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
 const getRandomInteger = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 
 const generateRandomArray = (arr, min = 1, max = 3) => new Array(getRandomInteger(min, max)).fill(``).map(() => arr[getRandomInteger(0, arr.length - 1)]);
@@ -28,22 +41,30 @@ const createElement = (templateString) => {
 
 const renderComponent = (container, component, place) => (place === `afterbegin`) ? container.prepend(component.getElement()) : container.append(component.getElement());
 
-// const replaceComponent = (newComponent, oldComponent) => {
-//   const parentElement = oldComponent.getElement().parentElement;
-//   const newElement = newComponent.getElement();
-//   const oldElement = oldComponent.getElement();
-//
-//   const isExistElements = !!(parentElement && newElement && oldElement);
-//
-//   if (isExistElements && parentElement.contains(oldElement)) {
-//     parentElement.replaceChild(newElement, oldElement);
-//   }
-// };
-
 const isEscEvent = (evt, action) => {
   if (evt.keyCode === ESC_KEYCODE) {
     action();
   }
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent};
+const getFilmCardsByFilter = (data, filterType) => {
+  switch (filterType) {
+    case FilterType.WATCHLIST:
+      return data.filter((it) => it.watchlist);
+    case FilterType.HISTORY:
+      return data.filter((it) => it.watched);
+    case FilterType.FAVORITES:
+      return data.filter((it) => it.favorite);
+  }
+
+  return data;
+};
+
+const getFilmCardsBySort = (data, sortType) => {
+  if (sortType !== `default`) {
+    return data.slice().sort((a, b) => b[sortType] - a[sortType]);
+  }
+  return data;
+};
+
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort};

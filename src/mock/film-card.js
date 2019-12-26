@@ -12,6 +12,7 @@ const authors = [`writer one`, `writer two`, `writer three`, `writer four`, `wri
 const emoji = new Set([`smile`, `sleeping`, `puke`, `angry`]);
 
 const generateFilmCard = () => ({
+  id: getRandomInteger(0, 100),
   title: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
   originalTitle: [...filmTitles][getRandomInteger(0, [...filmTitles].length - 1)],
   rating: getRandomInteger(0, 10),
@@ -32,6 +33,7 @@ const generateFilmCard = () => ({
 });
 
 const generateComment = () => ({
+  id: getRandomInteger(0, 100),
   author: authors[getRandomInteger(0, authors.length - 1)],
   comment: generateRandomArray(description).join(` `),
   date: getRandomInteger(0, 29) * 365 * 24 * 3600 * 1000,
