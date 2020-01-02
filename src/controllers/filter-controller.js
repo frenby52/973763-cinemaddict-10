@@ -6,6 +6,7 @@ export default class FilterController {
     this._container = container;
     this._moviesModel = moviesModel;
     this._filterComponent = null;
+    this._statsClickHandler = null;
 
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
@@ -23,7 +24,7 @@ export default class FilterController {
     });
 
     this._filterComponent = new FilterComponent(filters);
-    this._filterComponent.setFilterClickHandler(this._onFilterChange);
+    this._filterComponent.setFilterAndStatsClickHandlers(this._onFilterChange, this._statsClickHandler);
     renderComponent(this._container, this._filterComponent);
   }
 
@@ -42,6 +43,10 @@ export default class FilterController {
   _onFilterChange(filterType) {
     this._moviesModel.activateFilter(filterType);
     this._activeFilterType = filterType;
+  }
+
+  setStatsClickHandler(handler) {
+    this._statsClickHandler = handler;
   }
 
   _onDataChange() {
