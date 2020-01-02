@@ -24,9 +24,11 @@ moviesModel.setCards(cardsData);
 const filterController = new FilterController(mainContainer, moviesModel);
 filterController.setStatsClickHandler((isStatsActive) => {
   if (isStatsActive) {
+    sortController.hide();
     statisticsComponent.show();
     pageController.hide();
   } else {
+    sortController.show();
     statisticsComponent.hide();
     pageController.show();
   }
