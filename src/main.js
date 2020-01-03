@@ -38,7 +38,7 @@ filterController.render();
 const sortController = new SortController(mainContainer, moviesModel);
 sortController.render();
 
-const statisticsComponent = new StatisticsComponent();
+const statisticsComponent = new StatisticsComponent(moviesModel);
 renderComponent(mainContainer, statisticsComponent);
 statisticsComponent.hide();
 

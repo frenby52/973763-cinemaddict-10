@@ -1,7 +1,91 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
+import Chart from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-const createStatisticsTemplate = () =>
-  `<section class="statistic">
+const getSortedStats = (data) => {
+  const allGenres = [];
+  data.forEach((item) =>
+    item.genre.forEach((it) => {
+      allGenres.push(it);
+    })
+  );
+
+  const uniqueGenres = new Set(allGenres);
+
+  const genresStats = [...uniqueGenres].map((it) => {
+    let qty = 0;
+    allGenres.forEach((it2) => {
+      if (it2 === it) {
+        qty++;
+      }
+    });
+    return {genre: it, count: qty};
+  });
+
+  return genresStats.sort((a, b) => b.count - a.count);
+};
+
+const renderChart = (ctx, movies) => {
+  const genres = getSortedStats(movies);
+  return new Chart(ctx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: genres.map((it) => it.genre),
+      datasets: [{
+        data: genres.map((it) => it.count),
+        backgroundColor: `#ffe800`,
+        anchor: `start`,
+        barThickness: 30,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      layout: {
+        padding: {
+          left: 100
+        }
+      },
+      plugins: {
+        datalabels: {
+          font: {
+            size: 18
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 18
+          },
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
+};
+
+const createStatisticsTemplate = (data) => {
+  const genres = getSortedStats(data);
+  const topGenre = genres[0] ? genres[0].genre : `-`;
+  return (`<section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
@@ -30,7 +114,7 @@ const createStatisticsTemplate = () =>
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${data.length} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
@@ -38,7 +122,7 @@ const createStatisticsTemplate = () =>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${topGenre}</p>
       </li>
     </ul>
 
@@ -46,10 +130,57 @@ const createStatisticsTemplate = () =>
       <canvas class="statistic__chart" width="1000"></canvas>
     </div>
 
-  </section>`;
+  </section>`);
+};
 
-export default class Statistics extends AbstractComponent {
-  getTemplate() {
-    return createStatisticsTemplate();
+export default class Statistics extends AbstractSmartComponent {
+  constructor(moviesModel) {
+    super();
+
+    this._moviesModel = moviesModel;
+    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    console.log(this._watchedMovies)
+    this._chart = null;
+
+    this._renderChart();
   }
+
+  getTemplate() {
+    return createStatisticsTemplate(this._watchedMovies);
+  }
+
+  _renderChart() {
+    const ctx = this.getElement().querySelector(`.statistic__chart`);
+    this._resetChart();
+    this._chart = renderChart(ctx, this._watchedMovies);
+    // this.setFilterListener();
+  }
+
+  rerender() {
+    // this._moviesModel = moviesModel;
+    console.log(this._watchedMovies)
+    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    console.log(this._watchedMovies)
+
+    super.rerender();
+    this._renderChart();
+  }
+
+  _resetChart() {
+    if (this._chart) {
+      this._chart.destroy();
+      this._chart = null;
+    }
+  }
+
+  show() {
+    console.log(`ok`)
+    super.show();
+
+    this.rerender();
+  }
+
+  recoveryListeners() {}
+
+
 }
