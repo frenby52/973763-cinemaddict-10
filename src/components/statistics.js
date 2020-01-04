@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import moment from "moment";
 
 const getSortedStats = (data) => {
   const allGenres = [];
@@ -85,6 +86,8 @@ const renderChart = (ctx, movies) => {
 const createStatisticsTemplate = (data) => {
   const genres = getSortedStats(data);
   const topGenre = genres[0] ? genres[0].genre : `-`;
+  const totalDuration = moment.duration(data.reduce((acc, it) => acc + (it.runtime * 60 * 1000), 0));
+
   return (`<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -118,7 +121,7 @@ const createStatisticsTemplate = (data) => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${moment.duration(totalDuration).hours()}<span class="statistic__item-description">h</span>${moment.duration(totalDuration).minutes()}<span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
@@ -153,7 +156,7 @@ export default class Statistics extends AbstractSmartComponent {
     const ctx = this.getElement().querySelector(`.statistic__chart`);
     this._resetChart();
     this._chart = renderChart(ctx, this._watchedMovies);
-    // this.setFilterListener();
+
   }
 
   rerender() {

@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {createElement} from "../util";
+import {createElement, getFilmRuntime} from "../util";
 import moment from "moment";
 import he from "he";
 
@@ -119,7 +119,7 @@ const createFilmDetailsTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${getFilmRuntime(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
