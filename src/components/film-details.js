@@ -8,6 +8,7 @@ const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
+
 const createCommentsMarkup = (comments) => comments.map((comment) =>
   `<li class="film-details__comment">
     <span class="film-details__comment-emoji">

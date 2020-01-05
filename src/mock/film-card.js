@@ -30,7 +30,8 @@ const generateFilmCard = () => ({
   watchlist: Math.random() > 0.5,
   watched: Math.random() > 0.5,
   favorite: Math.random() > 0.5,
-  comments: generateComments(getRandomInteger(0, description.length - 1))
+  comments: generateComments(getRandomInteger(0, description.length - 1)),
+  watchingDate: new Date(50 * 365 * 24 * getRandomInteger(3595, 3600) * 1000)
 });
 
 const generateComment = () => ({

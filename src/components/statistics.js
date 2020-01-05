@@ -84,7 +84,7 @@ const renderChart = (ctx, movies) => {
   });
 };
 
-const createStatisticsTemplate = (data) => {
+const createStatisticsTemplate = (data, filter) => {
   const genres = getSortedStats(data);
   const topGenre = genres[0] ? genres[0].genre : `-`;
   const totalDuration = moment.duration(data.reduce((acc, it) => acc + (it.runtime * 60 * 1000), 0));
@@ -99,19 +99,19 @@ const createStatisticsTemplate = (data) => {
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${filter === `all-time` ? `checked` : ``}>
       <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${filter === `today` ? `checked` : ``}>
       <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${filter === `week` ? `checked` : ``}>
       <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${filter === `month` ? `checked` : ``}>
       <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${filter === `year` ? `checked` : ``}>
       <label for="statistic-year" class="statistic__filters-label">Year</label>
     </form>
 
@@ -143,29 +143,29 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._moviesModel = moviesModel;
     this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    this._filteredData = this._watchedMovies;
     this._chart = null;
+    this._filter = `all-time`;
+    this._onDataChange = this._onDataChange.bind(this);
+    this._moviesModel.setDataChangeHandler(this._onDataChange);
 
     this._renderChart();
+    this._setFilterListener();
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._watchedMovies);
+    return createStatisticsTemplate(this._filteredData, this._filter);
   }
 
   _renderChart() {
-    // console.log(moment().subtract(7, `d`))
-    // console.log(moment().startOf(`day`))
-    // console.log(moment(1518131116001).format(`YYYY/MM/DD hh:mm`))
     const ctx = this.getElement().querySelector(`.statistic__chart`);
     this._resetChart();
-    this._chart = renderChart(ctx, this._watchedMovies);
-
+    this._chart = renderChart(ctx, this._filteredData);
   }
 
   rerender() {
-    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
-
     super.rerender();
+
     this._renderChart();
   }
 
@@ -182,7 +182,44 @@ export default class Statistics extends AbstractSmartComponent {
     this.rerender();
   }
 
-  recoveryListeners() {}
+  _setFilterListener() {
+    const todayPeriod = moment().startOf(`day`);
+    const weekPeriod = moment().subtract(7, `d`);
+    const monthPeriod = moment().subtract(30, `d`);
+    const yearPeriod = moment().subtract(365, `d`);
 
+    const getDataForPeriod = (data, startPeriod) => data.filter((it) => it.watchingDate > startPeriod);
 
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, (evt) => {
+      switch (evt.target.value) {
+        case `today`:
+          this._filteredData = getDataForPeriod(this._watchedMovies, todayPeriod);
+          break;
+        case `week`:
+          this._filteredData = getDataForPeriod(this._watchedMovies, weekPeriod);
+          break;
+        case `month`:
+          this._filteredData = getDataForPeriod(this._watchedMovies, monthPeriod);
+          break;
+        case `year`:
+          this._filteredData = getDataForPeriod(this._watchedMovies, yearPeriod);
+          break;
+        default:
+          this._filteredData = this._watchedMovies;
+      }
+      this._filter = evt.target.value;
+
+      this.rerender();
+    });
+  }
+
+  _onDataChange() {
+    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    this._filteredData = this._watchedMovies;
+    this._filter = `all-time`;
+  }
+
+  recoveryListeners() {
+    this._setFilterListener();
+  }
 }
