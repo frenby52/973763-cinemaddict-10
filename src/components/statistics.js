@@ -2,6 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
+import {getUserRank} from "../util";
 
 const getSortedStats = (data) => {
   const allGenres = [];
@@ -92,7 +93,7 @@ const createStatisticsTemplate = (data) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Sci-Fighter</span>
+      <span class="statistic__rank-label">${getUserRank(data.length)}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -142,7 +143,6 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._moviesModel = moviesModel;
     this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
-    console.log(this._watchedMovies)
     this._chart = null;
 
     this._renderChart();
@@ -153,6 +153,9 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _renderChart() {
+    // console.log(moment().subtract(7, `d`))
+    // console.log(moment().startOf(`day`))
+    // console.log(moment(1518131116001).format(`YYYY/MM/DD hh:mm`))
     const ctx = this.getElement().querySelector(`.statistic__chart`);
     this._resetChart();
     this._chart = renderChart(ctx, this._watchedMovies);
@@ -160,10 +163,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   rerender() {
-    // this._moviesModel = moviesModel;
-    console.log(this._watchedMovies)
     this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
-    console.log(this._watchedMovies)
 
     super.rerender();
     this._renderChart();
@@ -177,7 +177,6 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   show() {
-    console.log(`ok`)
     super.show();
 
     this.rerender();

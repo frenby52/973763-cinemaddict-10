@@ -4,7 +4,7 @@ export default class Movies {
   constructor() {
     this._cards = [];
 
-    this._dataChangeHandler = null;
+    this._dataChangeHandlers = [];
     this._activeFilterType = FilterType.ALL;
     this._activeSortType = SortType.DEFAULT;
     this._sortAndFilterChangeHandler = null;
@@ -31,7 +31,7 @@ export default class Movies {
     }
 
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
-    this._dataChangeHandler();
+    this._dataChangeHandlers.forEach((handler) => handler());
     return true;
   }
 
@@ -54,6 +54,6 @@ export default class Movies {
   }
 
   setDataChangeHandler(handler) {
-    this._dataChangeHandler = handler;
+    this._dataChangeHandlers.push(handler);
   }
 }

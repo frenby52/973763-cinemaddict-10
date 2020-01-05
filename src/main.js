@@ -1,5 +1,4 @@
 import {generateFilmCards} from "./mock/film-card";
-import {generateRank} from "./mock/rating";
 import {renderComponent} from "./util";
 import UserRatingComponent from "./components/user-rating";
 import PageController from "./controllers/page-controller";
@@ -11,16 +10,14 @@ import StatisticsComponent from './components/statistics';
 const FILM_COUNT = 11;
 
 const cardsData = generateFilmCards(FILM_COUNT);
-const rank = generateRank();
-
-const siteHeaderElement = document.querySelector(`.header`);
-renderComponent(siteHeaderElement, new UserRatingComponent(rank));
-
-const mainContainer = document.querySelector(`.main`);
 
 const moviesModel = new Movies();
 moviesModel.setCards(cardsData);
 
+const siteHeaderElement = document.querySelector(`.header`);
+renderComponent(siteHeaderElement, new UserRatingComponent(moviesModel));
+
+const mainContainer = document.querySelector(`.main`);
 const filterController = new FilterController(mainContainer, moviesModel);
 filterController.setStatsClickHandler((isStatsActive) => {
   if (isStatsActive) {

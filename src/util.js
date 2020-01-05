@@ -74,4 +74,15 @@ const getFilmRuntime = (runtime) => {
   return `${moment.duration(runtimeMs).hours()}h ${moment.duration(runtimeMs).minutes()}m`;
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime};
+const getUserRank = (rank) => {
+  if (rank >= 1 && rank <= 10) {
+    return `novice`;
+  } else if (rank >= 11 && rank <= 20) {
+    return `fan`;
+  } else if (rank >= 21) {
+    return `movie buff`;
+  }
+  return ``;
+};
+
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime, getUserRank};
