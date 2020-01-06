@@ -3,13 +3,14 @@ import FilmDetailsComponent from "../components/film-details";
 import {isEscEvent, renderComponent} from "../util";
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
     this._onViewChange = onViewChange;
     this.data = {};
+    this._api = api;
 
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
@@ -67,9 +68,22 @@ export default class MovieController {
   _onFilmCardElementClick(e) {
     e.preventDefault();
     this._onViewChange();
-    this._filmDetailsComponent = new FilmDetailsComponent(this.data);
-    renderComponent(this._container, this._filmDetailsComponent);
+    if (this.data.comments) {
+      this._api.getComments(this.data.id)
+        .then((comments) => {
+          // console.log(comments)
+          this._filmDetailsComponent = new FilmDetailsComponent(this.data, comments);
+          renderComponent(this._container, this._filmDetailsComponent);
+          this._setFilmDetailsHandlers();
+        });
+    } else {
+      this._filmDetailsComponent = new FilmDetailsComponent(this.data, []);
+      renderComponent(this._container, this._filmDetailsComponent);
+      this._setFilmDetailsHandlers();
+    }
+  }
 
+  _setFilmDetailsHandlers() {
     this._filmDetailsComponent.setWatchlistInputClickHandler(() => {
       this._onDataChange(this.data.id, Object.assign({}, this.data, {
         watchlist: !this.data.watchlist,

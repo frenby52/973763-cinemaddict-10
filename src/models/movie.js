@@ -1,24 +1,26 @@
 export default class Movie {
   constructor(data) {
-    this.id = data[`id`];
-    this.title = data[`title`] || ``;
-    this.originalTitle = data[`alternative_title`] || ``;
-    this.rating = parseInt(data[`total_rating`], 10) || 0;
-    this.poster = data[`poster`] || ``;
-    this.age = parseInt(data[`age_rating`], 10) || 0;
-    this.director = data[`director`] || ``;
-    this.writers = new Set(data[`writers`] || []);
-    this.actors = new Set(data[`actors`] || []);
-    this.date = new Date(data[`release`][`date`]) || null;
-    this.country = data[`release`][`release_country`] || ``;
-    this.runtime = parseInt(data[`runtime`], 10) || 0;
-    this.genre = new Set(data[`genre`] || []);
-    this.description = data[`description`] || ``;
-    this.personalRating = parseInt(data[`personal_rating`], 10) || 0;
-    this.watchlist = Boolean(data[`watchlist`]);
-    this.watched = Boolean(data[`already_watched`]);
-    this.watchingDate = new Date(data[`watching_date`]) || null;
-    this.favorite = Boolean(data[`favorite`]);
+    // console.log(data)
+
+    this.id = data[`id`] || ``;
+    this.title = data[`film_info`][`title`] || ``;
+    this.originalTitle = data[`film_info`][`alternative_title`] || ``;
+    this.rating = parseInt(data[`film_info`][`total_rating`], 10) || 0;
+    this.poster = data[`film_info`][`poster`] || ``;
+    this.age = parseInt(data[`film_info`][`age_rating`], 10) || 0;
+    this.director = data[`film_info`][`director`] || ``;
+    this.writers = new Set(data[`film_info`][`writers`] || []);
+    this.actors = new Set(data[`film_info`][`actors`] || []);
+    this.date = new Date(data[`film_info`][`release`][`date`]) || null;
+    this.country = data[`film_info`][`release`][`release_country`] || ``;
+    this.runtime = parseInt(data[`film_info`][`runtime`], 10) || 0;
+    this.genre = new Set(data[`film_info`][`genre`] || []);
+    this.description = data[`film_info`][`description`] || ``;
+    this.personalRating = parseInt(data[`user_details`][`personal_rating`], 10) || 0;
+    this.watchlist = Boolean(data[`user_details`][`watchlist`]);
+    this.watched = Boolean(data[`user_details`][`already_watched`]);
+    this.watchingDate = new Date(data[`user_details`][`watching_date`]) || null;
+    this.favorite = Boolean(data[`user_details`][`favorite`]);
     this.comments = data[`comments`] || [];
   }
 
@@ -61,7 +63,7 @@ export default class Movie {
     return data.map(Movie.parseMovie);
   }
 
-  static clone(data) {
-    return new Movie(data.toRAW());
-  }
+  // static clone(data) {
+  //   return new Movie(data.toRAW());
+  // }
 }

@@ -17,22 +17,25 @@ const checkStatus = (response) => {
   }
 };
 
-const API = class {
+export default class API {
   constructor(endPoint, authorization) {
     this._endPoint = endPoint;
     this._authorization = authorization;
   }
 
   getCards() {
-    return this._load({url: `cards`})
+    return this._load({url: `movies`})
       .then((response) => response.json())
-      .then(Movie.parseCards);
+      .then(Movie.parseMovies);
   }
 
   updateCard(id, data) {
   }
 
-  getComments() {
+  getComments(id) {
+    return this._load({url: `comments/${id}`})
+      .then((response) => response.json())
+      .then(Comments.parseComments);
   }
 
   createComment(comment) {
@@ -54,5 +57,3 @@ const API = class {
       });
   }
 };
-
-export default API;

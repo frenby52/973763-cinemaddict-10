@@ -17,9 +17,9 @@ const getExtraFilmCardsData = (data, key) => {
   return getRandomArrayItems(highestValuesData, FILM_EXTRA_COUNT);
 };
 
-const renderFilmCards = (cards, container, onDataChange, onViewChange) => {
+const renderFilmCards = (cards, container, onDataChange, onViewChange, api) => {
   return cards.map((card) => {
-    const movieController = new MovieController(container, onDataChange, onViewChange);
+    const movieController = new MovieController(container, onDataChange, onViewChange, api);
     movieController.render(card);
 
     return movieController;
@@ -27,11 +27,12 @@ const renderFilmCards = (cards, container, onDataChange, onViewChange) => {
 };
 
 export default class PageController {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._showedMovieControllers = [];
     this._showingCardsCount = FILM_COUNT_ON_START;
+    this._api = api;
 
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._mainFilmCardsComponent = new MainFilmCardsComponent();
@@ -83,7 +84,7 @@ export default class PageController {
   }
 
   _renderMainFilmCards(cards) {
-    const newCards = renderFilmCards(cards, this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
+    const newCards = renderFilmCards(cards, this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange, this._api);
     this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
   }
 
@@ -107,7 +108,7 @@ export default class PageController {
     if (isTotalCommentsNull || isTotalRatingNull) {
       container.innerHTML = ``;
     } else {
-      const newCards = renderFilmCards(filteredData, container, this._onDataChange, this._onViewChange);
+      const newCards = renderFilmCards(filteredData, container, this._onDataChange, this._onViewChange, this._api);
       this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
     }
   }

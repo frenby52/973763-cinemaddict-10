@@ -32,7 +32,7 @@ const createFilmRatingTemplate = (poster, title) => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/${poster}" alt="film-poster" class="film-details__user-rating-img">
+            <img src="${poster}" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">
@@ -74,8 +74,8 @@ const createFilmRatingTemplate = (poster, title) => {
       </section>`);
 };
 
-const createFilmDetailsTemplate = (data) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments, watchlist, watched, favorite} = data;
+const createFilmDetailsTemplate = (data, comments) => {
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get" tabindex="1">
     <div class="form-details__top-container">
@@ -84,7 +84,7 @@ const createFilmDetailsTemplate = (data) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
           <p class="film-details__age">${age}+</p>
         </div>
@@ -108,11 +108,11 @@ const createFilmDetailsTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${[...writers]}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${[...actors]}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -127,8 +127,8 @@ const createFilmDetailsTemplate = (data) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
-              <td class="film-details__cell">${createGenresMarkup(genre)}</td>
+              <td class="film-details__term">${[...genre].length > 1 ? `Genres` : `Genre`}</td>
+              <td class="film-details__cell">${createGenresMarkup([...genre])}</td>
             </tr>
           </table>
 
@@ -153,7 +153,7 @@ const createFilmDetailsTemplate = (data) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${createCommentsMarkup(comments)}
+        ${comments ? createCommentsMarkup(comments) : ``}
         </ul>
 
         <div class="film-details__new-comment">
@@ -205,10 +205,11 @@ const parseFormData = (formData, id) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(data) {
+  constructor(data, comments) {
     super();
 
     this._data = data;
+    this._comments = comments;
     this._subscribeOnEvents();
     this._emojiSrc = null;
     this._closeBtnClickHandler = null;
@@ -221,7 +222,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._data);
+    return createFilmDetailsTemplate(this._data, this._comments);
   }
 
   setCloseBtnClickHandler(handler) {

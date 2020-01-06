@@ -11,9 +11,9 @@ const createFilmCardTemplate = (data) => {
           <p class="film-card__info">
             <span class="film-card__year">${new Date(date).getFullYear()}</span>
             <span class="film-card__duration">${getFilmRuntime(runtime)}</span>
-            <span class="film-card__genre">${genre.join(`, `)}</span>
+            <span class="film-card__genre">${[...genre].join(`, `)}</span>
           </p>
-          <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+          <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${getCroppedDescription(description)}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <form class="film-card__controls">

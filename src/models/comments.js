@@ -2,7 +2,6 @@ export default class Comments {
   constructor(data) {
 
     this.id = data[`id`] || ``;
-
     this.author = data[`author`] || ``;
     this.comment = data[`comment`];
     this.date = new Date(data[`date`]) || null;
