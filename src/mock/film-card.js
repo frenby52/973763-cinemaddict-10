@@ -23,13 +23,15 @@ const generateFilmCard = () => ({
   actors: generateRandomArray([...actors]).join(`, `),
   date: getRandomInteger(0, 29) * 365 * 24 * 3600 * 1000,
   country: [...countries][getRandomInteger(0, [...countries].length - 1)],
-  runtime: `${getRandomInteger(0, 2)}h ${getRandomInteger(0, 60)}m`,
+  // runtime: `${getRandomInteger(0, 2)}h ${getRandomInteger(0, 60)}m`,
+  runtime: getRandomInteger(0, 200),
   genre: generateRandomArray([...genres]),
   description: generateRandomArray(description).join(` `),
   watchlist: Math.random() > 0.5,
   watched: Math.random() > 0.5,
   favorite: Math.random() > 0.5,
-  comments: generateComments(getRandomInteger(0, description.length - 1))
+  comments: generateComments(getRandomInteger(0, description.length - 1)),
+  watchingDate: new Date(50 * 365 * 24 * getRandomInteger(3595, 3600) * 1000)
 });
 
 const generateComment = () => ({

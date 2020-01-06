@@ -70,6 +70,18 @@ export default class PageController {
     }
   }
 
+  hide() {
+    this._mainFilmCardsComponent.hide();
+    this._topRatedComponent.hide();
+    this._mostCommentedComponent.hide();
+  }
+
+  show() {
+    this._mainFilmCardsComponent.show();
+    this._topRatedComponent.show();
+    this._mostCommentedComponent.show();
+  }
+
   _renderMainFilmCards(cards) {
     const newCards = renderFilmCards(cards, this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
     this._showedMovieControllers = this._showedMovieControllers.concat(newCards);

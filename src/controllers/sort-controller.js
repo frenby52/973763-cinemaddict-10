@@ -16,6 +16,14 @@ export default class SortController {
     renderComponent(this._container, this._sortComponent);
   }
 
+  hide() {
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._sortComponent.show();
+  }
+
   _onSortChange(sortType) {
     this._moviesModel.activateSort(sortType);
   }

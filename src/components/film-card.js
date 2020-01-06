@@ -1,4 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component";
+import {getFilmRuntime} from "../util";
 
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
@@ -9,7 +10,7 @@ const createFilmCardTemplate = (data) => {
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${new Date(date).getFullYear()}</span>
-            <span class="film-card__duration">${runtime}</span>
+            <span class="film-card__duration">${getFilmRuntime(runtime)}</span>
             <span class="film-card__genre">${genre.join(`, `)}</span>
           </p>
           <img src="./images/posters/${poster}" alt="" class="film-card__poster">

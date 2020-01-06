@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const ESC_KEYCODE = 27;
 
 const FilterType = {
@@ -67,4 +69,20 @@ const getFilmCardsBySort = (data, sortType) => {
   return data;
 };
 
-export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort};
+const getFilmRuntime = (runtime) => {
+  const runtimeMs = runtime * 60 * 1000;
+  return `${moment.duration(runtimeMs).hours()}h ${moment.duration(runtimeMs).minutes()}m`;
+};
+
+const getUserRank = (rank) => {
+  if (rank >= 1 && rank <= 10) {
+    return `novice`;
+  } else if (rank >= 11 && rank <= 20) {
+    return `fan`;
+  } else if (rank >= 21) {
+    return `movie buff`;
+  }
+  return ``;
+};
+
+export {getRandomInteger, generateRandomArray, getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime, getUserRank};
