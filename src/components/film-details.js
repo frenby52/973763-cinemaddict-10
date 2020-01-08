@@ -192,17 +192,17 @@ const createFilmDetailsTemplate = (data, comments) => {
 </section>`);
 };
 
-const parseFormData = (formData, id) => {
-  return {
-    // id: getRandomInteger(0, 100),
-    id,
-    comment: formData.get(`comment`),
-    date: new Date().getTime(),
-    author: `you`,
-    rating: formData.get(`score`),
-    emoji: formData.get(`comment-emoji`)
-  };
-};
+// const parseFormData = (formData, id) => {
+//   return {
+//     // id: getRandomInteger(0, 100),
+//     id,
+//     comment: formData.get(`comment`),
+//     date: new Date().getTime(),
+//     author: `you`,
+//     rating: formData.get(`score`),
+//     emoji: formData.get(`comment-emoji`)
+//   };
+// };
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(data, comments) {
@@ -266,15 +266,15 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   getFormData() {
     const form = this.getForm();
-    let newCommentId = 0;
-    const formData = new FormData(form);
-    if (this._data.comments.length) {
-      const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
-      newCommentId = highestIdComment[0].id + 1;
-    }
+    // const formData = new FormData(form);
+    // let newCommentId = 0;
+    // if (this._data.comments.length) {
+    //   const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
+    //   newCommentId = highestIdComment[0].id + 1;
+    // }
 
-    return parseFormData(formData, newCommentId);
-    // return formData;
+    // return parseFormData(formData, newCommentId);
+    return new FormData(form);
   }
 
   _onEmojiClick() {
@@ -311,8 +311,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getEmojiContainer().append(emojiImg);
   }
 
-  rerender(card) {
+  rerender(card, comments) {
     this._data = card;
+    //
+    this._comments = comments;
     this._emojiSrc = null;
     super.rerender();
   }

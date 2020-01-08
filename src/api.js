@@ -30,6 +30,14 @@ export default class API {
   }
 
   updateCard(id, data) {
+    return this._load({
+      url: `movies/${id}`,
+      method: Method.PUT,
+      body: JSON.stringify(data.toRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((response) => response.json())
+      .then(Movie.parseMovie);
   }
 
   getComments(id) {
@@ -38,7 +46,13 @@ export default class API {
       .then(Comments.parseComments);
   }
 
-  createComment(comment) {
+  createComment(id, comment) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment.toRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    });
   }
 
   updateComment(id, data) {
