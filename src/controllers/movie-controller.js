@@ -78,6 +78,10 @@ export default class MovieController {
           .then((comments) => {
             // console.log(comments)
             this._filmDetailsComponent.rerender(card, comments);
+          })
+          .catch(()=> {
+            this._filmDetailsComponent.rerender(card, []);
+            this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`).classList.add(`visually-hidden`);
           });
       } else {
         this._filmDetailsComponent.rerender(card, []);
@@ -104,6 +108,12 @@ export default class MovieController {
         .then((comments) => {
           // console.log(comments)
           this._filmDetailsComponent = new FilmDetailsComponent(this.data, comments);
+          renderComponent(this._container, this._filmDetailsComponent);
+          this._setFilmDetailsHandlers();
+        })
+        .catch(() => {
+          this._filmDetailsComponent = new FilmDetailsComponent(this.data, []);
+          this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`).classList.add(`visually-hidden`);
           renderComponent(this._container, this._filmDetailsComponent);
           this._setFilmDetailsHandlers();
         });
@@ -153,6 +163,7 @@ export default class MovieController {
       // const data = this._filmDetailsComponent.getFormData();
       const formData = this._filmDetailsComponent.getFormData();
       const data = parseFormData(formData);
+      const commentInput = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
 
       // console.log(...data);
       // console.log(card);
@@ -163,7 +174,7 @@ export default class MovieController {
       }
 
       if (!data.comment) {
-        const commentInput = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
+
         commentInput.setAttribute(`style`, `outline: 3px solid red;`);
         commentInput.addEventListener(`input`, () => {
           commentInput.setAttribute(`style`, `outline: none;`);
@@ -175,7 +186,11 @@ export default class MovieController {
       // this._onDataChange(this.data.id, this.data);
 
       this._api.createComment(this.data.id, data)
-        .then(() => this._onDataChange(this.data.id, this.data));
+        .then(() => this._onDataChange(this.data.id, this.data))
+        .catch(() => {
+          this._filmDetailsComponent.getElement().classList.add(`shake`);
+          commentInput.setAttribute(`style`, `outline: 3px solid red;`);
+      });
     });
 
     this._filmDetailsComponent.setKeyDownHandler((evt) => {

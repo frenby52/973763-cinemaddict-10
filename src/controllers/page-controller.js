@@ -133,6 +133,7 @@ export default class PageController {
   _onDataChange(id, newData) {
     this._api.updateCard(id, newData)
       .then((updatedMovie) => {
+        console.log(updatedMovie)
         const isCardUpdated = this._moviesModel.updateCard(id, updatedMovie);
 
         if (isCardUpdated) {
