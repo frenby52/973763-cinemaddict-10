@@ -53,7 +53,7 @@ export default class MovieController {
       updatedMovie.watched = !updatedMovie.watched;
       if (!updatedMovie.watched) {
         updatedMovie.personalRating = 0;
-        this._filmDetailsComponent.disableUserRating();
+        updatedMovie.watchingDate = new Date();
       }
       this._onDataChange(this.data.id, updatedMovie);
     });
@@ -145,6 +145,7 @@ export default class MovieController {
       updatedMovie.watched = !updatedMovie.watched;
       if (!updatedMovie.watched) {
         updatedMovie.personalRating = 0;
+        updatedMovie.watchingDate = new Date();
         this._filmDetailsComponent.disableUserRating();
       }
       this._onDataChange(this.data.id, updatedMovie);
