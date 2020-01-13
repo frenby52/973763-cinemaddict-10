@@ -55,11 +55,11 @@ export default class API {
     });
   }
 
-  updateComment(id, data) {
-  }
-
-  deleteComment(id) {
-  }
+  // updateComment(id, data) {
+  // }
+  //
+  // deleteComment(id) {
+  // }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
@@ -70,4 +70,4 @@ export default class API {
         throw err;
       });
   }
-};
+}
