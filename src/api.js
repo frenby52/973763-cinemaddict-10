@@ -1,7 +1,6 @@
 import Movie from './models/movie.js';
 import Comments from './models/comments.js';
 
-
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -55,11 +54,9 @@ export default class API {
     });
   }
 
-  // updateComment(id, data) {
-  // }
-  //
-  // deleteComment(id) {
-  // }
+  deleteComment(id) {
+    return this._load({url: `comments/${id}`, method: Method.DELETE});
+  }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);

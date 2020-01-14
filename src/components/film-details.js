@@ -5,7 +5,7 @@ import he from "he";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
-const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
+// const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 
@@ -18,7 +18,7 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
     <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
-      <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
+      <span class="film-details__comment-day">${moment(comment.date).fromNow()}</span>
       <button class="film-details__comment-delete" data-comment-id="${comment.id}">Delete</button>
     </p>
   </div> 
@@ -192,18 +192,6 @@ const createFilmDetailsTemplate = (data, comments) => {
 </section>`);
 };
 
-// const parseFormData = (formData, id) => {
-//   return {
-//     // id: getRandomInteger(0, 100),
-//     id,
-//     comment: formData.get(`comment`),
-//     date: new Date().getTime(),
-//     author: `you`,
-//     rating: formData.get(`score`),
-//     emoji: formData.get(`comment-emoji`)
-//   };
-// };
-
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(data, comments) {
     super();
@@ -339,6 +327,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
       it.disabled = true;
     });
+  }
+
+  disableForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+  }
+
+  activateForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
 
   recoveryListeners() {

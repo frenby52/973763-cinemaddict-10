@@ -1,4 +1,3 @@
-// import {generateFilmCards} from "./mock/film-card";
 import {renderComponent} from "./util";
 import UserRatingComponent from "./components/user-rating";
 import PageController from "./controllers/page-controller";
@@ -9,7 +8,7 @@ import StatisticsComponent from './components/statistics';
 import API from "./api";
 
 const AUTHORIZATION = `Basic eo0w590ik29889a52`;
-const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 
@@ -29,7 +28,6 @@ const renderFooterStats = (data) => {
 
 api.getCards()
   .then((cards) => {
-    // console.log(cards)
     moviesModel.setCards(cards);
     renderComponent(siteHeaderElement, new UserRatingComponent(moviesModel));
     filterController.setStatsClickHandler((isStatsActive) => {
