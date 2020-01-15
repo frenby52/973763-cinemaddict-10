@@ -2,7 +2,6 @@ import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {isEscEvent, renderComponent} from "../util";
 import Comments from '../models/comments.js';
-import Movie from '../models/movie.js';
 
 const parseFormData = (formData) => {
   return new Comments({
@@ -34,27 +33,25 @@ export default class MovieController {
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.watchlist = !updatedMovie.watchlist;
-      this._onDataChange(this.data.id, updatedMovie);
+      this.data.watchlist = !this.data.watchlist;
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.watched = !updatedMovie.watched;
-      if (!updatedMovie.watched) {
-        updatedMovie.personalRating = 0;
-        updatedMovie.watchingDate = new Date();
+      this.data.watched = !this.data.watched;
+      if (!this.data.watched) {
+        this.data.personalRating = 0;
+        this.data.watchingDate = new Date();
       }
-      this._onDataChange(this.data.id, updatedMovie);
+
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.favorite = !updatedMovie.favorite;
-      this._onDataChange(this.data.id, updatedMovie);
+      this.data.favorite = !this.data.favorite;
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
@@ -131,29 +128,27 @@ export default class MovieController {
 
   _setFilmDetailsHandlers() {
     this._filmDetailsComponent.setWatchlistInputClickHandler(() => {
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.watchlist = !updatedMovie.watchlist;
-      this._onDataChange(this.data.id, updatedMovie);
+      this.data.watchlist = !this.data.watchlist;
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setWatchedInputClickHandler(() => {
       // this._onDataChange(this.data.id, Object.assign({}, this.data, {
       //   watched: !this.data.watched,
       // }));
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.watched = !updatedMovie.watched;
-      if (!updatedMovie.watched) {
-        updatedMovie.personalRating = 0;
-        updatedMovie.watchingDate = new Date();
+      this.data.watched = !this.data.watched;
+      if (!this.data.watched) {
+        this.data.personalRating = 0;
+        this.data.watchingDate = new Date();
         this._filmDetailsComponent.disableUserRating();
       }
-      this._onDataChange(this.data.id, updatedMovie);
+
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setFavoritesInputClickHandler(() => {
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.favorite = !updatedMovie.favorite;
-      this._onDataChange(this.data.id, updatedMovie);
+      this.data.favorite = !this.data.favorite;
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setCommentSubmitHandler((evt) => {
@@ -191,18 +186,16 @@ export default class MovieController {
 
     this._filmDetailsComponent.setUserRatingResetHandler((evt) => {
       evt.preventDefault();
-
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.personalRating = 0;
-      this._onDataChange(this.data.id, updatedMovie);
+      this.data.personalRating = 0;
+      this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setUserRatingClickHandler((evt) => {
-      let newRating = parseInt(evt.target.value, 10);
-      const updatedMovie = new Movie(this.data.toRAW());
-      updatedMovie.personalRating = newRating;
+      this.data.personalRating = parseInt(evt.target.value, 10);
       this._filmDetailsComponent.disableUserRating();
-      this._onDataChange(this.data.id, updatedMovie);
+      this._onDataChange(this.data.id, this.data);
+
+
     });
 
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);

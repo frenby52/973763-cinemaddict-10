@@ -1,6 +1,5 @@
 export default class Movie {
   constructor(data) {
-    // console.log(data)
 
     this.id = data[`id`] || ``;
     this.title = data[`film_info`][`title`] || ``;
@@ -62,8 +61,4 @@ export default class Movie {
   static parseMovies(data) {
     return data.map(Movie.parseMovie);
   }
-
-  // static clone(data) {
-  //   return new Movie(data.toRAW());
-  // }
 }
