@@ -1,6 +1,3 @@
-import Movie from './models/movie.js';
-import Comments from './models/comments.js';
-
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -24,8 +21,7 @@ export default class API {
 
   getCards() {
     return this._load({url: `movies`})
-      .then((response) => response.json())
-      .then(Movie.parseMovies);
+      .then((response) => response.json());
   }
 
   updateCard(id, data) {
@@ -35,14 +31,12 @@ export default class API {
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({'Content-Type': `application/json`})
     })
-      .then((response) => response.json())
-      .then(Movie.parseMovie);
+      .then((response) => response.json());
   }
 
   getComments(id) {
     return this._load({url: `comments/${id}`})
-      .then((response) => response.json())
-      .then(Comments.parseComments);
+      .then((response) => response.json());
   }
 
   createComment(id, comment) {

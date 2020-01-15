@@ -6,6 +6,7 @@ import SortController from "./controllers/sort-controller";
 import Movies from "./models/movies";
 import StatisticsComponent from './components/statistics';
 import API from "./api";
+import Movie from "./models/movie";
 
 const AUTHORIZATION = `Basic eo0w590ik29889a52`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
@@ -27,6 +28,7 @@ const renderFooterStats = (data) => {
 };
 
 api.getCards()
+  .then(Movie.parseMovies)
   .then((cards) => {
     moviesModel.setCards(cards);
     renderComponent(siteHeaderElement, new UserRatingComponent(moviesModel));

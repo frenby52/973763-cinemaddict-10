@@ -66,6 +66,7 @@ export default class MovieController {
     if (this._filmDetailsComponent) {
       if (this.data.comments) {
         this._api.getComments(this.data.id)
+          .then(Comments.parseComments)
           .then((comments) => {
             this._filmDetailsComponent.rerender(card, comments);
           })
@@ -95,6 +96,7 @@ export default class MovieController {
     this._onViewChange();
     if (this.data.comments) {
       this._api.getComments(this.data.id)
+        .then(Comments.parseComments)
         .then((comments) => {
           this._filmDetailsComponent = new FilmDetailsComponent(this.data, comments);
           this._filmDetailsComponent.setDeleteCommentsButtonClickHandler((e) => {
@@ -175,7 +177,7 @@ export default class MovieController {
       this._api.createComment(this.data.id, data)
         .then(() => this._onDataChange(this.data.id, this.data))
         .catch(() => {
-          this._filmDetailsComponent.getElement().classList.add(`shake`);
+          this._filmDetailsComponent.addShakeAnimationClass();
           commentInput.setAttribute(`style`, `outline: 3px solid red;`);
           this._filmDetailsComponent.activateForm();
         });

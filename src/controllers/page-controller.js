@@ -3,6 +3,7 @@ import FilmsContainerComponent from "../components/films-container";
 import MainFilmCardsComponent from "../components/main-film-cards";
 import ExtraFilmCardsComponent from "../components/extra-fillm-cards";
 import MovieController from "./movie-controller";
+import Movie from "../models/movie";
 
 const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
@@ -132,6 +133,7 @@ export default class PageController {
 
   _onDataChange(id, newData) {
     this._api.updateCard(id, newData)
+      .then(Movie.parseMovie)
       .then((updatedMovie) => {
         const isCardUpdated = this._moviesModel.updateCard(id, updatedMovie);
 

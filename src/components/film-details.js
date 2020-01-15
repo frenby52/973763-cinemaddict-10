@@ -337,6 +337,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
 
+  addShakeAnimationClass() {
+    this.getElement().classList.add(`shake`);
+  }
+
+  // removeShakeAnimationClass() {
+  //   this.getElement().classList.remove(`shake`);
+  // }
+
   recoveryListeners() {
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);
     this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedInputClickHandler);
