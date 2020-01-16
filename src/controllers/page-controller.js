@@ -18,9 +18,9 @@ const getExtraFilmCardsData = (data, key) => {
   return getRandomArrayItems(highestValuesData, FILM_EXTRA_COUNT);
 };
 
-const renderFilmCards = (cards, container, onDataChange, onViewChange, api) => {
+const renderFilmCards = (cards, container, onDataChange, onViewChange) => {
   return cards.map((card) => {
-    const movieController = new MovieController(container, onDataChange, onViewChange, api);
+    const movieController = new MovieController(container, onDataChange, onViewChange);
     movieController.render(card);
 
     return movieController;
@@ -28,12 +28,11 @@ const renderFilmCards = (cards, container, onDataChange, onViewChange, api) => {
 };
 
 export default class PageController {
-  constructor(container, moviesModel, api) {
+  constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._showedMovieControllers = [];
     this._showingCardsCount = FILM_COUNT_ON_START;
-    this._api = api;
 
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._mainFilmCardsComponent = new MainFilmCardsComponent();
@@ -85,7 +84,7 @@ export default class PageController {
   }
 
   _renderMainFilmCards(cards) {
-    const newCards = renderFilmCards(cards, this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange, this._api);
+    const newCards = renderFilmCards(cards, this._mainFilmCardsComponent.getContainer(), this._onDataChange, this._onViewChange);
     this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
   }
 
@@ -109,7 +108,7 @@ export default class PageController {
     if (isTotalCommentsNull || isTotalRatingNull) {
       container.innerHTML = ``;
     } else {
-      const newCards = renderFilmCards(filteredData, container, this._onDataChange, this._onViewChange, this._api);
+      const newCards = renderFilmCards(filteredData, container, this._onDataChange, this._onViewChange);
       this._showedMovieControllers = this._showedMovieControllers.concat(newCards);
     }
   }
@@ -122,17 +121,8 @@ export default class PageController {
     this._renderExtraFilmCards(cards, this._mostCommentedComponent.getContainer(), `comments`);
   }
 
-  // _onDataChange(id, newData) {
-  //   // this._moviesModel.updateCard(id, newData);
-  //   const isCardUpdated = this._moviesModel.updateCard(id, newData);
-  //   if (isCardUpdated) {
-  //     const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
-  //     sameMovieControllers.forEach((it)=> it.rerender(newData));
-  //   }
-  // }
-
   _onDataChange(id, newData) {
-    this._api.updateCard(id, newData)
+    this._moviesModel.updateCardByApi(id, newData)
       .then(Movie.parseMovie)
       .then((updatedMovie) => {
         const isCardUpdated = this._moviesModel.updateCard(id, updatedMovie);

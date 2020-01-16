@@ -12,14 +12,14 @@ const parseFormData = (formData) => {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange, api) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
     this._onViewChange = onViewChange;
     this.data = {};
-    this._api = api;
+    this._commentsModel = new Comments();
 
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
@@ -62,7 +62,7 @@ export default class MovieController {
     this._filmCardComponent.rerender(card);
     if (this._filmDetailsComponent) {
       if (this.data.comments) {
-        this._api.getComments(this.data.id)
+        this._commentsModel.getComments(this.data.id)
           .then(Comments.parseComments)
           .then((comments) => {
             this._filmDetailsComponent.rerender(card, comments);
@@ -92,7 +92,7 @@ export default class MovieController {
     evt.preventDefault();
     this._onViewChange();
     if (this.data.comments) {
-      this._api.getComments(this.data.id)
+      this._commentsModel.getComments(this.data.id)
         .then(Comments.parseComments)
         .then((comments) => {
           this._filmDetailsComponent = new FilmDetailsComponent(this.data, comments);
@@ -101,7 +101,7 @@ export default class MovieController {
             if (e.target.classList.contains(`film-details__comment-delete`)) {
               e.target.textContent = `Deleting...`;
               e.target.disabled = true;
-              this._api.deleteComment(e.target.dataset.commentId)
+              this._commentsModel.deleteComment(e.target.dataset.commentId)
                 .then(() => this._onDataChange(this.data.id, this.data))
                 .catch(() => {
                   e.target.textContent = `Delete`;
@@ -169,7 +169,7 @@ export default class MovieController {
       }
 
       this._filmDetailsComponent.disableForm();
-      this._api.createComment(this.data.id, data)
+      this._commentsModel.createComment(this.data.id, data)
         .then(() => this._onDataChange(this.data.id, this.data))
         .catch(() => {
           this._filmDetailsComponent.addShakeAnimationClass();
@@ -194,8 +194,6 @@ export default class MovieController {
       this.data.personalRating = parseInt(evt.target.value, 10);
       this._filmDetailsComponent.disableUserRating();
       this._onDataChange(this.data.id, this.data);
-
-
     });
 
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);

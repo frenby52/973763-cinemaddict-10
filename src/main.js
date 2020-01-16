@@ -8,10 +8,7 @@ import StatisticsComponent from './components/statistics';
 import API from "./api";
 import Movie from "./models/movie";
 
-const AUTHORIZATION = `Basic eo0w590ik29889a52`;
-const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
-
-const api = new API(END_POINT, AUTHORIZATION);
+const api = new API();
 
 const moviesModel = new Movies();
 
@@ -20,7 +17,7 @@ const mainContainer = document.querySelector(`.main`);
 const filterController = new FilterController(mainContainer, moviesModel);
 const sortController = new SortController(mainContainer, moviesModel);
 
-const pageController = new PageController(mainContainer, moviesModel, api);
+const pageController = new PageController(mainContainer, moviesModel);
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = (data) => {

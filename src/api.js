@@ -1,9 +1,13 @@
+const AUTHORIZATION = `Basic eo0w590ik29889a52`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
   DELETE: `DELETE`
 };
+
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
@@ -14,9 +18,9 @@ const checkStatus = (response) => {
 };
 
 export default class API {
-  constructor(endPoint, authorization) {
-    this._endPoint = endPoint;
-    this._authorization = authorization;
+  constructor() {
+    this._endPoint = END_POINT;
+    this._authorization = AUTHORIZATION;
   }
 
   getCards() {
