@@ -1,4 +1,5 @@
 import {FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort} from "../util";
+import API from "../api";
 
 export default class Movies {
   constructor() {
@@ -8,6 +9,7 @@ export default class Movies {
     this._activeFilterType = FilterType.ALL;
     this._activeSortType = SortType.DEFAULT;
     this._sortAndFilterChangeHandler = null;
+    this._api = new API();
   }
 
   getCards() {
@@ -55,5 +57,9 @@ export default class Movies {
 
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
+  }
+
+  updateCardByApi(id, newData) {
+    return this._api.updateCard(id, newData);
   }
 }

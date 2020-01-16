@@ -84,7 +84,7 @@ const renderChart = (ctx, movies) => {
   });
 };
 
-const createStatisticsTemplate = (data, filter) => {
+const createStatisticsTemplate = (data, filter, watchedMovies) => {
   const genres = getSortedStats(data);
   const topGenre = genres[0] ? genres[0].genre : `-`;
   const totalDuration = moment.duration(data.reduce((acc, it) => acc + (it.runtime * 60 * 1000), 0));
@@ -93,7 +93,7 @@ const createStatisticsTemplate = (data, filter) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${getUserRank(data.length)}</span>
+      <span class="statistic__rank-label">${getUserRank(watchedMovies.length)}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -154,7 +154,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._filteredData, this._filter);
+    return createStatisticsTemplate(this._filteredData, this._filter, this._watchedMovies);
   }
 
   _renderChart() {

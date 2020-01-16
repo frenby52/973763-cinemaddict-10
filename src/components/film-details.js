@@ -5,7 +5,7 @@ import he from "he";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
-const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
+// const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
 
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 
@@ -18,13 +18,13 @@ const createCommentsMarkup = (comments) => comments.map((comment) =>
     <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${comment.author}</span>
-      <span class="film-details__comment-day">${formatCommentsDate(comment.date)}</span>
+      <span class="film-details__comment-day">${moment(comment.date).fromNow()}</span>
       <button class="film-details__comment-delete" data-comment-id="${comment.id}">Delete</button>
     </p>
   </div> 
   </li>`).join(`\n`);
 
-const createFilmRatingTemplate = (poster, title) => {
+const createFilmRatingTemplate = (poster, title, personalRating) => {
   return (`<section class="film-details__user-rating-wrap">
         <div class="film-details__user-rating-controls">
           <button class="film-details__watched-reset" type="button">Undo</button>
@@ -32,7 +32,7 @@ const createFilmRatingTemplate = (poster, title) => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/${poster}" alt="film-poster" class="film-details__user-rating-img">
+            <img src="${poster}" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">
@@ -41,31 +41,31 @@ const createFilmRatingTemplate = (poster, title) => {
             <p class="film-details__user-rating-feelings">How you feel it?</p>
 
             <div class="film-details__user-rating-score">
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1" ${personalRating === 1 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-1">1</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2" ${personalRating === 2 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-2">2</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3" ${personalRating === 3 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-3">3</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4" ${personalRating === 4 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-4">4</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5" ${personalRating === 5 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-5">5</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6" ${personalRating === 6 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-6">6</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7" ${personalRating === 7 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-7">7</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8" ${personalRating === 8 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-8">8</label>
 
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" ${personalRating === 9 ? `checked` : ``}>
               <label class="film-details__user-rating-label" for="rating-9">9</label>
 
             </div>
@@ -74,8 +74,8 @@ const createFilmRatingTemplate = (poster, title) => {
       </section>`);
 };
 
-const createFilmDetailsTemplate = (data) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, comments, watchlist, watched, favorite} = data;
+const createFilmDetailsTemplate = (data, comments) => {
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite, personalRating} = data;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get" tabindex="1">
     <div class="form-details__top-container">
@@ -84,7 +84,7 @@ const createFilmDetailsTemplate = (data) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
           <p class="film-details__age">${age}+</p>
         </div>
@@ -108,11 +108,11 @@ const createFilmDetailsTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${[...writers]}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${[...actors]}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -127,8 +127,8 @@ const createFilmDetailsTemplate = (data) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
-              <td class="film-details__cell">${createGenresMarkup(genre)}</td>
+              <td class="film-details__term">${[...genre].length > 1 ? `Genres` : `Genre`}</td>
+              <td class="film-details__cell">${createGenresMarkup([...genre])}</td>
             </tr>
           </table>
 
@@ -147,13 +147,13 @@ const createFilmDetailsTemplate = (data) => {
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
-    <div class="form-details__middle-container">${watched ? createFilmRatingTemplate(poster, title) : ``}</div>
+    <div class="form-details__middle-container">${watched ? createFilmRatingTemplate(poster, title, personalRating) : ``}</div>
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${createCommentsMarkup(comments)}
+        ${comments ? createCommentsMarkup(comments) : ``}
         </ul>
 
         <div class="film-details__new-comment">
@@ -192,23 +192,12 @@ const createFilmDetailsTemplate = (data) => {
 </section>`);
 };
 
-const parseFormData = (formData, id) => {
-  return {
-    // id: getRandomInteger(0, 100),
-    id,
-    comment: formData.get(`comment`),
-    date: new Date().getTime(),
-    author: `you`,
-    rating: formData.get(`score`),
-    emoji: formData.get(`comment-emoji`)
-  };
-};
-
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(data) {
+  constructor(data, comments) {
     super();
 
     this._data = data;
+    this._comments = comments;
     this._subscribeOnEvents();
     this._emojiSrc = null;
     this._closeBtnClickHandler = null;
@@ -218,10 +207,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._deleteCommentsButtonClickHandler = null;
     this._commentSubmitHandler = null;
     this._keyDowHandler = null;
+    this._userRatingResetHandler = null;
+    this._userRatingClickHandler = null;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._data);
+    return createFilmDetailsTemplate(this._data, this._comments);
   }
 
   setCloseBtnClickHandler(handler) {
@@ -265,15 +256,15 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   getFormData() {
     const form = this.getForm();
-    let newCommentId = 0;
-    const formData = new FormData(form);
-    if (this._data.comments.length) {
-      const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
-      newCommentId = highestIdComment[0].id + 1;
-    }
+    // const formData = new FormData(form);
+    // let newCommentId = 0;
+    // if (this._data.comments.length) {
+    //   const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
+    //   newCommentId = highestIdComment[0].id + 1;
+    // }
 
-    return parseFormData(formData, newCommentId);
-    // return formData;
+    // return parseFormData(formData, newCommentId);
+    return new FormData(form);
   }
 
   _onEmojiClick() {
@@ -310,11 +301,49 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getEmojiContainer().append(emojiImg);
   }
 
-  rerender(card) {
+  rerender(card, comments) {
     this._data = card;
+    //
+    this._comments = comments;
     this._emojiSrc = null;
     super.rerender();
   }
+
+  setUserRatingClickHandler(handler) {
+    this._userRatingClickHandler = handler;
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
+      item.addEventListener(`click`, handler);
+    });
+  }
+
+  setUserRatingResetHandler(handler) {
+    this._userRatingResetHandler = handler;
+    if (this.getElement().querySelector(`.film-details__watched-reset`)) {
+      this.getElement().querySelector(`.film-details__watched-reset`).addEventListener(`click`, handler);
+    }
+  }
+
+  disableUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  disableForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+  }
+
+  activateForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+  }
+
+  addShakeAnimationClass() {
+    this.getElement().classList.add(`shake`);
+  }
+
+  // removeShakeAnimationClass() {
+  //   this.getElement().classList.remove(`shake`);
+  // }
 
   recoveryListeners() {
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);
@@ -324,6 +353,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, this._deleteCommentsButtonClickHandler);
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`submit`, this._commentSubmitHandler);
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, this._keyDowHandler);
+    if (this.getElement().querySelector(`.film-details__watched-reset`)) {
+      this.getElement().querySelector(`.film-details__watched-reset`).addEventListener(`click`, this._userRatingResetHandler);
+    }
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
+      item.addEventListener(`click`, this._userRatingClickHandler);
+    });
 
     this._subscribeOnEvents();
   }
