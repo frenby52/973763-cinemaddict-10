@@ -5,8 +5,6 @@ import he from "he";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
-// const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
-
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 
 const createCommentsMarkup = (comments) => comments.map((comment) =>
@@ -256,14 +254,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   getFormData() {
     const form = this.getForm();
-    // const formData = new FormData(form);
-    // let newCommentId = 0;
-    // if (this._data.comments.length) {
-    //   const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
-    //   newCommentId = highestIdComment[0].id + 1;
-    // }
 
-    // return parseFormData(formData, newCommentId);
     return new FormData(form);
   }
 
@@ -342,14 +333,6 @@ export default class FilmDetails extends AbstractSmartComponent {
   activateForm() {
     this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
-
-  addShakeAnimationClass() {
-    this.getElement().classList.add(`shake`);
-  }
-
-  // removeShakeAnimationClass() {
-  //   this.getElement().classList.remove(`shake`);
-  // }
 
   recoveryListeners() {
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);

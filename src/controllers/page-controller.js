@@ -129,18 +129,13 @@ export default class PageController {
         const isCardUpdated = this._moviesModel.updateCard(id, updatedMovie);
 
         if (isCardUpdated) {
-          // this._sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
-          console.log(sameMovieControllers)
           sameMovieControllers.forEach((it)=> it.rerender(updatedMovie));
         }
       }).catch(() => {
         if (oldRating) {
           sameMovieControllers.forEach((it)=> it.onRatingUpdateError());
         }
-      // console.log(`error`)
-      // console.log(sameMovieControllers)
-
-    });
+      });
   }
 
   _onViewChange() {

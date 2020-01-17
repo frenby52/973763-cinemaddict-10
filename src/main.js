@@ -16,8 +16,8 @@ const siteHeaderElement = document.querySelector(`.header`);
 const mainContainer = document.querySelector(`.main`);
 const filterController = new FilterController(mainContainer, moviesModel);
 const sortController = new SortController(mainContainer, moviesModel);
-
 const pageController = new PageController(mainContainer, moviesModel);
+mainContainer.innerHTML = `<h2>Loading…</h2>`;
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = (data) => {
@@ -27,6 +27,7 @@ const renderFooterStats = (data) => {
 api.getCards()
   .then(Movie.parseMovies)
   .then((cards) => {
+    mainContainer.innerHTML = ``;
     moviesModel.setCards(cards);
     renderComponent(siteHeaderElement, new UserRatingComponent(moviesModel));
     filterController.setStatsClickHandler((isStatsActive) => {

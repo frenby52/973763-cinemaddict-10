@@ -158,6 +158,7 @@ export default class MovieController {
       const formData = this._filmDetailsComponent.getFormData();
       const data = parseFormData(formData);
       const commentInput = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
+      commentInput.setAttribute(`style`, `outline: none;`);
 
       if (!data.emoji) {
         this._filmDetailsComponent.getEmojiContainer().setAttribute(`style`, `box-shadow: inset 0 0 10px red;`);
@@ -171,31 +172,30 @@ export default class MovieController {
       }
 
       this._filmDetailsComponent.disableForm();
+      commentInput.classList.remove(`shake`);
       this._commentsModel.createComment(this.data.id, data)
         .then(() => this._onDataChange(this.data.id, this.data))
         .catch(() => {
-          this._filmDetailsComponent.addShakeAnimationClass();
+          commentInput.classList.add(`shake`);
           commentInput.setAttribute(`style`, `outline: 3px solid red;`);
           this._filmDetailsComponent.activateForm();
         });
     });
 
     this._filmDetailsComponent.setKeyDownHandler((evt) => {
-      if (evt.ctrlKey && evt.keyCode === 13) {
+      if (evt.ctrlKey && evt.key === `Enter`) {
         this._filmDetailsComponent.getElement().querySelector(`.film-details__inner`).dispatchEvent(new Event(`submit`));
       }
     });
 
     this._filmDetailsComponent.setUserRatingResetHandler((evt) => {
       evt.preventDefault();
-      // this.data.personalRating = 0;
       this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {personalRating: 0}));
-      // this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setUserRatingClickHandler((evt) => {
       const oldRating = this.data.personalRating;
-      const newRating = Object.assign(new Movie(), this.data, {personalRating: parseInt(evt.target.value, 10)})
+      const newRating = Object.assign(new Movie(), this.data, {personalRating: parseInt(evt.target.value, 10)});
       this._filmDetailsComponent.getElement().querySelector(`.film-details__user-rating-score`).classList.remove(`shake`);
       if (this._currentRatingElement) {
         this._currentRatingElement.style.backgroundColor = `#d8d8d8`;
@@ -223,7 +223,6 @@ export default class MovieController {
       this._currentRatingElement.style.backgroundColor = `red`;
       this._filmDetailsComponent.activateUserRating();
     }
-
   }
 
   setDefaultView() {
