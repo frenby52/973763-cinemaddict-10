@@ -2,6 +2,7 @@ import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {isEscEvent, renderComponent} from "../util";
 import Comments from '../models/comments.js';
+import Movie from "../models/movie";
 
 const parseFormData = (formData) => {
   return new Comments({
@@ -20,6 +21,7 @@ export default class MovieController {
     this._onViewChange = onViewChange;
     this.data = {};
     this._commentsModel = new Comments();
+    this._currentRatingElement = null;
 
     this._onFilmDetailsEscPress = this._onFilmDetailsEscPress.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
@@ -33,25 +35,25 @@ export default class MovieController {
 
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this.data.watchlist = !this.data.watchlist;
-      this._onDataChange(this.data.id, this.data);
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {watchlist: !this.data.watchlist}));
     });
 
     this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this.data.watched = !this.data.watched;
-      if (!this.data.watched) {
-        this.data.personalRating = 0;
-        this.data.watchingDate = new Date();
-      }
+      const updatedData = new Movie();
 
-      this._onDataChange(this.data.id, this.data);
+      Object.assign(updatedData, this.data, {
+        watched: !this.data.watched,
+        personalRating: 0,
+        watchingDate: new Date()
+      });
+
+      this._onDataChange(this.data.id, updatedData);
     });
 
     this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
-      this.data.favorite = !this.data.favorite;
-      this._onDataChange(this.data.id, this.data);
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {favorite: !this.data.favorite}));
     });
 
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
@@ -128,27 +130,27 @@ export default class MovieController {
 
   _setFilmDetailsHandlers() {
     this._filmDetailsComponent.setWatchlistInputClickHandler(() => {
-      this.data.watchlist = !this.data.watchlist;
-      this._onDataChange(this.data.id, this.data);
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {watchlist: !this.data.watchlist}));
     });
 
     this._filmDetailsComponent.setWatchedInputClickHandler(() => {
-      // this._onDataChange(this.data.id, Object.assign({}, this.data, {
-      //   watched: !this.data.watched,
-      // }));
-      this.data.watched = !this.data.watched;
-      if (!this.data.watched) {
-        this.data.personalRating = 0;
-        this.data.watchingDate = new Date();
+      const updatedData = new Movie();
+
+      Object.assign(updatedData, this.data, {
+        watched: !this.data.watched,
+        personalRating: 0,
+        watchingDate: new Date()
+      });
+
+      if (!updatedData.watched) {
         this._filmDetailsComponent.disableUserRating();
       }
 
-      this._onDataChange(this.data.id, this.data);
+      this._onDataChange(this.data.id, updatedData);
     });
 
     this._filmDetailsComponent.setFavoritesInputClickHandler(() => {
-      this.data.favorite = !this.data.favorite;
-      this._onDataChange(this.data.id, this.data);
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {favorite: !this.data.favorite}));
     });
 
     this._filmDetailsComponent.setCommentSubmitHandler((evt) => {
@@ -186,18 +188,42 @@ export default class MovieController {
 
     this._filmDetailsComponent.setUserRatingResetHandler((evt) => {
       evt.preventDefault();
-      this.data.personalRating = 0;
-      this._onDataChange(this.data.id, this.data);
+      // this.data.personalRating = 0;
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {personalRating: 0}));
+      // this._onDataChange(this.data.id, this.data);
     });
 
     this._filmDetailsComponent.setUserRatingClickHandler((evt) => {
-      this.data.personalRating = parseInt(evt.target.value, 10);
-      this._filmDetailsComponent.disableUserRating();
-      this._onDataChange(this.data.id, this.data);
+      const oldRating = this.data.personalRating;
+      const newRating = Object.assign(new Movie(), this.data, {personalRating: parseInt(evt.target.value, 10)})
+      this._filmDetailsComponent.getElement().querySelector(`.film-details__user-rating-score`).classList.remove(`shake`);
+      if (this._currentRatingElement) {
+        this._currentRatingElement.style.backgroundColor = `#d8d8d8`;
+      }
+
+      if (parseInt(evt.target.value, 10) === this.data.personalRating) {
+        evt.target.labels[0].style.backgroundColor = `#ffe800`;
+      }
+
+      this._currentRatingElement = evt.target.labels[0];
+
+      if (newRating.personalRating !== oldRating) {
+        this._filmDetailsComponent.disableUserRating();
+        this._onDataChange(this.data.id, newRating, oldRating);
+      }
     });
 
     this._filmDetailsComponent.setCloseBtnClickHandler(this._closeFilmDetails);
     document.addEventListener(`keydown`, this._onFilmDetailsEscPress);
+  }
+
+  onRatingUpdateError() {
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.getElement().querySelector(`.film-details__user-rating-score`).classList.add(`shake`);
+      this._currentRatingElement.style.backgroundColor = `red`;
+      this._filmDetailsComponent.activateUserRating();
+    }
+
   }
 
   setDefaultView() {

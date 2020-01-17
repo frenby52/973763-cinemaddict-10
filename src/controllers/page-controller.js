@@ -121,17 +121,26 @@ export default class PageController {
     this._renderExtraFilmCards(cards, this._mostCommentedComponent.getContainer(), `comments`);
   }
 
-  _onDataChange(id, newData) {
+  _onDataChange(id, newData, oldRating) {
+    const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
     this._moviesModel.updateCardByApi(id, newData)
       .then(Movie.parseMovie)
       .then((updatedMovie) => {
         const isCardUpdated = this._moviesModel.updateCard(id, updatedMovie);
 
         if (isCardUpdated) {
-          const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+          // this._sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
+          console.log(sameMovieControllers)
           sameMovieControllers.forEach((it)=> it.rerender(updatedMovie));
         }
-      });
+      }).catch(() => {
+        if (oldRating) {
+          sameMovieControllers.forEach((it)=> it.onRatingUpdateError());
+        }
+      // console.log(`error`)
+      // console.log(sameMovieControllers)
+
+    });
   }
 
   _onViewChange() {

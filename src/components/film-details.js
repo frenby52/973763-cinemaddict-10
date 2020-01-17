@@ -329,6 +329,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
+  activateUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
+  }
+
   disableForm() {
     this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
   }
