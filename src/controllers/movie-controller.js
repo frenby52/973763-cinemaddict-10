@@ -48,7 +48,7 @@ export default class MovieController {
         watchingDate: new Date()
       });
 
-      this._onDataChange(this.data.id, updatedData);
+      this._onDataChange(this.data.id, updatedData, true);
     });
 
     this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
@@ -104,7 +104,7 @@ export default class MovieController {
               e.target.textContent = `Deleting...`;
               e.target.disabled = true;
               this._commentsModel.deleteComment(e.target.dataset.commentId)
-                .then(() => this._onDataChange(this.data.id, this.data))
+                .then(() => this._onDataChange(this.data.id, this.data, true))
                 .catch(() => {
                   e.target.textContent = `Delete`;
                   e.target.disabled = false;
@@ -146,7 +146,7 @@ export default class MovieController {
         this._filmDetailsComponent.disableUserRating();
       }
 
-      this._onDataChange(this.data.id, updatedData);
+      this._onDataChange(this.data.id, updatedData, true);
     });
 
     this._filmDetailsComponent.setFavoritesInputClickHandler(() => {
@@ -174,7 +174,7 @@ export default class MovieController {
       this._filmDetailsComponent.disableForm();
       commentInput.classList.remove(`shake`);
       this._commentsModel.createComment(this.data.id, data)
-        .then(() => this._onDataChange(this.data.id, this.data))
+        .then(() => this._onDataChange(this.data.id, this.data, true))
         .catch(() => {
           commentInput.classList.add(`shake`);
           commentInput.setAttribute(`style`, `outline: 3px solid red;`);
@@ -190,7 +190,7 @@ export default class MovieController {
 
     this._filmDetailsComponent.setUserRatingResetHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {personalRating: 0}));
+      this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {personalRating: 0}), true);
     });
 
     this._filmDetailsComponent.setUserRatingClickHandler((evt) => {
@@ -209,7 +209,7 @@ export default class MovieController {
 
       if (newRating.personalRating !== oldRating) {
         this._filmDetailsComponent.disableUserRating();
-        this._onDataChange(this.data.id, newRating, oldRating);
+        this._onDataChange(this.data.id, newRating, true, oldRating);
       }
     });
 

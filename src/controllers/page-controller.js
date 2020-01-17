@@ -121,7 +121,7 @@ export default class PageController {
     this._renderExtraFilmCards(cards, this._mostCommentedComponent.getContainer(), `comments`);
   }
 
-  _onDataChange(id, newData, oldRating) {
+  _onDataChange(id, newData, isExtraSectionProperty = false, oldRating = null) {
     const sameMovieControllers = this._showedMovieControllers.filter((it) => it.data.id === id);
     this._moviesModel.updateCardByApi(id, newData)
       .then(Movie.parseMovie)
@@ -130,6 +130,15 @@ export default class PageController {
 
         if (isCardUpdated) {
           sameMovieControllers.forEach((it)=> it.rerender(updatedMovie));
+          if (isExtraSectionProperty) {
+            this._topRatedComponent.removeElement();
+            this._mostCommentedComponent.removeElement();
+            const cards = this._moviesModel.getCards();
+            this._renderTopRatedFilmCards(cards);
+            this._renderMostCommentedFilmCards(cards);
+            renderComponent(this._filmsContainerComponent.getElement(), this._topRatedComponent);
+            renderComponent(this._filmsContainerComponent.getElement(), this._mostCommentedComponent);
+          }
         }
       }).catch(() => {
         if (oldRating) {
