@@ -1,8 +1,8 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {FilterType} from "../util";
 
-const createFilterTemplate = (data) => {
-  const [all, watchlist, history, favorites] = data;
+const createFilterTemplate = (filtersStats) => {
+  const [all, watchlist, history, favorites] = filtersStats;
   return (`<nav class="main-navigation">
     <a href="#all" class="main-navigation__item ${all.active ? `main-navigation__item--active` : ``}">All movies</a>
     <a href="#watchlist" class="main-navigation__item ${watchlist.active ? `main-navigation__item--active` : ``} ">Watchlist <span class="main-navigation__item-count">${watchlist.count}</span></a>
@@ -13,9 +13,10 @@ const createFilterTemplate = (data) => {
 };
 
 export default class Filter extends AbstractSmartComponent {
-  constructor(data) {
+  constructor(filtersStats) {
     super();
-    this._data = data;
+
+    this._data = filtersStats;
     this._filterType = null;
     this._filterClickHandler = null;
     this._statsClickHandler = null;
@@ -25,8 +26,8 @@ export default class Filter extends AbstractSmartComponent {
     return createFilterTemplate(this._data);
   }
 
-  rerender(data) {
-    this._data = data;
+  rerender(filtersStats) {
+    this._data = filtersStats;
     super.rerender();
   }
 

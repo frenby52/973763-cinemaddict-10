@@ -16,21 +16,21 @@ const SortType = {
   RATING: `rating`
 };
 
-const getSortedData = (data, key) => {
-  if (data.length && Array.isArray(data[0][key])) {
-    return data.slice().sort((a, b) => b[key].length - a[key].length);
+const getSortedData = (cards, key) => {
+  if (cards.length && Array.isArray(cards[0][key])) {
+    return cards.slice().sort((a, b) => b[key].length - a[key].length);
   }
-  return data.slice().sort((a, b) => b[key] - a[key]);
+  return cards.slice().sort((a, b) => b[key] - a[key]);
 };
 
-const getHighestValuesData = (data, key) => {
-  if (data.length && Array.isArray(data[0][key])) {
-    return data.filter((it) => it[key].length === data[0][key].length);
+const getHighestValuesData = (cards, key) => {
+  if (cards.length && Array.isArray(cards[0][key])) {
+    return cards.filter((it) => it[key].length === cards[0][key].length);
   }
-  return data.filter((it) => it[key] === data[0][key]);
+  return cards.filter((it) => it[key] === cards[0][key]);
 };
 
-const getRandomArrayItems = (data, qty)=> data.sort(() => Math.random() - 0.5).slice(0, qty);
+const getRandomArrayItems = (cards, qty)=> cards.sort(() => Math.random() - 0.5).slice(0, qty);
 
 const createElement = (templateString) => {
   const template = document.createElement(`template`);
@@ -46,24 +46,24 @@ const isEscEvent = (evt, action) => {
   }
 };
 
-const getFilmCardsByFilter = (data, filterType) => {
+const getFilmCardsByFilter = (cards, filterType) => {
   switch (filterType) {
     case FilterType.WATCHLIST:
-      return data.filter((it) => it.watchlist);
+      return cards.filter((it) => it.watchlist);
     case FilterType.HISTORY:
-      return data.filter((it) => it.watched);
+      return cards.filter((it) => it.watched);
     case FilterType.FAVORITES:
-      return data.filter((it) => it.favorite);
+      return cards.filter((it) => it.favorite);
   }
 
-  return data;
+  return cards;
 };
 
-const getFilmCardsBySort = (data, sortType) => {
+const getFilmCardsBySort = (cards, sortType) => {
   if (sortType !== `default`) {
-    return data.slice().sort((a, b) => b[sortType] - a[sortType]);
+    return cards.slice().sort((a, b) => b[sortType] - a[sortType]);
   }
-  return data;
+  return cards;
 };
 
 const getFilmRuntime = (runtime) => {

@@ -73,8 +73,8 @@ const createFilmRatingTemplate = (poster, title, personalRating) => {
       </section>`);
 };
 
-const createFilmDetailsTemplate = (data, comments) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite, personalRating} = data;
+const createFilmDetailsTemplate = (card, comments) => {
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite, personalRating} = card;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get" tabindex="1">
     <div class="form-details__top-container">
@@ -192,10 +192,10 @@ const createFilmDetailsTemplate = (data, comments) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(data, comments) {
+  constructor(card, comments) {
     super();
 
-    this._data = data;
+    this._data = card;
     this._comments = comments;
     this._subscribeOnEvents();
     this._emojiSrc = null;

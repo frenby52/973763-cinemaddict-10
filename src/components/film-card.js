@@ -4,8 +4,8 @@ import {debounce} from "debounce";
 
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
-const createFilmCardTemplate = (data) => {
-  const {title, rating, date, runtime, genre, poster, description, comments, watchlist, watched, favorite} = data;
+const createFilmCardTemplate = (card) => {
+  const {title, rating, date, runtime, genre, poster, description, comments, watchlist, watched, favorite} = card;
   return (`<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
@@ -26,10 +26,10 @@ const createFilmCardTemplate = (data) => {
 };
 
 export default class FilmCard extends AbstractSmartComponent {
-  constructor(data) {
+  constructor(card) {
     super();
 
-    this._data = data;
+    this._data = card;
     this._elementsClickHandlers = null;
     this._watchlistButtonClickHandler = null;
     this._watchedButtonClickHandler = null;

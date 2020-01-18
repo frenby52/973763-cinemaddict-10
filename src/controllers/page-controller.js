@@ -9,8 +9,8 @@ const FILM_EXTRA_COUNT = 2;
 const FILM_COUNT_ON_START = 5;
 const FILM_COUNT_BY_BUTTON = 5;
 
-const getExtraFilmCardsData = (data, key) => {
-  const sortedData = getSortedData(data, key);
+const getExtraFilmCardsData = (cards, key) => {
+  const sortedData = getSortedData(cards, key);
   const highestValuesData = getHighestValuesData(sortedData, key);
   if (highestValuesData.length <= FILM_EXTRA_COUNT) {
     return sortedData.slice(0, FILM_EXTRA_COUNT);

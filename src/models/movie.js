@@ -1,27 +1,27 @@
 export default class Movie {
-  constructor(data) {
+  constructor(card) {
 
-    if (data) {
-      this.id = data[`id`] || ``;
-      this.title = data[`film_info`][`title`] || ``;
-      this.originalTitle = data[`film_info`][`alternative_title`] || ``;
-      this.rating = parseInt(data[`film_info`][`total_rating`], 10) || 0;
-      this.poster = data[`film_info`][`poster`] || ``;
-      this.age = parseInt(data[`film_info`][`age_rating`], 10) || 0;
-      this.director = data[`film_info`][`director`] || ``;
-      this.writers = new Set(data[`film_info`][`writers`] || []);
-      this.actors = new Set(data[`film_info`][`actors`] || []);
-      this.date = new Date(data[`film_info`][`release`][`date`]) || null;
-      this.country = data[`film_info`][`release`][`release_country`] || ``;
-      this.runtime = parseInt(data[`film_info`][`runtime`], 10) || 0;
-      this.genre = new Set(data[`film_info`][`genre`] || []);
-      this.description = data[`film_info`][`description`] || ``;
-      this.personalRating = parseInt(data[`user_details`][`personal_rating`], 10) || 0;
-      this.watchlist = Boolean(data[`user_details`][`watchlist`]);
-      this.watched = Boolean(data[`user_details`][`already_watched`]);
-      this.watchingDate = new Date(data[`user_details`][`watching_date`]) || null;
-      this.favorite = Boolean(data[`user_details`][`favorite`]);
-      this.comments = data[`comments`] || [];
+    if (card) {
+      this.id = card[`id`] || ``;
+      this.title = card[`film_info`][`title`] || ``;
+      this.originalTitle = card[`film_info`][`alternative_title`] || ``;
+      this.rating = parseInt(card[`film_info`][`total_rating`], 10) || 0;
+      this.poster = card[`film_info`][`poster`] || ``;
+      this.age = parseInt(card[`film_info`][`age_rating`], 10) || 0;
+      this.director = card[`film_info`][`director`] || ``;
+      this.writers = new Set(card[`film_info`][`writers`] || []);
+      this.actors = new Set(card[`film_info`][`actors`] || []);
+      this.date = new Date(card[`film_info`][`release`][`date`]) || null;
+      this.country = card[`film_info`][`release`][`release_country`] || ``;
+      this.runtime = parseInt(card[`film_info`][`runtime`], 10) || 0;
+      this.genre = new Set(card[`film_info`][`genre`] || []);
+      this.description = card[`film_info`][`description`] || ``;
+      this.personalRating = parseInt(card[`user_details`][`personal_rating`], 10) || 0;
+      this.watchlist = Boolean(card[`user_details`][`watchlist`]);
+      this.watched = Boolean(card[`user_details`][`already_watched`]);
+      this.watchingDate = new Date(card[`user_details`][`watching_date`]) || null;
+      this.favorite = Boolean(card[`user_details`][`favorite`]);
+      this.comments = card[`comments`] || [];
     }
   }
 
@@ -56,11 +56,11 @@ export default class Movie {
     };
   }
 
-  static parseMovie(data) {
-    return new Movie(data);
+  static parseMovie(card) {
+    return new Movie(card);
   }
 
-  static parseMovies(data) {
-    return data.map(Movie.parseMovie);
+  static parseMovies(card) {
+    return card.map(Movie.parseMovie);
   }
 }

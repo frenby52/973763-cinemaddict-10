@@ -20,8 +20,8 @@ const pageController = new PageController(mainContainer, moviesModel);
 mainContainer.innerHTML = `<h2>Loading…</h2>`;
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
-const renderFooterStats = (data) => {
-  footerStatsElement.innerHTML = `<p>${data.length} movies inside</p>`;
+const renderFooterStats = (cards) => {
+  footerStatsElement.innerHTML = `<p>${cards.length} movies inside</p>`;
 };
 
 api.getCards()

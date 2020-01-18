@@ -1,13 +1,13 @@
 import API from "../api";
 
 export default class Comments {
-  constructor(data) {
-    if (data) {
-      this.id = data[`id`] || ``;
-      this.author = data[`author`] || ``;
-      this.comment = data[`comment`];
-      this.date = new Date(data[`date`]) || null;
-      this.emoji = data[`emotion`] || ``;
+  constructor(comment) {
+    if (comment) {
+      this.id = comment[`id`] || ``;
+      this.author = comment[`author`] || ``;
+      this.comment = comment[`comment`];
+      this.date = new Date(comment[`date`]) || null;
+      this.emoji = comment[`emotion`] || ``;
     }
 
     this._api = new API();
@@ -33,11 +33,11 @@ export default class Comments {
     return this._api.deleteComment(id);
   }
 
-  static parseComment(data) {
-    return new Comments(data);
+  static parseComment(comment) {
+    return new Comments(comment);
   }
 
-  static parseComments(data) {
-    return data.map(Comments.parseComment);
+  static parseComments(comment) {
+    return comment.map(Comments.parseComment);
   }
 }
