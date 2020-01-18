@@ -1,7 +1,8 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {createElement, getFilmRuntime} from "../util";
+import {createElement, getFilmRuntime, DEBOUNCE_INTERVAL} from "../util";
 import moment from "moment";
 import he from "he";
+import {debounce} from "debounce";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
@@ -219,18 +220,18 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setWatchlistInputClickHandler(handler) {
-    this._watchlistInputClickHandler = handler;
-    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, handler);
+    this._watchlistInputClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);
   }
 
   setWatchedInputClickHandler(handler) {
-    this._watchedInputClickHandler = handler;
-    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
+    this._watchedInputClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedInputClickHandler);
   }
 
   setFavoritesInputClickHandler(handler) {
-    this._favoriteInputClickHandler = handler;
-    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+    this._favoriteInputClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteInputClickHandler);
   }
 
   setDeleteCommentsButtonClickHandler(handler) {

@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {getFilmRuntime} from "../util";
+import {getFilmRuntime, DEBOUNCE_INTERVAL} from "../util";
+import {debounce} from "debounce";
 
 const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
 
@@ -17,9 +18,9 @@ const createFilmCardTemplate = (data) => {
           <p class="film-card__description">${getCroppedDescription(description)}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <form class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist  ${watchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite ${favorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
+            <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist  ${watchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
+            <button type="button" class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
+            <button type="button" class="film-card__controls-item button film-card__controls-item--favorite ${favorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
           </form>
    </article>`);
 };
@@ -58,18 +59,18 @@ export default class FilmCard extends AbstractSmartComponent {
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this._watchlistButtonClickHandler = handler;
-    this.getWatchlistButtonElement().addEventListener(`click`, handler);
+    this._watchlistButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getWatchlistButtonElement().addEventListener(`click`, this._watchlistButtonClickHandler);
   }
 
   setWatchedButtonClickHandler(handler) {
-    this._watchedButtonClickHandler = handler;
-    this.getWatchedButtonElement().addEventListener(`click`, handler);
+    this._watchedButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getWatchedButtonElement().addEventListener(`click`, this._watchedButtonClickHandler);
   }
 
   setFavoritesButtonClickHandler(handler) {
-    this._favoritesButtonClickHandler = handler;
-    this.getFavoritesButtonElement().addEventListener(`click`, handler);
+    this._favoritesButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
+    this.getFavoritesButtonElement().addEventListener(`click`, this._favoritesButtonClickHandler);
   }
 
   rerender(card) {

@@ -1,6 +1,7 @@
 import moment from "moment";
 
 const ESC_KEYCODE = 27;
+const DEBOUNCE_INTERVAL = 500;
 
 const FilterType = {
   ALL: `#all`,
@@ -81,4 +82,4 @@ const getUserRank = (rank) => {
   return ``;
 };
 
-export {getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime, getUserRank};
+export {getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime, getUserRank, DEBOUNCE_INTERVAL};
