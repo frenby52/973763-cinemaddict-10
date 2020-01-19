@@ -2,7 +2,12 @@ import AbstractSmartComponent from "./abstract-smart-component";
 import {getFilmRuntime, DEBOUNCE_INTERVAL} from "../util";
 import {debounce} from "debounce";
 
-const getCroppedDescription = (description) => description.length < 140 ? description : `${description.slice(0, 139)}…`;
+const DescriptionLength = {
+  NORMAL: 139,
+  MAX: 140
+};
+
+const getCroppedDescription = (description) => description.length < DescriptionLength.MAX ? description : `${description.slice(0, DescriptionLength.NORMAL)}…`;
 
 const createFilmCardTemplate = (card) => {
   const {title, rating, date, runtime, genre, poster, description, comments, watchlist, watched, favorite} = card;
@@ -34,7 +39,7 @@ export default class FilmCard extends AbstractSmartComponent {
     this._watchlistButtonClickHandler = null;
     this._watchedButtonClickHandler = null;
     this._favoritesButtonClickHandler = null;
-    this._interactiveElementsClassList = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
+    this._interactiveElementsClasses = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
   }
 
   getTemplate() {
@@ -53,9 +58,14 @@ export default class FilmCard extends AbstractSmartComponent {
     return this.getElement().querySelector(`.film-card__controls-item--favorite`);
   }
 
+  rerender(card) {
+    this._data = card;
+    super.rerender();
+  }
+
   setElementsClickHandlers(handler) {
     this._elementsClickHandlers = handler;
-    this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler));
+    this._interactiveElementsClasses.forEach((it) => this._element.querySelector(it).addEventListener(`click`, handler));
   }
 
   setWatchlistButtonClickHandler(handler) {
@@ -73,13 +83,8 @@ export default class FilmCard extends AbstractSmartComponent {
     this.getFavoritesButtonElement().addEventListener(`click`, this._favoritesButtonClickHandler);
   }
 
-  rerender(card) {
-    this._data = card;
-    super.rerender();
-  }
-
   recoveryListeners() {
-    this._interactiveElementsClassList.forEach((it) => this._element.querySelector(it).addEventListener(`click`, this._elementsClickHandlers));
+    this._interactiveElementsClasses.forEach((it) => this._element.querySelector(it).addEventListener(`click`, this._elementsClickHandlers));
     this.getWatchlistButtonElement().addEventListener(`click`, this._watchlistButtonClickHandler);
     this.getWatchedButtonElement().addEventListener(`click`, this._watchedButtonClickHandler);
     this.getFavoritesButtonElement().addEventListener(`click`, this._favoritesButtonClickHandler);

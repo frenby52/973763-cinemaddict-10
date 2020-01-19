@@ -79,6 +79,14 @@ export default class MovieController {
     }
   }
 
+  setDefaultView() {
+    this._closeFilmDetails();
+  }
+
+  destroy() {
+    this._filmCardComponent.removeElement();
+  }
+
   _closeFilmDetails() {
     if (this._filmDetailsComponent) {
       this._filmDetailsComponent.getElement().remove();
@@ -157,27 +165,27 @@ export default class MovieController {
       evt.preventDefault();
       const formData = this._filmDetailsComponent.getFormData();
       const data = parseFormData(formData);
-      const commentInput = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
-      commentInput.setAttribute(`style`, `outline: none;`);
+      const commentInputElement = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
+      commentInputElement.setAttribute(`style`, `outline: none;`);
 
       if (!data.emoji) {
         this._filmDetailsComponent.getEmojiContainer().setAttribute(`style`, `box-shadow: inset 0 0 10px red;`);
       }
 
       if (!data.comment) {
-        commentInput.setAttribute(`style`, `outline: 3px solid red;`);
-        commentInput.addEventListener(`input`, () => {
-          commentInput.setAttribute(`style`, `outline: none;`);
+        commentInputElement.setAttribute(`style`, `outline: 3px solid red;`);
+        commentInputElement.addEventListener(`input`, () => {
+          commentInputElement.setAttribute(`style`, `outline: none;`);
         });
       }
 
       this._filmDetailsComponent.disableForm();
-      commentInput.classList.remove(`shake`);
+      commentInputElement.classList.remove(`shake`);
       this._commentsModel.createComment(this.data.id, data)
         .then(() => this._onDataChange(this.data.id, this.data, true))
         .catch(() => {
-          commentInput.classList.add(`shake`);
-          commentInput.setAttribute(`style`, `outline: 3px solid red;`);
+          commentInputElement.classList.add(`shake`);
+          commentInputElement.setAttribute(`style`, `outline: 3px solid red;`);
           this._filmDetailsComponent.activateForm();
         });
     });
@@ -223,13 +231,5 @@ export default class MovieController {
       this._currentRatingElement.style.backgroundColor = `red`;
       this._filmDetailsComponent.activateUserRating();
     }
-  }
-
-  setDefaultView() {
-    this._closeFilmDetails();
-  }
-
-  destroy() {
-    this._filmCardComponent.removeElement();
   }
 }

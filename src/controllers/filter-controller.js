@@ -45,11 +45,11 @@ export default class FilterController {
     this._activeFilterType = filterType;
   }
 
-  setStatsClickHandler(handler) {
-    this._statsClickHandler = handler;
-  }
-
   _onDataChange() {
     this.rerender();
+  }
+
+  setStatsClickHandler(handler) {
+    this._statsClickHandler = handler;
   }
 }

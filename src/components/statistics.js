@@ -182,6 +182,12 @@ export default class Statistics extends AbstractSmartComponent {
     this.rerender();
   }
 
+  _onDataChange() {
+    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    this._filteredData = this._watchedMovies;
+    this._filter = `all-time`;
+  }
+
   _setFilterListener() {
     const todayPeriod = moment().startOf(`day`);
     const weekPeriod = moment().subtract(7, `d`);
@@ -211,12 +217,6 @@ export default class Statistics extends AbstractSmartComponent {
 
       this.rerender();
     });
-  }
-
-  _onDataChange() {
-    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
-    this._filteredData = this._watchedMovies;
-    this._filter = `all-time`;
   }
 
   recoveryListeners() {

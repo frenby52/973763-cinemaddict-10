@@ -13,11 +13,11 @@ const api = new API();
 const moviesModel = new Movies();
 
 const siteHeaderElement = document.querySelector(`.header`);
-const mainContainer = document.querySelector(`.main`);
-const filterController = new FilterController(mainContainer, moviesModel);
-const sortController = new SortController(mainContainer, moviesModel);
-const pageController = new PageController(mainContainer, moviesModel);
-mainContainer.innerHTML = `<h2>Loading…</h2>`;
+const mainContainerElement = document.querySelector(`.main`);
+const filterController = new FilterController(mainContainerElement, moviesModel);
+const sortController = new SortController(mainContainerElement, moviesModel);
+const pageController = new PageController(mainContainerElement, moviesModel);
+mainContainerElement.innerHTML = `<h2>Loading…</h2>`;
 
 const footerStatsElement = document.querySelector(`.footer__statistics`);
 const renderFooterStats = (cards) => {
@@ -27,7 +27,7 @@ const renderFooterStats = (cards) => {
 api.getCards()
   .then(Movie.parseMovies)
   .then((cards) => {
-    mainContainer.innerHTML = ``;
+    mainContainerElement.innerHTML = ``;
     moviesModel.setCards(cards);
     renderComponent(siteHeaderElement, new UserRatingComponent(moviesModel));
     filterController.setStatsClickHandler((isStatsActive) => {
@@ -46,7 +46,7 @@ api.getCards()
     sortController.render();
 
     const statisticsComponent = new StatisticsComponent(moviesModel);
-    renderComponent(mainContainer, statisticsComponent);
+    renderComponent(mainContainerElement, statisticsComponent);
 
     statisticsComponent.hide();
     pageController.render();

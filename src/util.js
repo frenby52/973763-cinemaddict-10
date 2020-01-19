@@ -16,6 +16,12 @@ const SortType = {
   RATING: `rating`
 };
 
+const UserRank = {
+  NOVICE: 0,
+  FAN: 10,
+  MOVIE_BUFF: 20
+};
+
 const getSortedData = (cards, key) => {
   if (cards.length && Array.isArray(cards[0][key])) {
     return cards.slice().sort((a, b) => b[key].length - a[key].length);
@@ -72,14 +78,15 @@ const getFilmRuntime = (runtime) => {
 };
 
 const getUserRank = (rank) => {
-  if (rank >= 1 && rank <= 10) {
+  if (rank > UserRank.NOVICE && rank <= UserRank.FAN) {
     return `novice`;
-  } else if (rank >= 11 && rank <= 20) {
+  } else if (rank > UserRank.FAN && rank <= UserRank.MOVIE_BUFF) {
     return `fan`;
-  } else if (rank >= 21) {
+  } else if (rank > UserRank.MOVIE_BUFF) {
     return `movie buff`;
   }
   return ``;
 };
+
 
 export {getSortedData, getHighestValuesData, getRandomArrayItems, createElement, renderComponent, isEscEvent, FilterType, getFilmCardsByFilter, SortType, getFilmCardsBySort, getFilmRuntime, getUserRank, DEBOUNCE_INTERVAL};

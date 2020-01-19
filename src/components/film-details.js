@@ -214,6 +214,64 @@ export default class FilmDetails extends AbstractSmartComponent {
     return createFilmDetailsTemplate(this._data, this._comments);
   }
 
+  getForm() {
+    return this.getElement().querySelector(`.film-details__inner`);
+  }
+
+  getFormData() {
+    const form = this.getForm();
+
+    return new FormData(form);
+  }
+
+  getEmojiContainer() {
+    return this.getElement().querySelector(`.film-details__add-emoji-label`);
+  }
+
+  _getEmoji() {
+    return this.getEmojiContainer().querySelector(`img`);
+  }
+
+  _removeEmoji() {
+    if (this._getEmoji()) {
+      this._getEmoji().remove();
+    }
+  }
+
+  _renderEmoji() {
+    const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
+    const emojiImg = createElement(emojiTemplate);
+    emojiImg.src = this._emojiSrc;
+    this.getEmojiContainer().append(emojiImg);
+  }
+
+  rerender(card, comments) {
+    this._data = card;
+    this._comments = comments;
+    this._emojiSrc = null;
+    super.rerender();
+  }
+
+  disableUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  activateUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
+  }
+
+  disableForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+  }
+
+  activateForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+  }
+
   setCloseBtnClickHandler(handler) {
     this._closeBtnClickHandler = handler;
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
@@ -249,16 +307,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, handler);
   }
 
-  getForm() {
-    return this.getElement().querySelector(`.film-details__inner`);
-  }
-
-  getFormData() {
-    const form = this.getForm();
-
-    return new FormData(form);
-  }
-
   _onEmojiClick() {
     this.getElement().querySelector(`.film-details__new-comment`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName === `IMG` && evt.target.getAttribute(`src`) !== this._emojiSrc) {
@@ -270,35 +318,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         }
       }
     });
-  }
-
-  getEmojiContainer() {
-    return this.getElement().querySelector(`.film-details__add-emoji-label`);
-  }
-
-  _getEmoji() {
-    return this.getEmojiContainer().querySelector(`img`);
-  }
-
-  _removeEmoji() {
-    if (this._getEmoji()) {
-      this._getEmoji().remove();
-    }
-  }
-
-  _renderEmoji() {
-    const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
-    const emojiImg = createElement(emojiTemplate);
-    emojiImg.src = this._emojiSrc;
-    this.getEmojiContainer().append(emojiImg);
-  }
-
-  rerender(card, comments) {
-    this._data = card;
-    //
-    this._comments = comments;
-    this._emojiSrc = null;
-    super.rerender();
   }
 
   setUserRatingClickHandler(handler) {
@@ -313,26 +332,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     if (this.getElement().querySelector(`.film-details__watched-reset`)) {
       this.getElement().querySelector(`.film-details__watched-reset`).addEventListener(`click`, handler);
     }
-  }
-
-  disableUserRating() {
-    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
-      it.disabled = true;
-    });
-  }
-
-  activateUserRating() {
-    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
-      it.disabled = false;
-    });
-  }
-
-  disableForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
-  }
-
-  activateForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
 
   recoveryListeners() {

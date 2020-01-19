@@ -23,22 +23,22 @@ export default class MainFilmCards extends AbstractComponent {
     return this.getElement().querySelector(`.films-list__container`);
   }
 
+  getShowMoreBtnElement() {
+    return this.getElement().querySelector(`.films-list__show-more`);
+  }
+
   showNoMoviesMessage() {
-    const title = this._element.querySelector(`.films-list__title`);
-    title.classList.remove(`visually-hidden`);
-    title.textContent = `There are no movies in our database`;
+    const titleElement = this._element.querySelector(`.films-list__title`);
+    titleElement.classList.remove(`visually-hidden`);
+    titleElement.textContent = `There are no movies in our database`;
   }
 
   restoreDefaultTitle() {
-    const title = this._element.querySelector(`.films-list__title`);
-    if (!title.classList.contains(`visually-hidden`)) {
-      title.classList.add(`visually-hidden`);
-      title.textContent = `All movies. Upcoming`;
+    const titleElement = this._element.querySelector(`.films-list__title`);
+    if (!titleElement.classList.contains(`visually-hidden`)) {
+      titleElement.classList.add(`visually-hidden`);
+      titleElement.textContent = `All movies. Upcoming`;
     }
-  }
-
-  getShowMoreBtnElement() {
-    return this.getElement().querySelector(`.films-list__show-more`);
   }
 
   renderShowMoreBtn() {
