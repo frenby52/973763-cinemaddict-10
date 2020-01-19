@@ -1,6 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {getFilmRuntime, DEBOUNCE_INTERVAL} from "../util";
-import {debounce} from "debounce";
+import {getFilmRuntime} from "../util";
 
 const DescriptionLength = {
   NORMAL: 139,
@@ -69,18 +68,18 @@ export default class FilmCard extends AbstractSmartComponent {
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this._watchlistButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
-    this.getWatchlistButtonElement().addEventListener(`click`, this._watchlistButtonClickHandler);
+    this._watchlistButtonClickHandler = handler;
+    this.getWatchlistButtonElement().addEventListener(`click`, handler);
   }
 
   setWatchedButtonClickHandler(handler) {
-    this._watchedButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
-    this.getWatchedButtonElement().addEventListener(`click`, this._watchedButtonClickHandler);
+    this._watchedButtonClickHandler = handler;
+    this.getWatchedButtonElement().addEventListener(`click`, handler);
   }
 
   setFavoritesButtonClickHandler(handler) {
-    this._favoritesButtonClickHandler = debounce(handler, DEBOUNCE_INTERVAL);
-    this.getFavoritesButtonElement().addEventListener(`click`, this._favoritesButtonClickHandler);
+    this._favoritesButtonClickHandler = handler;
+    this.getFavoritesButtonElement().addEventListener(`click`, handler);
   }
 
   recoveryListeners() {

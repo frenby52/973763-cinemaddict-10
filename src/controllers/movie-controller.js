@@ -1,8 +1,9 @@
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
-import {isEscEvent, renderComponent} from "../util";
+import {isEscEvent, renderComponent, DEBOUNCE_INTERVAL} from "../util";
 import Comments from '../models/comments.js';
 import Movie from "../models/movie";
+import {debounce} from "debounce";
 
 const parseFormData = (formData) => {
   return new Comments({
@@ -33,12 +34,12 @@ export default class MovieController {
     this._filmCardComponent = new FilmCardComponent(card);
     renderComponent(this._container, this._filmCardComponent);
 
-    this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
+    this._filmCardComponent.setWatchlistButtonClickHandler(debounce((evt) => {
       evt.preventDefault();
       this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {watchlist: !this.data.watchlist}));
-    });
+    }, DEBOUNCE_INTERVAL));
 
-    this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
+    this._filmCardComponent.setWatchedButtonClickHandler(debounce((evt) => {
       evt.preventDefault();
       const updatedData = new Movie();
 
@@ -49,12 +50,12 @@ export default class MovieController {
       });
 
       this._onDataChange(this.data.id, updatedData, true);
-    });
+    }, DEBOUNCE_INTERVAL));
 
-    this._filmCardComponent.setFavoritesButtonClickHandler((evt) => {
+    this._filmCardComponent.setFavoritesButtonClickHandler(debounce((evt) => {
       evt.preventDefault();
       this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {favorite: !this.data.favorite}));
-    });
+    }, DEBOUNCE_INTERVAL));
 
     this._filmCardComponent.setElementsClickHandlers(this._onFilmCardElementClick);
   }
@@ -137,11 +138,11 @@ export default class MovieController {
   }
 
   _setFilmDetailsHandlers() {
-    this._filmDetailsComponent.setWatchlistInputClickHandler(() => {
+    this._filmDetailsComponent.setWatchlistInputClickHandler(debounce(() => {
       this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {watchlist: !this.data.watchlist}));
-    });
+    }, DEBOUNCE_INTERVAL));
 
-    this._filmDetailsComponent.setWatchedInputClickHandler(() => {
+    this._filmDetailsComponent.setWatchedInputClickHandler(debounce(() => {
       const updatedData = new Movie();
 
       Object.assign(updatedData, this.data, {
@@ -155,11 +156,11 @@ export default class MovieController {
       }
 
       this._onDataChange(this.data.id, updatedData, true);
-    });
+    }, DEBOUNCE_INTERVAL));
 
-    this._filmDetailsComponent.setFavoritesInputClickHandler(() => {
+    this._filmDetailsComponent.setFavoritesInputClickHandler(debounce(() => {
       this._onDataChange(this.data.id, Object.assign(new Movie(), this.data, {favorite: !this.data.favorite}));
-    });
+    }, DEBOUNCE_INTERVAL));
 
     this._filmDetailsComponent.setCommentSubmitHandler((evt) => {
       evt.preventDefault();
