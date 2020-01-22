@@ -4,9 +4,9 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import {getUserRank} from "../util";
 
-const getSortedStats = (data) => {
+const getSortedStats = (cards) => {
   const allGenres = [];
-  data.forEach((item) =>
+  cards.forEach((item) =>
     item.genre.forEach((it) => {
       allGenres.push(it);
     })
@@ -27,8 +27,8 @@ const getSortedStats = (data) => {
   return genresStats.sort((a, b) => b.count - a.count);
 };
 
-const renderChart = (ctx, movies) => {
-  const genres = getSortedStats(movies);
+const renderChart = (ctx, cards) => {
+  const genres = getSortedStats(cards);
   return new Chart(ctx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -84,10 +84,10 @@ const renderChart = (ctx, movies) => {
   });
 };
 
-const createStatisticsTemplate = (data, filter, watchedMovies) => {
-  const genres = getSortedStats(data);
+const createStatisticsTemplate = (cards, filter, watchedMovies) => {
+  const genres = getSortedStats(cards);
   const topGenre = genres[0] ? genres[0].genre : `-`;
-  const totalDuration = moment.duration(data.reduce((acc, it) => acc + (it.runtime * 60 * 1000), 0));
+  const totalDuration = moment.duration(cards.reduce((acc, it) => acc + (it.runtime * 60 * 1000), 0));
 
   return (`<section class="statistic">
     <p class="statistic__rank">
@@ -118,7 +118,7 @@ const createStatisticsTemplate = (data, filter, watchedMovies) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${data.length} <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${cards.length} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
@@ -182,6 +182,12 @@ export default class Statistics extends AbstractSmartComponent {
     this.rerender();
   }
 
+  _onDataChange() {
+    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
+    this._filteredData = this._watchedMovies;
+    this._filter = `all-time`;
+  }
+
   _setFilterListener() {
     const todayPeriod = moment().startOf(`day`);
     const weekPeriod = moment().subtract(7, `d`);
@@ -211,12 +217,6 @@ export default class Statistics extends AbstractSmartComponent {
 
       this.rerender();
     });
-  }
-
-  _onDataChange() {
-    this._watchedMovies = this._moviesModel.getCardsAll().filter((it) => it.watched);
-    this._filteredData = this._watchedMovies;
-    this._filter = `all-time`;
   }
 
   recoveryListeners() {

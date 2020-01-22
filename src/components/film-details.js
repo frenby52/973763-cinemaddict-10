@@ -5,8 +5,6 @@ import he from "he";
 
 const formatReleaseDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
-// const formatCommentsDate = (date) => moment(date).format(`YYYY/MM/DD hh:mm`);
-
 const createGenresMarkup = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 
 const createCommentsMarkup = (comments) => comments.map((comment) =>
@@ -74,8 +72,8 @@ const createFilmRatingTemplate = (poster, title, personalRating) => {
       </section>`);
 };
 
-const createFilmDetailsTemplate = (data, comments) => {
-  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite, personalRating} = data;
+const createFilmDetailsTemplate = (card, comments) => {
+  const {title, originalTitle, rating, poster, age, director, writers, actors, date, country, runtime, genre, description, watchlist, watched, favorite, personalRating} = card;
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get" tabindex="1">
     <div class="form-details__top-container">
@@ -193,10 +191,10 @@ const createFilmDetailsTemplate = (data, comments) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(data, comments) {
+  constructor(card, comments) {
     super();
 
-    this._data = data;
+    this._data = card;
     this._comments = comments;
     this._subscribeOnEvents();
     this._emojiSrc = null;
@@ -213,6 +211,64 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   getTemplate() {
     return createFilmDetailsTemplate(this._data, this._comments);
+  }
+
+  getForm() {
+    return this.getElement().querySelector(`.film-details__inner`);
+  }
+
+  getFormData() {
+    const form = this.getForm();
+
+    return new FormData(form);
+  }
+
+  getEmojiContainer() {
+    return this.getElement().querySelector(`.film-details__add-emoji-label`);
+  }
+
+  _getEmoji() {
+    return this.getEmojiContainer().querySelector(`img`);
+  }
+
+  _removeEmoji() {
+    if (this._getEmoji()) {
+      this._getEmoji().remove();
+    }
+  }
+
+  _renderEmoji() {
+    const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
+    const emojiImg = createElement(emojiTemplate);
+    emojiImg.src = this._emojiSrc;
+    this.getEmojiContainer().append(emojiImg);
+  }
+
+  rerender(card, comments) {
+    this._data = card;
+    this._comments = comments;
+    this._emojiSrc = null;
+    super.rerender();
+  }
+
+  disableUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  activateUserRating() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
+  }
+
+  disableForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+  }
+
+  activateForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
 
   setCloseBtnClickHandler(handler) {
@@ -250,23 +306,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, handler);
   }
 
-  getForm() {
-    return this.getElement().querySelector(`.film-details__inner`);
-  }
-
-  getFormData() {
-    const form = this.getForm();
-    // const formData = new FormData(form);
-    // let newCommentId = 0;
-    // if (this._data.comments.length) {
-    //   const highestIdComment = this._data.comments.slice().sort((a, b) => b.id - a.id).slice(0, 1);
-    //   newCommentId = highestIdComment[0].id + 1;
-    // }
-
-    // return parseFormData(formData, newCommentId);
-    return new FormData(form);
-  }
-
   _onEmojiClick() {
     this.getElement().querySelector(`.film-details__new-comment`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName === `IMG` && evt.target.getAttribute(`src`) !== this._emojiSrc) {
@@ -278,35 +317,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         }
       }
     });
-  }
-
-  getEmojiContainer() {
-    return this.getElement().querySelector(`.film-details__add-emoji-label`);
-  }
-
-  _getEmoji() {
-    return this.getEmojiContainer().querySelector(`img`);
-  }
-
-  _removeEmoji() {
-    if (this._getEmoji()) {
-      this._getEmoji().remove();
-    }
-  }
-
-  _renderEmoji() {
-    const emojiTemplate = `<img width="55" height="55" alt="emoji">`;
-    const emojiImg = createElement(emojiTemplate);
-    emojiImg.src = this._emojiSrc;
-    this.getEmojiContainer().append(emojiImg);
-  }
-
-  rerender(card, comments) {
-    this._data = card;
-    //
-    this._comments = comments;
-    this._emojiSrc = null;
-    super.rerender();
   }
 
   setUserRatingClickHandler(handler) {
@@ -322,28 +332,6 @@ export default class FilmDetails extends AbstractSmartComponent {
       this.getElement().querySelector(`.film-details__watched-reset`).addEventListener(`click`, handler);
     }
   }
-
-  disableUserRating() {
-    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
-      it.disabled = true;
-    });
-  }
-
-  disableForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
-  }
-
-  activateForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
-  }
-
-  addShakeAnimationClass() {
-    this.getElement().classList.add(`shake`);
-  }
-
-  // removeShakeAnimationClass() {
-  //   this.getElement().classList.remove(`shake`);
-  // }
 
   recoveryListeners() {
     this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistInputClickHandler);

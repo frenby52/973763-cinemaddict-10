@@ -37,6 +37,10 @@ export default class Movies {
     return true;
   }
 
+  updateCardByApi(id, newData) {
+    return this._api.updateCard(id, newData);
+  }
+
   activateFilter(filterType) {
     this._activeFilterType = filterType;
     if (this._sortAndFilterChangeHandler) {
@@ -57,9 +61,5 @@ export default class Movies {
 
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
-  }
-
-  updateCardByApi(id, newData) {
-    return this._api.updateCard(id, newData);
   }
 }

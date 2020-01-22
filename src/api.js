@@ -8,9 +8,13 @@ const Method = {
   DELETE: `DELETE`
 };
 
+const ResponseStatus = {
+  OK: 200,
+  REDIRECTION: 300
+};
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= ResponseStatus.OK && response.status < ResponseStatus.REDIRECTION) {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
@@ -28,11 +32,11 @@ export default class API {
       .then((response) => response.json());
   }
 
-  updateCard(id, data) {
+  updateCard(id, card) {
     return this._load({
       url: `movies/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(card.toRAW()),
       headers: new Headers({'Content-Type': `application/json`})
     })
       .then((response) => response.json());
