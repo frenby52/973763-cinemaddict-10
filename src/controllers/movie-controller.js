@@ -72,7 +72,7 @@ export default class MovieController {
           })
           .catch(()=> {
             this._filmDetailsComponent.rerender(card, []);
-            this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`).classList.add(`visually-hidden`);
+            this._filmDetailsComponent.hideComments();
           });
       } else {
         this._filmDetailsComponent.rerender(card, []);
@@ -110,13 +110,11 @@ export default class MovieController {
           this._filmDetailsComponent.setDeleteCommentsButtonClickHandler((e) => {
             e.preventDefault();
             if (e.target.classList.contains(`film-details__comment-delete`)) {
-              e.target.textContent = `Deleting...`;
-              e.target.disabled = true;
+              this._filmDetailsComponent.setDeleteBtnState(e.target, true);
               this._commentsModel.deleteComment(e.target.dataset.commentId)
                 .then(() => this._onDataChange(this.data.id, this.data, true))
                 .catch(() => {
-                  e.target.textContent = `Delete`;
-                  e.target.disabled = false;
+                  this._filmDetailsComponent.setDeleteBtnState(e.target, false);
                 });
             }
           });
@@ -126,7 +124,7 @@ export default class MovieController {
         })
         .catch(() => {
           this._filmDetailsComponent = new FilmDetailsComponent(this.data, []);
-          this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`).classList.add(`visually-hidden`);
+          this._filmDetailsComponent.hideComments();
           renderComponent(this._container, this._filmDetailsComponent);
           this._setFilmDetailsHandlers();
         });
@@ -166,27 +164,26 @@ export default class MovieController {
       evt.preventDefault();
       const formData = this._filmDetailsComponent.getFormData();
       const data = parseFormData(formData);
-      const commentInputElement = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`);
-      commentInputElement.setAttribute(`style`, `outline: none;`);
+      this._filmDetailsComponent.setErrorStateComment();
 
       if (!data.emoji) {
-        this._filmDetailsComponent.getEmojiContainer().setAttribute(`style`, `box-shadow: inset 0 0 10px red;`);
+        this._filmDetailsComponent.setErrorStateEmoji();
       }
 
       if (!data.comment) {
-        commentInputElement.setAttribute(`style`, `outline: 3px solid red;`);
-        commentInputElement.addEventListener(`input`, () => {
-          commentInputElement.setAttribute(`style`, `outline: none;`);
+        this._filmDetailsComponent.setErrorStateComment(true);
+        this._filmDetailsComponent.getCommentInputElement().addEventListener(`input`, () => {
+          this._filmDetailsComponent.setErrorStateComment();
         });
       }
 
       this._filmDetailsComponent.disableForm();
-      commentInputElement.classList.remove(`shake`);
+      this._filmDetailsComponent.setErrorState(this._filmDetailsComponent.getCommentInputElement());
       this._commentsModel.createComment(this.data.id, data)
         .then(() => this._onDataChange(this.data.id, this.data, true))
         .catch(() => {
-          commentInputElement.classList.add(`shake`);
-          commentInputElement.setAttribute(`style`, `outline: 3px solid red;`);
+          this._filmDetailsComponent.setErrorState(this._filmDetailsComponent.getCommentInputElement(), true);
+          this._filmDetailsComponent.setErrorStateComment(true);
           this._filmDetailsComponent.activateForm();
         });
     });
@@ -205,13 +202,13 @@ export default class MovieController {
     this._filmDetailsComponent.setUserRatingClickHandler((evt) => {
       const oldRating = this.data.personalRating;
       const newRating = Object.assign(new Movie(), this.data, {personalRating: parseInt(evt.target.value, 10)});
-      this._filmDetailsComponent.getElement().querySelector(`.film-details__user-rating-score`).classList.remove(`shake`);
+      this._filmDetailsComponent.setErrorState(this._filmDetailsComponent.getUserRatingElement());
       if (this._currentRatingElement) {
-        this._currentRatingElement.style.backgroundColor = `#d8d8d8`;
+        this._filmDetailsComponent.setElementBackground(this._currentRatingElement, `#d8d8d8`);
       }
 
       if (parseInt(evt.target.value, 10) === this.data.personalRating) {
-        evt.target.labels[0].style.backgroundColor = `#ffe800`;
+        this._filmDetailsComponent.setElementBackground(evt.target.labels[0], `#ffe800`);
       }
 
       this._currentRatingElement = evt.target.labels[0];
@@ -228,8 +225,8 @@ export default class MovieController {
 
   onRatingUpdateError() {
     if (this._filmDetailsComponent) {
-      this._filmDetailsComponent.getElement().querySelector(`.film-details__user-rating-score`).classList.add(`shake`);
-      this._currentRatingElement.style.backgroundColor = `red`;
+      this._filmDetailsComponent.setErrorState(this._filmDetailsComponent.getUserRatingElement(), true);
+      this._filmDetailsComponent.setElementBackground(this._currentRatingElement, `red`);
       this._filmDetailsComponent.activateUserRating();
     }
   }

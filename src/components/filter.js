@@ -33,12 +33,12 @@ export default class Filter extends AbstractSmartComponent {
 
   _removeActiveClass() {
     const filterElements = Array.from(this.getElement().querySelectorAll(`.main-navigation__item:not(.main-navigation__item--additional)`));
-    const AllFilterElementIndex = filterElements.findIndex((it) => it.getAttribute(`href`) === FilterType.ALL);
+    const allFilterElementIndex = filterElements.findIndex((it) => it.getAttribute(`href`) === FilterType.ALL);
     const activeFilterElementIndex = filterElements.findIndex((it) => it.getAttribute(`href`) === this._filterType);
     if (this._filterType) {
       filterElements[activeFilterElementIndex].classList.remove(`main-navigation__item--active`);
     } else {
-      filterElements[AllFilterElementIndex].classList.remove(`main-navigation__item--active`);
+      filterElements[allFilterElementIndex].classList.remove(`main-navigation__item--active`);
     }
   }
 

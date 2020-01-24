@@ -40,6 +40,10 @@ export default class FilterController {
     this._filterComponent.rerender(filters);
   }
 
+  setStatsClickHandler(handler) {
+    this._statsClickHandler = handler;
+  }
+
   _onFilterChange(filterType) {
     this._moviesModel.activateFilter(filterType);
     this._activeFilterType = filterType;
@@ -47,9 +51,5 @@ export default class FilterController {
 
   _onDataChange() {
     this.rerender();
-  }
-
-  setStatsClickHandler(handler) {
-    this._statsClickHandler = handler;
   }
 }

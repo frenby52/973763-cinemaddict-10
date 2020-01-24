@@ -271,6 +271,47 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
   }
 
+  hideComments() {
+    this.getElement().querySelector(`.film-details__comments-wrap`).classList.add(`visually-hidden`);
+  }
+
+  getUserRatingElement() {
+    return this.getElement().querySelector(`.film-details__user-rating-score`);
+  }
+
+  getCommentInputElement() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
+  setDeleteBtnState(button, isDisabled) {
+    button.disabled = isDisabled;
+    button.textContent = (isDisabled) ? `Deleting...` : `Delete`;
+  }
+
+  setElementBackground(elem, color) {
+    elem.style.backgroundColor = color;
+  }
+
+  setErrorState(elem, isError = false) {
+    if (isError) {
+      elem.classList.add(`shake`);
+    } else {
+      elem.classList.remove(`shake`);
+    }
+  }
+
+  setErrorStateComment(isError = false) {
+    if (isError) {
+      this.getCommentInputElement().setAttribute(`style`, `outline: 3px solid red;`);
+    } else {
+      this.getCommentInputElement().setAttribute(`style`, `outline: none;`);
+    }
+  }
+
+  setErrorStateEmoji() {
+    this.getEmojiContainer().setAttribute(`style`, `box-shadow: inset 0 0 10px red;`);
+  }
+
   setCloseBtnClickHandler(handler) {
     this._closeBtnClickHandler = handler;
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
